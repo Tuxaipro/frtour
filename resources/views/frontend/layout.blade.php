@@ -14,7 +14,20 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php
+        $hasViteManifest = file_exists(public_path('build/manifest.json'));
+    @endphp
+    
+    @if($hasViteManifest)
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <!-- Fallback for production without Vite build -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+            body { font-family: 'Inter', sans-serif; }
+        </style>
+    @endif
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
