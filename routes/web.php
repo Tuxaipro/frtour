@@ -19,7 +19,7 @@ use App\Http\Controllers\QuoteRequestController;
 use Illuminate\Support\Facades\Route;
 
 // Frontend routes
-Route::get('/', function () {
+Route::match(['GET', 'HEAD'], '/', function () {
     $heroes = \App\Models\Hero::active()->ordered()->get();
     $circuits = \App\Models\Circuit::where('is_active', true)->inRandomOrder()->take(6)->get();
     $categories = \App\Models\GalerieCategory::where('is_active', true)->inRandomOrder()->take(6)->get();
