@@ -13,7 +13,20 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @php
+            $hasViteManifest = file_exists(public_path('build/manifest.json'));
+        @endphp
+        
+        @if($hasViteManifest)
+            @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @else
+            <!-- Fallback for production without Vite build -->
+            <script src="https://cdn.tailwindcss.com"></script>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+                body { font-family: 'Inter', sans-serif; }
+            </style>
+        @endif
     </head>
     <body class="font-sans text-slate-900 antialiased bg-slate-50">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
