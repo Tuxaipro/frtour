@@ -3,8 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ $circuit->name }} — India Tourisme</title>
+  <title>{{ $circuit->name }} — {{ $siteName }}</title>
   <meta name="description" content="{{ Str::limit($circuit->description, 160) }}">
+  
+  @if($siteFaviconUrl ?? false)
+    <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
+    <link rel="shortcut icon" href="{{ $siteFaviconUrl }}">
+  @else
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  @endif
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {

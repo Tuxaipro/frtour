@@ -52,6 +52,49 @@ Route::get('/api/destinations', function() {
     return response()->json($destinations);
 })->name('api.destinations');
 
+Route::get('/api/logo-settings', function() {
+    $settings = [
+        'site_logo_url' => '',
+        'logo_light_url' => '',
+        'site_name' => \App\Models\Setting::get('site_name', 'India Tourisme'),
+        'site_description' => \App\Models\Setting::get('site_description', 'Spécialiste des voyages sur-mesure'),
+    ];
+    
+    // Get logo URLs using the same logic as ViewServiceProvider
+    $provider = new \App\Providers\ViewServiceProvider(app());
+    $reflection = new ReflectionClass($provider);
+    $method = $reflection->getMethod('getImageUrl');
+    $method->setAccessible(true);
+    
+    $siteLogo = \App\Models\Setting::get('site_logo', '');
+    $logoLight = \App\Models\Setting::get('logo_light', '');
+    
+    if ($siteLogo) {
+        $settings['site_logo_url'] = $method->invoke($provider, $siteLogo);
+    }
+    
+    if ($logoLight) {
+        $settings['logo_light_url'] = $method->invoke($provider, $logoLight);
+    }
+    
+    return response()->json($settings);
+})->name('api.logo-settings');
+
+Route::get('/api/social-settings', function() {
+    $settings = [
+        'facebook_url' => \App\Models\Setting::get('facebook_url', '#'),
+        'twitter_url' => \App\Models\Setting::get('twitter_url', '#'),
+        'instagram_url' => \App\Models\Setting::get('instagram_url', '#'),
+        'linkedin_url' => \App\Models\Setting::get('linkedin_url', '#'),
+        'youtube_url' => \App\Models\Setting::get('youtube_url', '#'),
+        'contact_whatsapp_url' => \App\Models\Setting::get('contact_whatsapp_url', ''),
+        'contact_phone' => \App\Models\Setting::get('contact_phone', '+1 (555) 123-4567'),
+        'contact_email' => \App\Models\Setting::get('contact_email', 'info@example.com'),
+    ];
+    
+    return response()->json($settings);
+})->name('api.social-settings');
+
 // Sitemap Route
 Route::get('/sitemap.xml', function() {
     $destinations = \App\Models\Destination::where('is_active', true)->get();

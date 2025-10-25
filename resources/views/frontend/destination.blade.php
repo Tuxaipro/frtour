@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Circuits {{ $destination->name }} - India Tourisme</title>
+    <title>Circuits {{ $destination->name }} - {{ $siteName }}</title>
     <meta name="description" content="{{ $destination->meta_description ?? $destination->description }}">
+
+    @if($siteFaviconUrl ?? false)
+        <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
+        <link rel="shortcut icon" href="{{ $siteFaviconUrl }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    @endif
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

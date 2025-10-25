@@ -7,12 +7,21 @@
   
   
   <!-- Additional SEO -->
-  <meta name="author" content="India Tourisme">
+  <meta name="author" content="{{ $siteName }}">
   <meta name="language" content="French">
   <meta name="revisit-after" content="7 days">
   <meta name="theme-color" content="#3B82F6">
   <meta name="msapplication-TileColor" content="#3B82F6">
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <!-- Dynamic SEO from settings -->
+  <title>{{ $metaTitle }}</title>
+  <meta name="description" content="{{ $metaDescription }}">
+  @if($siteFaviconUrl)
+    <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
+    <link rel="shortcut icon" href="{{ $siteFaviconUrl }}">
+  @else
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  @endif
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">

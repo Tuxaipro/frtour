@@ -7,6 +7,13 @@
 
     <title>India Tourisme - Admin Panel</title>
 
+    @if($siteFaviconUrl ?? false)
+        <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
+        <link rel="shortcut icon" href="{{ $siteFaviconUrl }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    @endif
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

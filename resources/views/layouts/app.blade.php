@@ -7,6 +7,13 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        @if($siteFaviconUrl ?? false)
+            <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
+            <link rel="shortcut icon" href="{{ $siteFaviconUrl }}">
+        @else
+            <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        @endif
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

@@ -7,6 +7,13 @@
 
         <title>{{ config('app.name', 'India Tourisme') }} - Admin</title>
 
+        @if($siteFaviconUrl ?? false)
+            <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
+            <link rel="shortcut icon" href="{{ $siteFaviconUrl }}">
+        @else
+            <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        @endif
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

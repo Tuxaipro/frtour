@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', setting('site_name', config('app.name', 'Laravel'))) - {{ setting('site_name', config('app.name', 'Laravel')) }}</title>
+    <title>@yield('title', $metaTitle)</title>
 
-    <meta name="description" content="@yield('meta_description', setting('meta_description', 'Travel website'))">
+    <meta name="description" content="@yield('meta_description', $metaDescription)">
+    
+    @if($siteFaviconUrl)
+        <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    @endif
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

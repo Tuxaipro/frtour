@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'India Tourisme')</title>
-    <meta name="description" content="@yield('description', 'Voyages sur mesure en Inde, Sri Lanka, Népal et Bhoutan. Circuits privés, chauffeurs anglophones/francophones, assistance 24/7.')">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <title>@yield('title', $metaTitle)</title>
+    <meta name="description" content="@yield('description', $metaDescription)">
+    @if($siteFaviconUrl)
+        <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">
+    @else
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {

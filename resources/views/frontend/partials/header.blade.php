@@ -3,7 +3,10 @@
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
                 <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center">
-                    <span class="text-2xl font-bold text-slate-900">Nom de l'Agence</span>
+                    @if($siteLogoUrl)
+                        <img src="{{ $siteLogoUrl }}" alt="{{ $siteName }}" class="h-8 w-auto mr-3">
+                    @endif
+                    <span class="text-2xl font-bold text-slate-900">{{ $siteName }}</span>
                 </a>
             </div>
             
