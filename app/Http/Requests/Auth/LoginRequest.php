@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -39,17 +40,33 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
-        $this->ensureIsNotRateLimited();
+        try {
+            $this->ensureIsNotRateLimited();
+        } catch (\Exception $e) {
+            // If rate limiting fails due to database issues, log and continue
+            Log::error('Rate limiting check failed: ' . $e->getMessage());
+            // Don't block authentication if rate limiting cache fails
+        }
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+            try {
+                RateLimiter::hit($this->throttleKey());
+            } catch (\Exception $e) {
+                // If rate limiting fails, log but don't block
+                Log::error('Rate limiter hit failed: ' . $e->getMessage());
+            }
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        try {
+            RateLimiter::clear($this->throttleKey());
+        } catch (\Exception $e) {
+            // If rate limiting clear fails, log but don't block
+            Log::error('Rate limiter clear failed: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -59,20 +76,29 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
-            return;
+        try {
+            if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+                return;
+            }
+
+            event(new Lockout($this));
+
+            $seconds = RateLimiter::availableIn($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => trans('auth.throttle', [
+                    'seconds' => $seconds,
+                    'minutes' => ceil($seconds / 60),
+                ]),
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Re-throw validation exceptions
+            throw $e;
+        } catch (\Exception $e) {
+            // Log cache/database errors but allow login to proceed
+            Log::error('Rate limiting check encountered an error: ' . $e->getMessage());
+            // Don't block authentication if rate limiting fails
         }
-
-        event(new Lockout($this));
-
-        $seconds = RateLimiter::availableIn($this->throttleKey());
-
-        throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
-        ]);
     }
 
     /**

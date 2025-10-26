@@ -56,6 +56,48 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         html { scroll-behavior: smooth; }
         
+        /* Enhanced sticky header with backdrop blur */
+        .sticky-header {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+        }
+        
+        /* Scroll offset for anchor links */
+        section[id] {
+            scroll-margin-top: 4rem;
+        }
+        
+        /* Smooth transitions for navigation */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #3B82F6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Ensure sticky positioning works */
+        nav {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 50 !important;
+        }
+        
         /* 2025 Responsive Standards */
         @media (max-width: 430px) {
             /* Mobile phones optimization */
@@ -87,7 +129,9 @@
 <body class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen">
         <!-- Header -->
-        @include('frontend.partials.header')
+        <div style="position: sticky !important; top: 0 !important; z-index: 50 !important; width: 100% !important;">
+            @include('frontend.partials.header')
+        </div>
 
         <!-- Page Content -->
         <main>

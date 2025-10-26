@@ -25,6 +25,25 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     html { scroll-behavior: smooth; }
+    
+    /* Ensure sticky positioning works */
+    #header-container {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 50 !important;
+      width: 100% !important;
+    }
+    
+    #header-container > nav {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 50 !important;
+      background-color: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+    }
   </style>
 </head>
 <body class="bg-white text-slate-900 font-sans antialiased">

@@ -46,6 +46,25 @@
             transition: all 0.3s ease;
         }
         
+        /* Ensure sticky positioning works for galerie page */
+        #header-container {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 50 !important;
+            width: 100% !important;
+        }
+        
+        #header-container > nav {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 50 !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+        }
+        
         /* Scroll offset for anchor links */
         section[id] {
             scroll-margin-top: 4rem;

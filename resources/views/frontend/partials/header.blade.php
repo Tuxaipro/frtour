@@ -1,4 +1,4 @@
-<header class="bg-white shadow-sm sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
+<header class="bg-white shadow-sm sticky top-0 z-50" style="background-color: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important; position: sticky !important; top: 0 !important; z-index: 50 !important;" x-data="{ mobileMenuOpen: false }">
     <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
