@@ -151,7 +151,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($circuits as $circuit)
                 <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                    <div class="h-64 relative overflow-hidden">
+                    <div class="h-48 relative overflow-hidden">
                         @if($circuit->featured_image)
                             <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-full object-cover">
                         @else
@@ -161,22 +161,43 @@
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 text-white">
-                            <h3 class="text-2xl font-bold mb-2">{{ $circuit->name }}</h3>
-                            <p class="text-sm opacity-90">{{ $circuit->duration_days }} jours</p>
+                            <h3 class="text-xl font-bold mb-1">{{ $circuit->name }}</h3>
+                            <p class="text-sm text-white/90">{{ $circuit->duration_days }} jours</p>
                         </div>
                     </div>
                     <div class="p-6">
+                        <div class="space-y-3 mb-4">
+                            @if($circuit->description)
+                                <p class="text-slate-600 text-sm line-clamp-2">{{ Str::limit($circuit->description, 80) }}</p>
+                            @endif
+                        </div>
                         <div class="flex justify-between items-center mb-4">
                             @if($circuit->price_from)
                                 <span class="text-lg font-bold text-amber-600">€{{ number_format($circuit->price_from, 0, ',', ' ') }}</span>
                             @endif
-                            <a href="{{ route('circuit', $circuit->slug) }}" class="text-sm font-medium text-slate-900 hover:text-amber-600 transition-colors duration-200">
-                                Voir le circuit
-                                <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            <a href="{{ route('circuit', $circuit->slug) }}" class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200 text-sm">
+                                Voir les détails
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                 </svg>
                             </a>
                         </div>
+                        @if($circuit->tags)
+                          @php
+                            $circuitTags = explode(',', $circuit->tags);
+                            $circuitTags = array_map('trim', $circuitTags);
+                            $circuitTags = array_slice($circuitTags, 0, 3);
+                            $colors = ['bg-blue-100 text-blue-700', 'bg-green-100 text-green-700', 'bg-amber-100 text-amber-700'];
+                          @endphp
+                          <div class="flex flex-wrap gap-2 mt-4">
+                            @foreach($circuitTags as $index => $tag)
+                              @php
+                                $colorClass = $colors[$index % count($colors)];
+                              @endphp
+                              <span class="px-2 py-1 {{ $colorClass }} text-xs font-medium rounded-full">{{ $tag }}</span>
+                            @endforeach
+                          </div>
+                        @endif
                     </div>
                 </div>
             @empty

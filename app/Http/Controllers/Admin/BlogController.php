@@ -55,6 +55,7 @@ class BlogController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'excerpt' => 'nullable|string',
             'content' => 'required',
             'meta_description' => 'nullable|string|max:255',
             'is_published' => 'boolean',
@@ -63,6 +64,7 @@ class BlogController extends Controller
         $data = [
             'title' => $request->title,
             'slug' => Str::slug($request->title),
+            'excerpt' => $request->excerpt,
             'content' => $request->content,
             'meta_description' => $request->meta_description,
             'is_published' => $request->is_published ?? false,
@@ -101,6 +103,8 @@ class BlogController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'remove_featured_image' => 'nullable|boolean',
+            'excerpt' => 'nullable|string',
             'content' => 'required',
             'meta_description' => 'nullable|string|max:255',
             'is_published' => 'boolean',
@@ -109,14 +113,24 @@ class BlogController extends Controller
         $data = [
             'title' => $request->title,
             'slug' => Str::slug($request->title),
+            'excerpt' => $request->excerpt,
             'content' => $request->content,
             'meta_description' => $request->meta_description,
             'is_published' => $request->is_published ?? false,
         ];
 
+        // Handle featured image removal
+        if ($request->boolean('remove_featured_image')) {
+            if ($blog->featured_image && \Storage::disk('public')->exists($blog->featured_image)) {
+                \Storage::disk('public')->delete($blog->featured_image);
+            }
+            $data['featured_image'] = null;
+        }
+
+        // Handle featured image upload
         if ($request->hasFile('featured_image')) {
             // Delete old image if exists
-            if ($blog->featured_image) {
+            if ($blog->featured_image && \Storage::disk('public')->exists($blog->featured_image)) {
                 \Storage::disk('public')->delete($blog->featured_image);
             }
             $data['featured_image'] = $request->file('featured_image')->store('blog_images', 'public');

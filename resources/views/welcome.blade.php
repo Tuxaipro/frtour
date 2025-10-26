@@ -502,37 +502,31 @@
               $tags = array_map('trim', $tags);
               $tags = array_slice($tags, 0, 3); // Limit to 3 tags
             @endphp
-            <article class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-slate-200 hover:border-primary/30">
-              <div class="relative overflow-hidden">
+            <article class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
+              <div class="h-48 relative overflow-hidden">
                 @if($circuit->featured_image)
-                  <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div class="absolute bottom-2 left-4 right-4">
-                    <h3 class="text-lg font-bold text-white">{{ $circuit->name }}</h3>
-                  </div>
+                  <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                 @else
-                  <div class="w-full h-48 bg-gradient-to-br {{ $gradient }} flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                    <span class="text-white text-lg font-bold text-center px-4">{{ $circuit->name }}</span>
+                  <div class="w-full h-full bg-gradient-to-br {{ $gradient }}">
+                    <div class="absolute inset-0 bg-black/20"></div>
                   </div>
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 @endif
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div class="absolute bottom-4 left-4">
+                  <h3 class="text-lg font-bold text-white mb-1">{{ $circuit->name }}</h3>
+                  <p class="text-sm text-white/90">{{ $circuit->duration_days }} jours</p>
+                </div>
               </div>
-              <div class="p-4">
-                @if(!$circuit->featured_image)
-                  <h3 class="text-lg font-bold text-slate-900 mb-2">{{ $circuit->name }} — {{ $circuit->duration_days }} jours</h3>
-                @endif
-                <p class="text-slate-600 mb-3 text-sm">{{ Str::limit($circuit->description, 70) }}</p>
-                @if($circuit->price_from)
-                  <p class="text-lg font-bold text-primary mb-3 whitespace-nowrap">à partir de {{ number_format($circuit->price_from, 0, ',', ' ') }} € / pers <span class="text-xs font-normal text-slate-500">(hors vols)</span></p>
-                @endif
-                @if(count($tags) > 0)
-                  <div class="flex flex-wrap gap-1 mb-3">
-                    @foreach($tags as $tag)
-                      <span class="px-2 py-1 bg-primary-light text-primary text-xs font-medium rounded-full">{{ $tag }}</span>
-                    @endforeach
-                  </div>
-                @endif
-                <div class="mt-3 flex justify-end">
+              <div class="p-6">
+                <div class="space-y-3 mb-4">
+                  @if($circuit->description)
+                    <p class="text-slate-600 text-sm">{{ Str::limit($circuit->description, 80) }}</p>
+                  @endif
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                  @if($circuit->price_from)
+                    <span class="text-lg font-bold text-amber-600">€{{ number_format($circuit->price_from, 0, ',', ' ') }}</span>
+                  @endif
                   <a href="{{ route('circuit', $circuit->slug) }}" class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200 text-sm">
                     Voir les détails
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -540,6 +534,24 @@
                     </svg>
                   </a>
                 </div>
+                @if($circuit->tags)
+                  @php
+                    $circuitTags = explode(',', $circuit->tags);
+                    $circuitTags = array_map('trim', $circuitTags);
+                    $circuitTags = array_slice($circuitTags, 0, 3);
+                  @endphp
+                  @if(count($circuitTags) > 0)
+                    <div class="flex flex-wrap gap-1 mt-3">
+                      @foreach($circuitTags as $index => $tag)
+                        @php
+                          $colors = ['bg-blue-100 text-blue-700', 'bg-green-100 text-green-700', 'bg-amber-100 text-amber-700'];
+                          $colorClass = $colors[$index % count($colors)];
+                        @endphp
+                        <span class="px-2 py-1 {{ $colorClass }} text-xs font-medium rounded-full">{{ $tag }}</span>
+                      @endforeach
+                    </div>
+                  @endif
+                @endif
               </div>
             </article>
           @empty

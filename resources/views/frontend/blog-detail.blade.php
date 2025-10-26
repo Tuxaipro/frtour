@@ -387,16 +387,6 @@
             </div>
           </section>
 
-          <!-- Call to Action -->
-          <div class="bg-gradient-to-r from-primary to-blue-600 rounded-2xl p-8 text-center text-white mb-12">
-            <h3 class="text-2xl font-bold mb-4">Besoin d'aide pour planifier votre voyage ?</h3>
-            <p class="text-lg mb-6 opacity-90">Nos experts vous conseillent gratuitement sur les meilleures périodes selon votre itinéraire.</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="https://calendly.com/votre-calendly/rdv-15min" class="bg-white/20 text-white border border-white/30 px-8 py-3 rounded-xl font-semibold hover:bg-white/30 transition-all duration-200">
-                RDV visio 15 min
-              </a>
-            </div>
-          </div>
         </div>
       </div>
     </section>

@@ -56,15 +56,6 @@
 <!-- Blog Posts -->
 <section class="py-16 sm:py-20 lg:py-24 bg-white">
     <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-                Articles <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Récents</span>
-            </h2>
-            <p class="text-xl text-slate-600 max-w-3xl mx-auto">
-                Nos dernières publications pour préparer votre voyage
-            </p>
-        </div>
-        
         @if($blogs->count() > 0)
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($blogs as $index => $blog)
@@ -93,21 +84,23 @@
                     @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                   </div>
-                  <div class="p-6">
-                    <div class="text-sm text-slate-500 mb-2">{{ $blog->created_at->format('d M Y') }}</div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors duration-200">{{ $blog->title }}</h3>
-                    <p class="text-slate-600 mb-4">{{ Str::limit($blog->excerpt ?? strip_tags($blog->content), 100) }}</p>
-                    <div class="flex items-center justify-between">
-                      <span class="text-sm text-slate-500">{{ ceil(str_word_count(strip_tags($blog->content)) / 200) }} min de lecture</span>
-                      <span class="text-primary font-semibold flex items-center">
-                        Lire l'article
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                        </svg>
-                      </span>
-                    </div>
-                  </div>
                 </a>
+                <div class="p-6">
+                  <div class="text-sm text-slate-500 mb-2">{{ $blog->created_at->format('d M Y') }}</div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors duration-200">
+                    <a href="{{ route('blog.show', $blog->slug) }}" class="hover:text-primary transition-colors">{{ $blog->title }}</a>
+                  </h3>
+                  <p class="text-slate-600 mb-4">{{ Str::limit($blog->excerpt ?? strip_tags($blog->content), 100) }}</p>
+                  <div class="flex flex-col gap-3">
+                    <span class="text-sm text-slate-500">{{ ceil(str_word_count(strip_tags($blog->content)) / 200) }} min de lecture</span>
+                    <a href="{{ route('blog.show', $blog->slug) }}" class="inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition-all duration-200 group">
+                      Lire l'article
+                      <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
               </article>
             @endforeach
           </div>
@@ -124,26 +117,6 @@
     </div>
 </section>
 
-<!-- Newsletter -->
-<section class="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-slate-900 to-slate-800">
-    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div class="text-center max-w-3xl mx-auto">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-                Restez <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">informé</span>
-            </h2>
-            <p class="text-xl text-slate-300 mb-8">
-                Inscrivez-vous à notre newsletter pour recevoir nos conseils de voyage et nos offres spéciales.
-            </p>
-            
-            <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
-                <input type="email" placeholder="Votre email" required class="flex-1 px-6 py-4 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200">
-                <button type="submit" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 whitespace-nowrap">
-                    S'inscrire
-                </button>
-            </form>
-        </div>
-    </div>
-</section>
 
   </main>
 
