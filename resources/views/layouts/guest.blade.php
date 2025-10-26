@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'India Tourisme') }} - Admin</title>
+        <title>{{ $siteName ?? config('app.name', 'Admin') }} - Admin</title>
 
         @if($siteFaviconUrl ?? false)
             <link rel="icon" type="image/x-icon" href="{{ $siteFaviconUrl }}">

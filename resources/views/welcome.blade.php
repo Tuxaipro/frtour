@@ -48,6 +48,90 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     html { scroll-behavior: smooth; }
     
+    /* Enhanced sticky header */
+    .sticky-header {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.95);
+      transition: all 0.3s ease;
+    }
+    
+    /* Scroll offset for anchor links */
+    section[id] {
+      scroll-margin-top: 4rem;
+    }
+    
+    /* Smooth transitions for navigation */
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: #3B82F6;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    /* Ensure sticky positioning works */
+    nav.sticky {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    
+    /* Fallback for older browsers */
+    nav {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 50 !important;
+    }
+    
+    /* Ensure header container doesn't hide content */
+    #header-container {
+      position: relative;
+      z-index: 50;
+      width: 100%;
+    }
+    
+    /* Force sticky positioning on the nav inside header-container */
+    #header-container > nav {
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 50 !important;
+    }
+    
+    /* Test sticky behavior */
+    .test-sticky {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 50 !important;
+    }
+    
+    /* Add visual indicator for testing */
+    .sticky-indicator {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #3B82F6;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      z-index: 100;
+    }
+    
     /* 2025 Responsive Standards */
     @media (max-width: 430px) {
       /* Mobile phones optimization */
@@ -124,8 +208,47 @@
   </style>
 </head>
 <body class="bg-white text-slate-900 font-sans antialiased">
-  <!-- Header Container -->
-  <div id="header-container"></div>
+  <div id="header-container" style="position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important;">
+    <nav class="bg-white shadow-lg border-b border-slate-200" style="background-color: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important; margin: 0 !important; width: 100% !important;">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-14">
+          <div class="flex items-center">
+            <a href="/" class="text-xl font-bold text-slate-900">{{ $siteName ?? 'India Tourisme' }}</a>
+          </div>
+          <div class="hidden lg:flex items-center space-x-6">
+            <a href="/" class="text-slate-700 hover:text-primary font-medium text-sm">Accueil</a>
+            <a href="/#services" class="text-slate-700 hover:text-primary font-medium text-sm">Services</a>
+            <a href="/galerie" class="text-slate-700 hover:text-primary font-medium text-sm">Galerie</a>
+            <a href="/blog" class="text-slate-700 hover:text-primary font-medium text-sm">Blog</a>
+            <a href="/#contact" class="text-slate-700 hover:text-primary font-medium text-sm">Contact</a>
+          </div>
+          
+          <!-- Mobile menu button -->
+          <div class="flex items-center lg:hidden">
+            <button type="button" onclick="toggleMobileMenu()" class="p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Mobile menu -->
+      <div class="lg:hidden hidden" id="mobile-menu" style="background-color: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px) !important;">
+        <div class="px-2 pt-2 pb-3 space-y-1 border-t border-slate-200">
+          <a href="/" class="block px-3 py-2 text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-md">Accueil</a>
+          <a href="/#services" class="block px-3 py-2 text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-md">Services</a>
+          <a href="/galerie" class="block px-3 py-2 text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-md">Galerie</a>
+          <a href="/blog" class="block px-3 py-2 text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-md">Blog</a>
+          <a href="/#contact" class="block px-3 py-2 text-sm font-medium text-slate-700 hover:text-primary hover:bg-slate-50 rounded-md">Contact</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Spacer for fixed header -->
+  <div style="height: 56px;"></div>
 
   <main>
             <!-- Hero Slider Section -->
@@ -224,7 +347,7 @@
                 </div>
             @else
                 <!-- Default Hero Section (fallback) -->
-            <section class="relative bg-gradient-to-br from-primary-light via-blue-50 to-white py-16 sm:py-20 lg:py-32 overflow-hidden">
+            <section class="relative bg-gradient-to-br from-primary-light via-blue-50 to-white py-8 sm:py-12 lg:py-16 overflow-hidden">
                 <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%233B82F6" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
                 <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
                     <div class="text-center max-w-4xl mx-auto">
@@ -235,11 +358,11 @@
                             DMC certifié ISO 9001:2015
                         </div>
                         
-                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-4">
                             Voyages <span class="text-primary">sur‑mesure</span> en Inde,<br class="hidden sm:block"> Sri Lanka, Népal & Bhoutan
                         </h1>
                         
-                        <p class="text-xl text-slate-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+                        <p class="text-lg text-slate-600 mb-6 max-w-3xl mx-auto leading-relaxed">
                             Circuits privés, chauffeurs anglophones/francophones, assistance 24/7 — pour voyageurs exigeants, agences et MICE.
                         </p>
                         
@@ -328,24 +451,24 @@
     </section>
 
     <!-- Quote Form Section -->
-    <section id="devis" class="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
+    <section id="devis" class="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden scroll-mt-20">
       <!-- Background decoration -->
       <div class="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-blue-600/5"></div>
       <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/10 to-transparent rounded-full -translate-y-48 translate-x-48"></div>
       <div class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-blue-600/10 to-transparent rounded-full translate-y-40 -translate-x-40"></div>
       
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div class="text-center mb-12">
-          <div class="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4 shadow-md backdrop-blur-sm border border-primary/20 animate-fade-in">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-md backdrop-blur-sm border border-primary/20 animate-fade-in">
+            <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             Devis gratuit et sans engagement
           </div>
-          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 animate-fade-in-up">
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 animate-fade-in-up">
             Obtenez un devis <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">personnalisé</span>
           </h2>
-          <p class="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-8 animate-fade-in-up animation-delay-200">Trois étapes simples pour créer votre voyage sur-mesure. Réponse détaillée sous 24–48h (jours ouvrés).</p>
+          <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-6 animate-fade-in-up animation-delay-200">Trois étapes simples pour créer votre voyage sur-mesure. Réponse détaillée sous 24–48h (jours ouvrés).</p>
           
           <!-- Enhanced Progress Indicator -->
           <div class="max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
@@ -1682,126 +1805,115 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-16 sm:py-20 lg:py-32 bg-white scroll-mt-24">
+    <section id="contact" class="py-8 sm:py-12 lg:py-16 bg-white scroll-mt-20">
       <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Contactez-nous</h2>
-          <p class="text-xl text-slate-600">Une question ? Nous sommes là pour vous aider.</p>
+        <div class="text-center mb-8">
+          <h2 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-3">Contactez-nous</h2>
+          <p class="text-lg text-slate-600">Une question ? Nous sommes là pour vous aider.</p>
         </div>
         
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          <div class="bg-slate-50 rounded-2xl p-6 sm:p-8">
-            <h3 class="text-xl font-bold text-slate-900 mb-6">Nos coordonnées</h3>
-            <div class="space-y-6">
-              <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 bg-primary-light rounded-lg flex items-center justify-center">
-                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+          <div class="bg-slate-50 rounded-xl p-4 sm:p-6">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">Nos coordonnées</h3>
+            <div class="space-y-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
+                  <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-slate-900">Téléphone</p>
-                  <p class="text-slate-600">+33 X XX XX XX XX</p>
+                  <p class="font-semibold text-slate-900 text-sm">Téléphone</p>
+                  <p class="text-slate-600 text-sm">{{ $contactPhone ?? '+33 X XX XX XX XX' }}</p>
                 </div>
               </div>
               
-              <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 bg-primary-light rounded-lg flex items-center justify-center">
-                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
+                  <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-slate-900">Email</p>
-                  <a href="mailto:contact@indiatourisme.fr" class="text-primary hover:text-primary-dark transition-colors duration-200">contact@indiatourisme.fr</a>
+                  <p class="font-semibold text-slate-900 text-sm">Email</p>
+                  <a href="mailto:{{ $contactEmail ?? 'contact@indiatourisme.fr' }}" class="text-primary hover:text-primary-dark transition-colors duration-200 text-sm">{{ $contactEmail ?? 'contact@indiatourisme.fr' }}</a>
                 </div>
               </div>
               
-              <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 bg-primary-light rounded-lg flex items-center justify-center">
-                  <svg class="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
+              @if($contactWhatsappUrl)
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
+                  <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.109"/>
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-slate-900">WhatsApp</p>
-                  <a href="https://wa.me/XXXXXXXXXXX" class="text-primary hover:text-primary-dark transition-colors duration-200">Écrire un message</a>
+                  <p class="font-semibold text-slate-900 text-sm">WhatsApp</p>
+                  <a href="{{ $contactWhatsappUrl }}" class="text-primary hover:text-primary-dark transition-colors duration-200 text-sm">Écrire un message</a>
                 </div>
               </div>
-              
-              <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 bg-primary-light rounded-lg flex items-center justify-center">
-                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  </svg>
-                </div>
-                <div>
-                  <p class="font-semibold text-slate-900">Adresse</p>
-                  <p class="text-slate-600">ADRESSE COMPLÈTE EN FRANCE</p>
-                </div>
-              </div>
+              @endif
             </div>
           </div>
           
-          <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-slate-200">
-            <h3 class="text-xl font-bold text-slate-900 mb-6">Envoyez-nous un message</h3>
+          <div class="bg-white rounded-xl p-4 sm:p-6 shadow-lg border border-slate-200">
+            <h3 class="text-lg font-bold text-slate-900 mb-4">Envoyez-nous un message</h3>
             
             <!-- Success/Error Messages -->
-            <div id="contact-message" class="hidden mb-6 p-4 rounded-xl"></div>
+            <div id="contact-message" class="hidden mb-4 p-3 rounded-xl"></div>
             
-            <form id="contact-form" class="space-y-4">
+            <form id="contact-form" class="space-y-3">
               @csrf
               <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">Sujet</label>
-                <input type="text" name="subject" required class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="Sujet de votre message">
+                <label class="block text-sm font-medium text-slate-700 mb-1">Sujet</label>
+                <input type="text" name="subject" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="Sujet de votre message">
               </div>
               <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">Votre message</label>
-                <textarea name="message" rows="4" placeholder="Parlez-nous de votre projet..." required class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"></textarea>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Votre message</label>
+                <textarea name="message" rows="3" placeholder="Parlez-nous de votre projet..." required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 resize-none"></textarea>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Nom *</label>
-                  <input type="text" name="name" required class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="Votre nom">
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Nom *</label>
+                  <input type="text" name="name" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="Votre nom">
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-slate-700 mb-2">Email *</label>
-                  <input type="email" name="email" required class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="votre@email.com">
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Email *</label>
+                  <input type="email" name="email" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="votre@email.com">
                 </div>
               </div>
               <div>
-                <label class="block text-sm font-medium text-slate-700 mb-2">Téléphone</label>
-                <input type="tel" name="phone" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="Votre numéro de téléphone">
+                <label class="block text-sm font-medium text-slate-700 mb-1">Téléphone</label>
+                <input type="tel" name="phone" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="Votre numéro de téléphone">
               </div>
               
               <!-- Math Captcha -->
-              <div class="space-y-3">
+              <div class="space-y-2">
                 <label class="block text-sm font-medium text-slate-700">Vérification mathématique *</label>
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-3">
                   <div class="flex-1">
-                    <input type="number" name="math_captcha" id="math_captcha_input" required class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="Votre réponse">
+                    <input type="number" name="math_captcha" id="math_captcha_input" required class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200" placeholder="Votre réponse">
                   </div>
                   <div class="flex-shrink-0">
-                    <div id="math-captcha-question" class="border border-slate-300 rounded-xl p-4 bg-slate-50 text-center min-w-[120px]">
-                      <div class="text-lg font-bold text-slate-700" id="captcha-question-text">
+                    <div id="math-captcha-question" class="border border-slate-300 rounded-lg p-3 bg-slate-50 text-center min-w-[100px]">
+                      <div class="text-sm font-bold text-slate-700" id="captcha-question-text">
                         {{ \App\Helpers\MathCaptcha::generate('contact')['question'] }}
                       </div>
                     </div>
-                    <button type="button" id="refresh-captcha-contact" class="flex items-center justify-center space-x-2 text-xs text-slate-500 hover:text-primary mt-2 px-3 py-2 border border-slate-300 rounded-lg hover:border-primary hover:bg-primary/5 transition-all duration-200 mx-auto">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button type="button" id="refresh-captcha-contact" class="flex items-center justify-center space-x-1 text-xs text-slate-500 hover:text-primary mt-1 px-2 py-1 border border-slate-300 rounded hover:border-primary hover:bg-primary/5 transition-all duration-200 mx-auto">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                       </svg>
-                      <span>Nouveau calcul</span>
+                      <span>Nouveau</span>
                     </button>
                   </div>
                 </div>
               </div>
               
-              <button type="submit" id="submit-btn" class="w-full bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+              <button type="submit" id="submit-btn" class="w-full bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
                 <span id="submit-text">Envoyer le message</span>
                 <span id="submit-loading" class="hidden">
-                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -1823,10 +1935,26 @@
   <script src="components/header.js"></script>
   <script src="components/footer.js"></script>
   <script>
+    // Mobile menu toggle function
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenu) {
+        mobileMenu.classList.toggle('hidden');
+      }
+    }
+
     // Load components when page loads
     document.addEventListener('DOMContentLoaded', function() {
-      loadHeader();
-      loadFooter();
+      // Load dynamic header only if header-container is empty
+      const headerContainer = document.getElementById('header-container');
+      if (headerContainer && headerContainer.innerHTML.trim() === '') {
+        loadHeader();
+      }
+      
+      // Load footer
+      if (document.getElementById('footer-container')) {
+        loadFooter();
+      }
       
       // Contact form handling
       const contactForm = document.getElementById('contact-form');

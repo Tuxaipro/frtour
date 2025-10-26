@@ -11,7 +11,7 @@ async function loadHeader() {
       const destinations = await destinationsResponse.json();
       
       destinationsHtml = destinations.map(destination => 
-        `<a href="/destinations/${destination.slug}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-primary">${destination.name}</a>`
+        `<a href="/destinations/${destination.slug}" class="block px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 hover:text-primary">${destination.name}</a>`
       ).join('');
       
       // Fetch logo settings
@@ -59,44 +59,44 @@ async function loadHeader() {
     }
 
     headerContainer.innerHTML = `
-      <nav class="bg-white shadow-sm sticky top-0 z-50">
+      <nav class="bg-white shadow-lg sticky top-0 z-50 border-b border-slate-200 sticky-header test-sticky" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 50;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between items-center h-20">
+          <div class="flex justify-between items-center h-14">
             <!-- Logo Section -->
             <div class="flex items-center">
               ${logoHtml}
             </div>
 
             <!-- Navigation Menu -->
-            <div class="hidden lg:flex items-center space-x-8">
-              <a href="/" class="text-slate-700 hover:text-primary font-medium transition-colors duration-200">Accueil</a>
+            <div class="hidden lg:flex items-center space-x-6">
+              <a href="/" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Accueil</a>
               <div class="relative group">
-                <a href="#" class="text-slate-700 hover:text-primary font-medium transition-colors duration-200 flex items-center">
+                <a href="#" class="nav-link text-slate-700 hover:text-primary font-medium flex items-center text-sm">
                   Circuits
-                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
                 </a>
-                <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-slate-200">
-                  <div class="py-2">
+                <div class="absolute left-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-slate-200" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+                  <div class="py-1">
                     ${destinationsHtml}
                   </div>
                 </div>
               </div>
-              <a href="/groupe" class="text-slate-700 hover:text-primary font-medium transition-colors duration-200">Groupe</a>
-              <a href="/#services" class="text-slate-700 hover:text-primary font-medium transition-colors duration-200">Services</a>
-              <a href="/galerie" class="text-slate-700 hover:text-primary font-medium transition-colors duration-200">Galerie</a>
-              <a href="/blog" class="text-slate-700 hover:text-primary font-medium transition-colors duration-200">Blog</a>
-              <a href="/#contact" class="text-slate-700 hover:text-primary font-medium transition-colors duration-200">Contact</a>
+              <a href="/groupe" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Groupe</a>
+              <a href="/#services" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Services</a>
+              <a href="/galerie" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Galerie</a>
+              <a href="/blog" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Blog</a>
+              <a href="/#contact" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Contact</a>
             </div>
 
             <!-- CTA Button -->
             <div class="hidden lg:flex items-center">
-              <a href="/#devis" class="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+              <a href="/#devis" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm">
                 Demander un devis
               </a>
             </div>
-            <div class="-mr-2 flex items-center sm:hidden">
+            <div class="-mr-2 flex items-center lg:hidden">
               <button type="button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()">
                 <span class="sr-only">Ouvrir le menu principal</span>
                 <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -109,16 +109,16 @@ async function loadHeader() {
 
         <!-- Mobile menu -->
         <div class="lg:hidden hidden" id="mobile-menu">
-          <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-slate-200">
-            <a href="/" class="text-slate-700 hover:text-primary block px-3 py-2 text-base font-medium">Accueil</a>
-            <a href="/#circuits" class="text-slate-700 hover:text-primary block px-3 py-2 text-base font-medium">Circuits</a>
-            <a href="/groupe" class="text-slate-700 hover:text-primary block px-3 py-2 text-base font-medium">Groupe</a>
-            <a href="/#services" class="text-slate-700 hover:text-primary block px-3 py-2 text-base font-medium">Services</a>
-            <a href="/galerie" class="text-slate-700 hover:text-primary block px-3 py-2 text-base font-medium">Galerie</a>
-            <a href="/blog" class="text-slate-700 hover:text-primary block px-3 py-2 text-base font-medium">Blog</a>
-            <a href="/#contact" class="text-slate-700 hover:text-primary block px-3 py-2 text-base font-medium">Contact</a>
-            <div class="pt-4 px-3">
-              <a href="/#devis" class="bg-primary hover:bg-primary-dark text-white px-4 py-3 rounded-lg font-medium transition-colors duration-200 inline-flex items-center justify-center w-full">
+          <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-slate-200" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+            <a href="/" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Accueil</a>
+            <a href="/#circuits" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Circuits</a>
+            <a href="/groupe" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Groupe</a>
+            <a href="/#services" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Services</a>
+            <a href="/galerie" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Galerie</a>
+            <a href="/blog" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Blog</a>
+            <a href="/#contact" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Contact</a>
+            <div class="pt-3 px-3">
+              <a href="/#devis" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 inline-flex items-center justify-center w-full text-sm">
                 Demander un devis
               </a>
             </div>
@@ -138,5 +138,66 @@ function toggleMobileMenu() {
 
 // Load header when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('Loading header...');
   loadHeader();
+  console.log('Header loaded successfully');
+  
+  // Enhanced sticky header behavior
+  setTimeout(() => {
+    const header = document.querySelector('nav');
+    console.log('Header found:', header);
+    let lastScrollY = window.scrollY;
+    
+    if (header) {
+      console.log('Setting up sticky header behavior');
+      
+      // Add scroll effect to header
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        
+        // Add/remove shadow based on scroll position
+        if (currentScrollY > 10) {
+          header.classList.add('shadow-lg');
+          header.classList.remove('shadow-sm');
+        } else {
+          header.classList.add('shadow-sm');
+          header.classList.remove('shadow-lg');
+        }
+        
+        lastScrollY = currentScrollY;
+      });
+      
+      // Smooth scroll for anchor links
+      const anchorLinks = document.querySelectorAll('a[href^="#"]');
+      console.log('Found anchor links:', anchorLinks.length);
+      anchorLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === '#') return;
+          
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            const headerHeight = header.offsetHeight;
+            const targetPosition = target.offsetTop - headerHeight - 20;
+            
+            console.log('Scrolling to:', href, 'at position:', targetPosition);
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+            
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+              mobileMenu.classList.add('hidden');
+            }
+          }
+        });
+      });
+    } else {
+      console.error('Header not found!');
+    }
+  }, 100); // Small delay to ensure header is loaded
 });
