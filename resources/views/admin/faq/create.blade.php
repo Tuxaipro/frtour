@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Ajouter une FAQ')
-@section('subtitle', 'Ajouter une nouvelle question fréquemment posée')
+@section('title', 'Add FAQ')
+@section('subtitle', 'Add a new frequently asked question')
 
 @section('content')
 <div class="max-w-2xl">
@@ -19,7 +19,7 @@
                        name="question" 
                        value="{{ old('question') }}"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('question') border-red-500 @enderror"
-                       placeholder="Quelle est votre question ?">
+                       placeholder="What is your question?">
                 @error('question')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -28,13 +28,13 @@
             <!-- Answer -->
             <div class="mb-6">
                 <label for="answer" class="block text-sm font-medium text-slate-700 mb-2">
-                    Réponse <span class="text-red-500">*</span>
+                    Answer <span class="text-red-500">*</span>
                 </label>
                 <textarea id="answer" 
                           name="answer" 
                           rows="6"
                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('answer') border-red-500 @enderror"
-                          placeholder="Votre réponse détaillée...">{{ old('answer') }}</textarea>
+                          placeholder="Your detailed answer...">{{ old('answer') }}</textarea>
                 @error('answer')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -43,7 +43,7 @@
             <!-- Sort Order -->
             <div class="mb-6">
                 <label for="sort_order" class="block text-sm font-medium text-slate-700 mb-2">
-                    Ordre d'affichage
+                    Display Order
                 </label>
                 <input type="number" 
                        id="sort_order" 
@@ -51,7 +51,7 @@
                        value="{{ old('sort_order', 0) }}"
                        min="0"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('sort_order') border-red-500 @enderror">
-                <p class="mt-1 text-sm text-slate-500">Les FAQ avec un ordre plus petit apparaîtront en premier</p>
+                <p class="mt-1 text-sm text-slate-500">FAQs with lower order will appear first</p>
                 @error('sort_order')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -65,7 +65,7 @@
                            value="1" 
                            {{ old('is_active', true) ? 'checked' : '' }}
                            class="rounded border-slate-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <span class="ml-2 text-sm text-slate-700">FAQ active</span>
+                    <span class="ml-2 text-sm text-slate-700">Active FAQ</span>
                 </label>
             </div>
 
@@ -73,11 +73,11 @@
             <div class="flex justify-end space-x-3">
                 <a href="{{ route('admin.faq.index') }}" 
                    class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors duration-200">
-                    Annuler
+                    Cancel
                 </a>
                 <button type="submit" 
                         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    Ajouter la FAQ
+                    Add FAQ
                 </button>
             </div>
         </form>

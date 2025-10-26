@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Modifier l\'image')
-@section('subtitle', 'Modifier les informations de l\'image')
+@section('title', 'Edit Image')
+@section('subtitle', 'Edit image information')
 
 @section('content')
 <div class="max-w-2xl">
@@ -12,7 +12,7 @@
             
             <!-- Current Image Preview -->
             <div class="mb-6">
-                <label class="block text-sm font-medium text-slate-700 mb-2">Image actuelle</label>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Current Image</label>
                 <div class="w-full h-48 bg-slate-100 rounded-lg overflow-hidden">
                     <img src="{{ Storage::url($galerie->image) }}" 
                          alt="{{ $galerie->title }}" 
@@ -23,14 +23,14 @@
             <!-- Title -->
             <div class="mb-6">
                 <label for="title" class="block text-sm font-medium text-slate-700 mb-2">
-                    Titre <span class="text-red-500">*</span>
+                    Title <span class="text-red-500">*</span>
                 </label>
                 <input type="text" 
                        id="title" 
                        name="title" 
                        value="{{ old('title', $galerie->title) }}"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('title') border-red-500 @enderror"
-                       placeholder="Titre de l'image">
+                       placeholder="Image title">
                 @error('title')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -45,7 +45,7 @@
                           name="description" 
                           rows="4"
                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('description') border-red-500 @enderror"
-                          placeholder="Description de l'image (optionnel)">{{ old('description', $galerie->description) }}</textarea>
+                          placeholder="Image description (optional)">{{ old('description', $galerie->description) }}</textarea>
                 @error('description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -54,12 +54,12 @@
             <!-- Category -->
             <div class="mb-6">
                 <label for="category_id" class="block text-sm font-medium text-slate-700 mb-2">
-                    Catégorie
+                    Category
                 </label>
                 <select id="category_id" 
                         name="category_id" 
                         class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('category_id') border-red-500 @enderror">
-                    <option value="">Sélectionner une catégorie (optionnel)</option>
+                    <option value="">Select a category (optional)</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id', $galerie->category_id) == $category->id ? 'selected' : '' }}>
                             {{ $category->name }}
@@ -74,14 +74,14 @@
             <!-- New Image -->
             <div class="mb-6">
                 <label for="image" class="block text-sm font-medium text-slate-700 mb-2">
-                    Nouvelle image
+                    New Image
                 </label>
                 <input type="file" 
                        id="image" 
                        name="image" 
                        accept="image/*"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('image') border-red-500 @enderror">
-                <p class="mt-1 text-sm text-slate-500">Laissez vide pour conserver l'image actuelle. Formats acceptés: JPEG, PNG, JPG, GIF. Taille max: 2MB</p>
+                <p class="mt-1 text-sm text-slate-500">Leave empty to keep current image. Accepted formats: JPEG, PNG, JPG, GIF. Max size: 2MB</p>
                 @error('image')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -90,7 +90,7 @@
             <!-- Sort Order -->
             <div class="mb-6">
                 <label for="sort_order" class="block text-sm font-medium text-slate-700 mb-2">
-                    Ordre d'affichage
+                    Display Order
                 </label>
                 <input type="number" 
                        id="sort_order" 
@@ -98,7 +98,7 @@
                        value="{{ old('sort_order', $galerie->sort_order) }}"
                        min="0"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('sort_order') border-red-500 @enderror">
-                <p class="mt-1 text-sm text-slate-500">Les images avec un ordre plus petit apparaîtront en premier</p>
+                <p class="mt-1 text-sm text-slate-500">Images with lower order will appear first</p>
                 @error('sort_order')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -112,7 +112,7 @@
                            value="1" 
                            {{ old('is_active', $galerie->is_active) ? 'checked' : '' }}
                            class="rounded border-slate-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <span class="ml-2 text-sm text-slate-700">Image active</span>
+                    <span class="ml-2 text-sm text-slate-700">Active Image</span>
                 </label>
             </div>
 
@@ -120,11 +120,11 @@
             <div class="flex justify-end space-x-3">
                 <a href="{{ route('admin.galerie.index') }}" 
                    class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors duration-200">
-                    Annuler
+                    Cancel
                 </a>
                 <button type="submit" 
                         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    Mettre à jour
+                    Update
                 </button>
             </div>
         </form>

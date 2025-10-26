@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Ajouter une image')
-@section('subtitle', 'Ajouter une nouvelle image à la galerie')
+@section('title', 'Add Image')
+@section('subtitle', 'Add a new image to the gallery')
 
 @section('content')
 <div class="max-w-2xl">
@@ -12,14 +12,14 @@
             <!-- Title -->
             <div class="mb-6">
                 <label for="title" class="block text-sm font-medium text-slate-700 mb-2">
-                    Titre <span class="text-red-500">*</span>
+                    Title <span class="text-red-500">*</span>
                 </label>
                 <input type="text" 
                        id="title" 
                        name="title" 
                        value="{{ old('title') }}"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('title') border-red-500 @enderror"
-                       placeholder="Titre de l'image">
+                       placeholder="Image title">
                 @error('title')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -34,7 +34,7 @@
                           name="description" 
                           rows="4"
                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('description') border-red-500 @enderror"
-                          placeholder="Description de l'image (optionnel)">{{ old('description') }}</textarea>
+                          placeholder="Image description (optional)">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -43,12 +43,12 @@
             <!-- Category -->
             <div class="mb-6">
                 <label for="category_id" class="block text-sm font-medium text-slate-700 mb-2">
-                    Catégorie
+                    Category
                 </label>
                 <select id="category_id" 
                         name="category_id" 
                         class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('category_id') border-red-500 @enderror">
-                    <option value="">Sélectionner une catégorie (optionnel)</option>
+                    <option value="">Select a category (optional)</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                             {{ $category->name }}
@@ -70,7 +70,7 @@
                        name="image" 
                        accept="image/*"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('image') border-red-500 @enderror">
-                <p class="mt-1 text-sm text-slate-500">Formats acceptés: JPEG, PNG, JPG, GIF. Taille max: 2MB</p>
+                <p class="mt-1 text-sm text-slate-500">Accepted formats: JPEG, PNG, JPG, GIF. Max size: 2MB</p>
                 @error('image')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -79,7 +79,7 @@
             <!-- Sort Order -->
             <div class="mb-6">
                 <label for="sort_order" class="block text-sm font-medium text-slate-700 mb-2">
-                    Ordre d'affichage
+                    Display Order
                 </label>
                 <input type="number" 
                        id="sort_order" 
@@ -87,7 +87,7 @@
                        value="{{ old('sort_order', 0) }}"
                        min="0"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('sort_order') border-red-500 @enderror">
-                <p class="mt-1 text-sm text-slate-500">Les images avec un ordre plus petit apparaîtront en premier</p>
+                <p class="mt-1 text-sm text-slate-500">Images with lower order will appear first</p>
                 @error('sort_order')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -101,7 +101,7 @@
                            value="1" 
                            {{ old('is_active', true) ? 'checked' : '' }}
                            class="rounded border-slate-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <span class="ml-2 text-sm text-slate-700">Image active</span>
+                    <span class="ml-2 text-sm text-slate-700">Active Image</span>
                 </label>
             </div>
 
@@ -109,11 +109,11 @@
             <div class="flex justify-end space-x-3">
                 <a href="{{ route('admin.galerie.index') }}" 
                    class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors duration-200">
-                    Annuler
+                    Cancel
                 </a>
                 <button type="submit" 
                         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    Ajouter l'image
+                    Add Image
                 </button>
             </div>
         </form>

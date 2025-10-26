@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Modifier la catégorie')
-@section('subtitle', 'Modifier les informations de la catégorie')
+@section('title', 'Edit Category')
+@section('subtitle', 'Edit category information')
 
 @section('content')
 <div class="max-w-2xl">
@@ -13,14 +13,14 @@
             <!-- Name -->
             <div class="mb-6">
                 <label for="name" class="block text-sm font-medium text-slate-700 mb-2">
-                    Nom de la catégorie <span class="text-red-500">*</span>
+                    Category Name <span class="text-red-500">*</span>
                 </label>
                 <input type="text" 
                        id="name" 
                        name="name" 
                        value="{{ old('name', $galerieCategory->name) }}"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('name') border-red-500 @enderror"
-                       placeholder="Ex: Paysages, Monuments, Culture...">
+                       placeholder="Ex: Landscapes, Monuments, Culture...">
                 @error('name')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -35,7 +35,7 @@
                           name="description" 
                           rows="4"
                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('description') border-red-500 @enderror"
-                          placeholder="Description de la catégorie (optionnel)">{{ old('description', $galerieCategory->description) }}</textarea>
+                          placeholder="Category description (optional)">{{ old('description', $galerieCategory->description) }}</textarea>
                 @error('description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -44,7 +44,7 @@
             <!-- Sort Order -->
             <div class="mb-6">
                 <label for="sort_order" class="block text-sm font-medium text-slate-700 mb-2">
-                    Ordre d'affichage
+                    Display Order
                 </label>
                 <input type="number" 
                        id="sort_order" 
@@ -52,7 +52,7 @@
                        value="{{ old('sort_order', $galerieCategory->sort_order) }}"
                        min="0"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('sort_order') border-red-500 @enderror">
-                <p class="mt-1 text-sm text-slate-500">Les catégories avec un ordre plus petit apparaîtront en premier</p>
+                <p class="mt-1 text-sm text-slate-500">Categories with lower order will appear first</p>
                 @error('sort_order')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -66,7 +66,7 @@
                            value="1" 
                            {{ old('is_active', $galerieCategory->is_active) ? 'checked' : '' }}
                            class="rounded border-slate-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <span class="ml-2 text-sm text-slate-700">Catégorie active</span>
+                    <span class="ml-2 text-sm text-slate-700">Active Category</span>
                 </label>
             </div>
 
@@ -77,7 +77,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <span class="text-sm text-slate-600">
-                        Cette catégorie contient actuellement <strong>{{ $galerieCategory->galeries->count() }}</strong> image(s).
+                        This category currently contains <strong>{{ $galerieCategory->galeries->count() }}</strong> image(s).
                     </span>
                 </div>
             </div>
@@ -86,11 +86,11 @@
             <div class="flex justify-end space-x-3">
                 <a href="{{ route('admin.galerie-category.index') }}" 
                    class="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors duration-200">
-                    Annuler
+                    Cancel
                 </a>
                 <button type="submit" 
                         class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    Mettre à jour la catégorie
+                    Update Category
                 </button>
             </div>
         </form>
