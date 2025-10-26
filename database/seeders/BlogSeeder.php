@@ -17,6 +17,8 @@ class BlogSeeder extends Seeder
             [
                 'title' => 'Top 10 Places to Visit in India',
                 'slug' => 'top-10-places-to-visit-in-india',
+                'excerpt' => 'Discover the most incredible destinations India has to offer, from iconic monuments to stunning natural wonders.',
+                'featured_image' => null,
                 'content' => '<p>India is a land of diverse cultures, breathtaking landscapes, and rich history. From the snow-capped peaks of the Himalayas to the pristine beaches of the south, India offers a plethora of experiences for every traveler. Here are the top 10 places you must visit in India:</p>
                 
                 <h2>1. Taj Mahal, Agra</h2>
@@ -54,6 +56,8 @@ class BlogSeeder extends Seeder
             [
                 'title' => 'Indian Cuisine: A Culinary Journey',
                 'slug' => 'indian-cuisine-a-culinary-journey',
+                'excerpt' => 'Explore the rich and diverse flavors of Indian cuisine, from regional specialties to street food culture.',
+                'featured_image' => null,
                 'content' => '<p>Indian cuisine is as diverse as the country itself, with each region offering its own unique flavors, ingredients, and cooking techniques. From the spicy curries of the south to the rich gravies of the north, Indian food is a true delight for the senses.</p>
                 
                 <h2>Regional Varieties</h2>
@@ -82,6 +86,8 @@ class BlogSeeder extends Seeder
             [
                 'title' => 'Tips for Traveling in India',
                 'slug' => 'tips-for-traveling-in-india',
+                'excerpt' => 'Essential travel tips and advice for visiting India, covering everything from visas to cultural sensitivity.',
+                'featured_image' => null,
                 'content' => '<p>Traveling in India can be an incredibly rewarding experience, but it\'s also important to be prepared. Here are some essential tips to make your journey smooth and enjoyable:</p>
                 
                 <h2>Visa and Documentation</h2>
