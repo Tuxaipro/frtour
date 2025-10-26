@@ -21,6 +21,11 @@ class SettingSeeder extends Seeder
             ['key' => 'address', 'value' => '123 Rue de l\'Inde, 75001 Paris', 'type' => 'string', 'group' => 'general'],
             ['key' => 'business_hours', 'value' => 'Lun-Ven: 9h-18h, Sam: 9h-13h', 'type' => 'string', 'group' => 'general'],
             
+            // Logo and Brand settings
+            ['key' => 'site_logo', 'value' => '', 'type' => 'string', 'group' => 'general'],
+            ['key' => 'logo_light', 'value' => '', 'type' => 'string', 'group' => 'general'],
+            ['key' => 'site_favicon', 'value' => '', 'type' => 'string', 'group' => 'general'],
+            
             // SEO settings
             ['key' => 'meta_title', 'value' => 'India Tourisme - Voyages sur mesure en Inde', 'type' => 'string', 'group' => 'seo'],
             ['key' => 'meta_description', 'value' => 'Voyages sur mesure en Inde, Sri Lanka, Népal et Bhoutan. Circuits privés, chauffeurs anglophones/francophones, assistance 24/7.', 'type' => 'text', 'group' => 'seo'],
