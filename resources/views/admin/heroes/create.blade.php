@@ -121,15 +121,20 @@
                         
                         <!-- New Image Preview -->
                         <div id="new-image-preview" class="mb-4 hidden">
-                            <div class="flex items-center space-x-3">
-                                <img id="preview-new" src="" alt="New background image" class="w-32 h-20 object-cover rounded-lg border border-gray-200">
+                            <div class="flex items-start space-x-3 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                                <img id="preview-new" src="" alt="New background image" class="w-24 h-16 object-cover rounded-lg border border-slate-300 shadow-sm flex-shrink-0">
                                 <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-700">New Image Preview</p>
-                                    <p class="text-xs text-gray-500" id="filename"></p>
+                                    <p class="text-sm font-medium text-slate-700">New Image Preview</p>
+                                    <p class="text-xs text-slate-500 mt-1" id="filename"></p>
+                                    <div class="mt-3">
+                                        <button type="button" onclick="clearNewImage()" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100 transition-colors">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                            Cancel
+                                        </button>
+                                    </div>
                                 </div>
-                                <button type="button" onclick="clearNewImage()" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                    Cancel
-                                </button>
                             </div>
                         </div>
                         

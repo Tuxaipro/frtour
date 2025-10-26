@@ -12,9 +12,30 @@ class PageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pages = Page::all();
+        $query = Page::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $pages = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        
         return view('admin.pages.index', compact('pages'));
     }
 
@@ -122,5 +143,33 @@ class PageController extends Controller
         
         $page->delete();
         return redirect()->route('admin.pages.index')->with('success', 'Page deleted successfully.');
+    }
+
+    /**
+     * Duplicate a page
+     */
+    public function duplicate(Page $page)
+    {
+        $newPage = $page->replicate();
+        $newPage->title = $page->title . ' (Copy)';
+        $newPage->slug = $page->slug . '-copy';
+        $newPage->is_active = false; // Set duplicate as inactive by default
+        $newPage->created_at = now();
+        $newPage->updated_at = now();
+        $newPage->save();
+
+        // Copy the featured image if it exists
+        if ($page->featured_image) {
+            $extension = pathinfo($page->featured_image, PATHINFO_EXTENSION);
+            $newFilename = 'page_images/' . uniqid() . '_' . time() . '.' . $extension;
+            
+            if (\Storage::disk('public')->exists($page->featured_image)) {
+                \Storage::disk('public')->copy($page->featured_image, $newFilename);
+                $newPage->featured_image = $newFilename;
+                $newPage->save();
+            }
+        }
+
+        return redirect()->route('admin.pages.index')->with('success', 'Page duplicated successfully. You can now edit the copy.');
     }
 }

@@ -123,30 +123,49 @@
                         <!-- Current Image Display -->
                         @if($hero->background_image)
                             <div id="current-image" class="mb-4">
-                                <div class="flex items-center space-x-3">
-                                    <img src="{{ asset('storage/' . $hero->background_image) }}" alt="{{ $hero->title }}" class="w-32 h-20 object-cover rounded-lg border border-gray-200" id="preview-current">
-                                    <div class="flex-1">
-                                        <p class="text-sm font-medium text-gray-700">Current Image</p>
-                                        <p class="text-xs text-gray-500">{{ basename($hero->background_image) }}</p>
+                                <div class="flex items-start space-x-3 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                                    <img src="{{ asset('storage/' . $hero->background_image) }}" alt="{{ $hero->title }}" class="w-24 h-16 object-cover rounded-lg border border-slate-300 shadow-sm flex-shrink-0" id="preview-current">
+                                    <div class="flex-1 flex flex-col justify-between min-h-[96px]">
+                                        <div>
+                                            <p class="text-sm font-medium text-slate-700">Current Image</p>
+                                            <p class="text-xs text-slate-500 mt-1">{{ basename($hero->background_image) }}</p>
+                                        </div>
+                                        <div class="flex items-center space-x-2 mt-auto">
+                                            <a href="{{ asset('storage/' . $hero->background_image) }}" target="_blank" class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded hover:bg-blue-100 transition-colors">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                                </svg>
+                                                View
+                                            </a>
+                                            <button type="button" onclick="clearCurrentImage()" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100 transition-colors">
+                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                                Remove
+                                            </button>
+                                        </div>
                                     </div>
-                                    <button type="button" onclick="clearCurrentImage()" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                        Remove
-                                    </button>
                                 </div>
                             </div>
                         @endif
                         
                         <!-- New Image Preview -->
                         <div id="new-image-preview" class="mb-4 hidden">
-                            <div class="flex items-center space-x-3">
-                                <img id="preview-new" src="" alt="New background image" class="w-32 h-20 object-cover rounded-lg border border-gray-200">
+                            <div class="flex items-start space-x-3 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                                <img id="preview-new" src="" alt="New background image" class="w-24 h-16 object-cover rounded-lg border border-slate-300 shadow-sm flex-shrink-0">
                                 <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-700">New Image Preview</p>
-                                    <p class="text-xs text-gray-500" id="filename"></p>
+                                    <p class="text-sm font-medium text-slate-700">New Image Preview</p>
+                                    <p class="text-xs text-slate-500 mt-1" id="filename"></p>
+                                    <div class="mt-3">
+                                        <button type="button" onclick="clearNewImage()" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100 transition-colors">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                            Cancel
+                                        </button>
+                                    </div>
                                 </div>
-                                <button type="button" onclick="clearNewImage()" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                    Cancel
-                                </button>
                             </div>
                         </div>
                         

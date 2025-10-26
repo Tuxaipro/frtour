@@ -84,7 +84,6 @@ async function loadHeader() {
                 </div>
               </div>
               <a href="/groupe" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Groupe</a>
-              <a href="/#services" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Services</a>
               <a href="/galerie" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Galerie</a>
               <a href="/blog" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Blog</a>
               <a href="/#contact" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Contact</a>
@@ -113,7 +112,6 @@ async function loadHeader() {
             <a href="/" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Accueil</a>
             <a href="/#circuits" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Circuits</a>
             <a href="/groupe" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Groupe</a>
-            <a href="/#services" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Services</a>
             <a href="/galerie" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Galerie</a>
             <a href="/blog" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Blog</a>
             <a href="/#contact" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Contact</a>

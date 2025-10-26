@@ -53,10 +53,18 @@
             @foreach($circuits as $circuit)
                 <article class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-slate-200 hover:border-primary/30">
                     <div class="relative overflow-hidden">
-                        <div class="w-full h-64 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                            <span class="text-white text-xl font-bold">{{ $circuit->name }}</span>
-                        </div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        @if($circuit->featured_image)
+                            <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4">
+                                <h3 class="text-xl font-bold text-white">{{ $circuit->name }}</h3>
+                            </div>
+                        @else
+                            <div class="w-full h-64 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                                <span class="text-white text-xl font-bold">{{ $circuit->name }}</span>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                        @endif
                     </div>
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-slate-900 mb-2">{{ $circuit->name }} — {{ $circuit->duration_days }} jours</h3>

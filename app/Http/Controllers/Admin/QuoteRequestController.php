@@ -11,9 +11,29 @@ class QuoteRequestController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $quoteRequests = QuoteRequest::orderBy('created_at', 'desc')->get();
+        $query = QuoteRequest::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('destinations', 'like', "%{$search}%")
+                  ->orWhere('preferences', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('is_processed')) {
+            $query->where('is_processed', $request->is_processed === 'processed');
+        }
+
+        $quoteRequests = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        
         return view('admin.quote-requests.index', compact('quoteRequests'));
     }
 

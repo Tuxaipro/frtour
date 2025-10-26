@@ -11,9 +11,28 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $contacts = Contact::orderBy('created_at', 'desc')->paginate(15);
+        $query = Contact::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('subject', 'like', "%{$search}%")
+                  ->orWhere('message', 'like', "%{$search}%");
+            });
+        }
+
+        // Read status filter
+        if ($request->filled('is_read')) {
+            $query->where('is_read', $request->is_read === 'read');
+        }
+
+        $contacts = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
+        
         return view('admin.contacts.index', compact('contacts'));
     }
 

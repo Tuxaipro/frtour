@@ -8,9 +8,30 @@ use Illuminate\Http\Request;
 
 class FaqController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $faqs = Faq::orderBy('sort_order')->get();
+        $query = Faq::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('question', 'like', "%{$search}%")
+                  ->orWhere('answer', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $faqs = $query->orderBy('sort_order')->paginate(20)->withQueryString();
+        
         return view('admin.faq.index', compact('faqs'));
     }
 

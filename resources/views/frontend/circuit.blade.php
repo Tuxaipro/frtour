@@ -69,7 +69,30 @@
     <!-- Page Content -->
     <main>
 <!-- Hero Section -->
-<section class="relative bg-gradient-to-br from-orange-500 to-red-600 text-white py-16 sm:py-24 lg:py-32">
+@if($circuit->featured_image)
+<section class="relative h-[500px] lg:h-[600px] overflow-hidden">
+    <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="absolute inset-0 w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+    <div class="relative h-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
+        <div class="flex flex-col justify-end h-full pb-16">
+            <div class="max-w-4xl">
+                <nav class="flex items-center space-x-2 text-sm sm:text-base mb-6 text-white/80">
+                    <a href="{{ route('home') }}" class="hover:text-white transition-colors">Accueil</a>
+                    <span>/</span>
+                    <a href="{{ route('destination', $circuit->destination->slug) }}" class="hover:text-white transition-colors">{{ $circuit->destination->name }}</a>
+                    <span>/</span>
+                    <span class="text-white font-medium">{{ $circuit->name }}</span>
+                </nav>
+                
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
+                    {{ $circuit->name }}
+                </h1>
+            </div>
+        </div>
+    </div>
+</section>
+@else
+<section class="relative bg-gradient-to-br from-orange-500 to-red-600 text-white py-16 sm:py-20 lg:py-32">
     <div class="absolute inset-0 bg-black/20"></div>
     <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div class="max-w-4xl">
@@ -106,6 +129,7 @@
         </div>
     </div>
 </section>
+@endif
 
 <!-- Circuit Details -->
 <section class="py-16 sm:py-20 lg:py-24">
@@ -158,6 +182,11 @@
             
             <div>
                 <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-6">
+                    @if($circuit->featured_image)
+                    <div class="mb-6 -mt-6 -mx-6">
+                        <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-48 object-cover">
+                    </div>
+                    @endif
                     <h3 class="text-2xl font-bold text-slate-900 mb-6">Résumé du circuit</h3>
                     
                     <div class="space-y-4 mb-8">
@@ -212,8 +241,15 @@
             
             @forelse($relatedCircuits as $relatedCircuit)
                 <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                    <div class="h-64 bg-gradient-to-br from-red-500 to-pink-600 relative overflow-hidden">
-                        <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="h-64 relative overflow-hidden">
+                        @if($relatedCircuit->featured_image)
+                            <img src="{{ asset('storage/' . $relatedCircuit->featured_image) }}" alt="{{ $relatedCircuit->name }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="h-full bg-gradient-to-br from-red-500 to-pink-600">
+                                <div class="absolute inset-0 bg-black/20"></div>
+                            </div>
+                        @endif
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 text-white">
                             <h3 class="text-2xl font-bold mb-2">{{ $relatedCircuit->name }}</h3>
                             <p class="text-sm opacity-90">{{ $relatedCircuit->duration_days }} jours</p>

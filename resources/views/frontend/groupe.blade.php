@@ -77,25 +77,122 @@
     .rotate-180 {
       transform: rotate(180deg);
     }
+    
+    /* Page Loader Styles */
+    #page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    #page-loader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .loader-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+    }
+    
+    .loader-dot {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      animation: bounce 1.4s ease-in-out infinite both;
+    }
+    
+    .loader-dot:nth-child(1) {
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      animation-delay: 0s;
+    }
+    
+    .loader-dot:nth-child(2) {
+      bottom: 0;
+      left: 0;
+      animation-delay: 0.16s;
+    }
+    
+    .loader-dot:nth-child(3) {
+      bottom: 0;
+      right: 0;
+      animation-delay: 0.32s;
+    }
+    
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body class="bg-white">
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-container">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+  </div>
+
+  <script>
+    // Page Loader - Hide loader when page is fully loaded
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const loader = document.getElementById('page-loader');
+        if (loader) {
+          loader.classList.add('hide');
+          // Remove loader from DOM after animation completes
+          setTimeout(function() {
+            loader.remove();
+          }, 500);
+        }
+      }, 300); // Minimum display time for loader
+    });
+  </script>
+
   <!-- Header Container -->
   <div id="header-container"></div>
 
 <!-- Hero Section -->
-  <section class="relative bg-gradient-to-r from-purple-50 to-indigo-50 py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center">
-        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          Voyages de <span class="text-purple-600">Groupe</span>
-      </h1>
-        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+  <section class="relative bg-gradient-to-r from-purple-50 to-indigo-50 py-16 sm:py-20 lg:py-32">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%238B5CF6\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"4\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+    <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
+      <div class="text-center max-w-4xl mx-auto">
+        <div class="inline-flex items-center px-4 py-2 rounded-full bg-purple-100 border border-purple-200 text-purple-800 font-medium text-sm mb-8">
+          <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
+          </svg>
+          Groupes & Entreprises
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+          Voyages de <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Groupe</span>
+        </h1>
+        <p class="text-xl text-slate-600 mb-8 leading-relaxed">
           Organisez des voyages inoubliables pour vos groupes : familles, amis, entreprises ou associations. Des circuits sur-mesure avec des tarifs préférentiels.
-      </p>
+        </p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- Avantages Section -->
   <section class="py-20 bg-white">

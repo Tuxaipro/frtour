@@ -206,8 +206,99 @@
       transform: rotate(180deg);
     }
   </style>
+  <!-- Page Loader Styles -->
+  <style>
+    #page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    #page-loader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .loader-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+    }
+    
+    .loader-dot {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      animation: bounce 1.4s ease-in-out infinite both;
+    }
+    
+    .loader-dot:nth-child(1) {
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      animation-delay: 0s;
+    }
+    
+    .loader-dot:nth-child(2) {
+      bottom: 0;
+      left: 0;
+      animation-delay: 0.16s;
+    }
+    
+    .loader-dot:nth-child(3) {
+      bottom: 0;
+      right: 0;
+      animation-delay: 0.32s;
+    }
+    
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
 <body class="bg-white text-slate-900 font-sans antialiased">
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-container">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+  </div>
+
+  <script>
+    // Page Loader - Hide loader when page is fully loaded
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const loader = document.getElementById('page-loader');
+        if (loader) {
+          loader.classList.add('hide');
+          // Remove loader from DOM after animation completes
+          setTimeout(function() {
+            loader.remove();
+          }, 500);
+        }
+      }, 300); // Minimum display time for loader
+    });
+  </script>
+
   <div id="header-container" style="position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important;">
     <nav class="bg-white shadow-lg border-b border-slate-200" style="background-color: rgba(255, 255, 255, 0.95) !important; backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important; margin: 0 !important; width: 100% !important;">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -413,13 +504,23 @@
             @endphp
             <article class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-slate-200 hover:border-primary/30">
               <div class="relative overflow-hidden">
-                <div class="w-full h-48 bg-gradient-to-br {{ $gradient }} flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                  <span class="text-white text-lg font-bold text-center px-4">{{ $circuit->name }}</span>
-                </div>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                @if($circuit->featured_image)
+                  <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div class="absolute bottom-2 left-4 right-4">
+                    <h3 class="text-lg font-bold text-white">{{ $circuit->name }}</h3>
+                  </div>
+                @else
+                  <div class="w-full h-48 bg-gradient-to-br {{ $gradient }} flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                    <span class="text-white text-lg font-bold text-center px-4">{{ $circuit->name }}</span>
+                  </div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                @endif
               </div>
               <div class="p-4">
-                <h3 class="text-lg font-bold text-slate-900 mb-2">{{ $circuit->name }} — {{ $circuit->duration_days }} jours</h3>
+                @if(!$circuit->featured_image)
+                  <h3 class="text-lg font-bold text-slate-900 mb-2">{{ $circuit->name }} — {{ $circuit->duration_days }} jours</h3>
+                @endif
                 <p class="text-slate-600 mb-3 text-sm">{{ Str::limit($circuit->description, 70) }}</p>
                 @if($circuit->price_from)
                   <p class="text-lg font-bold text-primary mb-3 whitespace-nowrap">à partir de {{ number_format($circuit->price_from, 0, ',', ' ') }} € / pers <span class="text-xs font-normal text-slate-500">(hors vols)</span></p>
@@ -431,10 +532,10 @@
                     @endforeach
                   </div>
                 @endif
-                <div class="mt-3">
-                  <a href="{{ route('circuit', $circuit->slug) }}" class="inline-flex items-center text-primary hover:text-primary-dark font-medium transition-colors duration-200 text-sm">
+                <div class="mt-3 flex justify-end">
+                  <a href="{{ route('circuit', $circuit->slug) }}" class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200 text-sm">
                     Voir les détails
-                    <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                   </a>

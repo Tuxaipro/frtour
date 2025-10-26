@@ -11,9 +11,29 @@ class DestinationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $destinations = Destination::latest()->paginate(10);
+        $query = Destination::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $destinations = $query->latest()->paginate(10)->withQueryString();
 
         return view('admin.destinations.index', compact('destinations'));
     }
@@ -127,5 +147,21 @@ class DestinationController extends Controller
             return redirect()->route('admin.destinations.index')
                 ->with('error', 'An error occurred while deleting the destination: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Duplicate a destination
+     */
+    public function duplicate(Destination $destination)
+    {
+        $newDestination = $destination->replicate();
+        $newDestination->name = $destination->name . ' (Copy)';
+        $newDestination->slug = $destination->slug . '-copy';
+        $newDestination->is_active = false; // Set duplicate as inactive by default
+        $newDestination->created_at = now();
+        $newDestination->updated_at = now();
+        $newDestination->save();
+
+        return redirect()->route('admin.destinations.index')->with('success', 'Destination duplicated successfully. You can now edit the copy.');
     }
 }

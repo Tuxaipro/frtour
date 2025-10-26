@@ -11,9 +11,30 @@ class GalerieCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = GalerieCategory::orderBy('sort_order')->get();
+        $query = GalerieCategory::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $categories = $query->withCount('galeries')->orderBy('sort_order')->paginate(20)->withQueryString();
+        
         return view('admin.galerie-category.index', compact('categories'));
     }
 

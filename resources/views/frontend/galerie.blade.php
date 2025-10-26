@@ -5,11 +5,17 @@
 
 @section('content')
         <!-- Hero Section -->
-        <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Galerie Photos</h1>
-                    <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+        <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16 sm:py-20 lg:py-32">
+            <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
+                <div class="text-center max-w-4xl mx-auto">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white font-medium text-sm mb-8">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                        </svg>
+                        Galerie Photos
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">Galerie Photos</h1>
+                    <p class="text-xl text-blue-100 mb-8 leading-relaxed">
                         Découvrez les plus beaux moments de nos voyages à travers l'Inde, le Sri Lanka et le Népal
                     </p>
                 </div>

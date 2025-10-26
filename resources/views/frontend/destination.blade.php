@@ -87,7 +87,7 @@
         <!-- Page Content -->
         <main>
 <!-- Hero Section -->
-<section class="relative py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+<section class="relative py-16 sm:py-20 lg:py-32 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
     <!-- Background Pattern -->
     <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
     
@@ -151,8 +151,15 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse($circuits as $circuit)
                 <div class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                    <div class="h-64 bg-gradient-to-br from-red-500 to-pink-600 relative overflow-hidden">
-                        <div class="absolute inset-0 bg-black/20"></div>
+                    <div class="h-64 relative overflow-hidden">
+                        @if($circuit->featured_image)
+                            <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="h-full bg-gradient-to-br from-red-500 to-pink-600">
+                                <div class="absolute inset-0 bg-black/20"></div>
+                            </div>
+                        @endif
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 text-white">
                             <h3 class="text-2xl font-bold mb-2">{{ $circuit->name }}</h3>
                             <p class="text-sm opacity-90">{{ $circuit->duration_days }} jours</p>

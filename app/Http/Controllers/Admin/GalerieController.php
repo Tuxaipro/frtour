@@ -14,9 +14,27 @@ class GalerieController extends Controller
     {
         $query = Galerie::with('category')->orderBy('sort_order');
         
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
         // Filter by category if provided
         if ($request->has('category_id') && $request->category_id) {
             $query->where('category_id', $request->category_id);
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
         }
         
         $galerie = $query->get();

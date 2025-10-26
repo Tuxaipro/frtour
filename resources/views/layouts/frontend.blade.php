@@ -71,9 +71,99 @@
         .nav-link:hover::after {
             width: 100%;
         }
+        
+        /* Page Loader Styles */
+        #page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        #page-loader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        
+        .loader-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            animation: bounce 1.4s ease-in-out infinite both;
+        }
+        
+        .loader-dot:nth-child(1) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 0s;
+        }
+        
+        .loader-dot:nth-child(2) {
+            bottom: 0;
+            left: 0;
+            animation-delay: 0.16s;
+        }
+        
+        .loader-dot:nth-child(3) {
+            bottom: 0;
+            right: 0;
+            animation-delay: 0.32s;
+        }
+        
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50">
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-container">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+        </div>
+    </div>
+
+    <script>
+        // Page Loader - Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loader = document.getElementById('page-loader');
+                if (loader) {
+                    loader.classList.add('hide');
+                    // Remove loader from DOM after animation completes
+                    setTimeout(function() {
+                        loader.remove();
+                    }, 500);
+                }
+            }, 300); // Minimum display time for loader
+        });
+    </script>
+
     <!-- Header Container -->
     <div id="header-container"></div>
 

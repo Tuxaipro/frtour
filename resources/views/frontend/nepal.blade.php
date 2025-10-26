@@ -77,14 +77,103 @@
     .rotate-180 {
       transform: rotate(180deg);
     }
+    
+    /* Page Loader Styles */
+    #page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      transition: opacity 0.5s ease-out;
+    }
+    
+    #page-loader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .loader-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+    }
+    
+    .loader-dot {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      animation: bounce 1.4s ease-in-out infinite both;
+    }
+    
+    .loader-dot:nth-child(1) {
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      animation-delay: 0s;
+    }
+    
+    .loader-dot:nth-child(2) {
+      bottom: 0;
+      left: 0;
+      animation-delay: 0.16s;
+    }
+    
+    .loader-dot:nth-child(3) {
+      bottom: 0;
+      right: 0;
+      animation-delay: 0.32s;
+    }
+    
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body class="bg-white">
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="loader-container">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+  </div>
+
+  <script>
+    // Page Loader - Hide loader when page is fully loaded
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const loader = document.getElementById('page-loader');
+        if (loader) {
+          loader.classList.add('hide');
+          setTimeout(function() {
+            loader.remove();
+          }, 500);
+        }
+      }, 300);
+    });
+  </script>
+
   <!-- Header Container -->
   <div id="header-container"></div>
 
   <!-- Hero Section -->
-  <section class="relative bg-gradient-to-r from-blue-50 to-purple-50 py-20">
+  <section class="relative bg-gradient-to-r from-blue-50 to-purple-50 py-16 sm:py-20 lg:py-32">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
         <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">

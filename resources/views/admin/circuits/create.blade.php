@@ -13,7 +13,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.circuits.store') }}" method="POST">
+                <form action="{{ route('admin.circuits.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     
                     <div class="mb-4">
@@ -105,6 +105,34 @@
                     </div>
                     
                     <div class="mb-4">
+                        <label for="featured_image" class="block text-gray-700 text-sm font-bold mb-2">Featured Image</label>
+                        <input type="file" name="featured_image" id="featured_image" accept="image/*" onchange="previewImage(this)">
+                        <p class="text-gray-500 text-xs mt-1">Upload a featured image for this circuit (max 2MB)</p>
+                        @error('featured_image')
+                            <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+                        @enderror
+                        
+                        <!-- Image preview -->
+                        <div id="new-image-preview" class="mt-4 hidden">
+                            <div class="flex items-start space-x-3 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                                <img id="preview-new" src="" alt="New image" class="w-24 h-16 object-cover rounded-lg border border-slate-300 shadow-sm flex-shrink-0">
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-slate-700">New Image Preview</p>
+                                    <p class="text-xs text-slate-500 mt-1" id="filename"></p>
+                                    <div class="mt-3">
+                                        <button type="button" onclick="clearNewImage()" class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100 transition-colors">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
                         <input type="hidden" name="is_active" value="0">
                         <label class="block text-gray-700 text-sm font-bold mb-2">
                             <input type="checkbox" name="is_active" id="is_active" class="mr-2" value="1" {{ old('is_active', true) ? 'checked' : '' }}>
@@ -125,4 +153,23 @@
         </div>
     </div>
 </div>
+
+<script>
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('preview-new').src = e.target.result;
+            document.getElementById('filename').textContent = input.files[0].name;
+            document.getElementById('new-image-preview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function clearNewImage() {
+    document.getElementById('featured_image').value = '';
+    document.getElementById('new-image-preview').classList.add('hidden');
+}
+</script>
 @endsection

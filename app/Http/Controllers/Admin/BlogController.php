@@ -12,9 +12,30 @@ class BlogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::orderBy('created_at', 'desc')->get();
+        $query = Blog::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            if ($request->status === 'published') {
+                $query->where('is_published', true);
+            } elseif ($request->status === 'draft') {
+                $query->where('is_published', false);
+            }
+        }
+
+        $blogs = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        
         return view('admin.blogs.index', compact('blogs'));
     }
 
@@ -118,5 +139,33 @@ class BlogController extends Controller
         
         $blog->delete();
         return redirect()->route('admin.blogs.index')->with('success', 'Blog post deleted successfully.');
+    }
+
+    /**
+     * Duplicate a blog
+     */
+    public function duplicate(Blog $blog)
+    {
+        $newBlog = $blog->replicate();
+        $newBlog->title = $blog->title . ' (Copy)';
+        $newBlog->slug = $blog->slug . '-copy';
+        $newBlog->is_published = false; // Set duplicate as draft by default
+        $newBlog->created_at = now();
+        $newBlog->updated_at = now();
+        $newBlog->save();
+
+        // Copy the featured image if it exists
+        if ($blog->featured_image) {
+            $extension = pathinfo($blog->featured_image, PATHINFO_EXTENSION);
+            $newFilename = 'blog_images/' . uniqid() . '_' . time() . '.' . $extension;
+            
+            if (\Storage::disk('public')->exists($blog->featured_image)) {
+                \Storage::disk('public')->copy($blog->featured_image, $newFilename);
+                $newBlog->featured_image = $newFilename;
+                $newBlog->save();
+            }
+        }
+
+        return redirect()->route('admin.blogs.index')->with('success', 'Blog duplicated successfully. You can now edit the copy.');
     }
 }

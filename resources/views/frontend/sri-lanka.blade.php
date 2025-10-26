@@ -84,7 +84,7 @@
   <div id="header-container"></div>
 
   <!-- Hero Section -->
-  <section class="relative bg-gradient-to-r from-emerald-50 to-blue-50 py-20">
+  <section class="relative bg-gradient-to-r from-emerald-50 to-blue-50 py-16 sm:py-20 lg:py-32">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
         <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">

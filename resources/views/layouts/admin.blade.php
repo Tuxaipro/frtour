@@ -36,9 +36,152 @@
     
     <style>
         body { font-family: 'Inter', sans-serif; }
+        
+        /* Page Loader Styles */
+        #page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        #page-loader.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        
+        .loader-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            animation: bounce 1.4s ease-in-out infinite both;
+        }
+        
+        .loader-dot:nth-child(1) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 0s;
+        }
+        
+        .loader-dot:nth-child(2) {
+            bottom: 0;
+            left: 0;
+            animation-delay: 0.16s;
+        }
+        
+        .loader-dot:nth-child(3) {
+            bottom: 0;
+            right: 0;
+            animation-delay: 0.32s;
+        }
+        
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Enhanced Tooltip Styles */
+        [title] {
+            position: relative;
+        }
+        
+        /* Native tooltip styling */
+        [title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 10px;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            border-radius: 6px;
+            pointer-events: none;
+            z-index: 1000;
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: tooltipFadeIn 0.2s ease-out forwards;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Arrow for tooltip */
+        [title]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% - 1px);
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.85);
+            pointer-events: none;
+            z-index: 1001;
+            opacity: 0;
+            animation: tooltipFadeIn 0.2s ease-out forwards;
+            animation-delay: 0.05s;
+        }
+        
+        @keyframes tooltipFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(4px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-50">
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-container">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+        </div>
+    </div>
+
+    <script>
+        // Page Loader - Hide loader when page is fully loaded
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const loader = document.getElementById('page-loader');
+                if (loader) {
+                    loader.classList.add('hide');
+                    // Remove loader from DOM after animation completes
+                    setTimeout(function() {
+                        loader.remove();
+                    }, 500);
+                }
+            }, 300); // Minimum display time for loader
+        });
+    </script>
     <div class="min-h-screen flex">
         <!-- Sidebar -->
         <div class="w-56 bg-white shadow-lg border-r border-slate-200">
@@ -60,7 +203,7 @@
             <!-- Navigation -->
             <nav class="mt-4 px-2">
                 <div class="space-y-1">
-                    <a href="{{ route('admin.dashboard') }}" class="group flex items-center px-2 py-1.5 text-xs font-medium rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
+                    <a href="{{ route('admin.dashboard') }}" class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
@@ -98,7 +241,7 @@
                     </a>
                     
                 <a href="{{ route('admin.heroes.index') }}" class="group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 {{ request()->routeIs('admin.heroes.*') ? 'bg-blue-600 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900' }}">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
                     Hero Sections

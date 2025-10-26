@@ -12,9 +12,31 @@ class HeroController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $heroes = Hero::ordered()->get();
+        $query = Hero::query();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('subtitle', 'like', "%{$search}%")
+                  ->orWhere('badge_text', 'like', "%{$search}%");
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'inactive') {
+                $query->where('is_active', false);
+            }
+        }
+
+        $heroes = $query->ordered()->paginate(20)->withQueryString();
+        
         return view('admin.heroes.index', compact('heroes'));
     }
 
@@ -56,7 +78,7 @@ class HeroController extends Controller
         $data = $request->all();
         
         if ($request->hasFile('background_image')) {
-            $data['background_image'] = $request->file('background_image')->store('hero_images', 'public');
+            $data['background_image'] = $request->file('background_image')->store('heroes', 'public');
         }
 
         $data['is_active'] = $request->has('is_active');
@@ -120,7 +142,7 @@ class HeroController extends Controller
             if ($hero->background_image) {
                 Storage::disk('public')->delete($hero->background_image);
             }
-            $data['background_image'] = $request->file('background_image')->store('hero_images', 'public');
+            $data['background_image'] = $request->file('background_image')->store('heroes', 'public');
         }
 
         $data['is_active'] = $request->has('is_active');
@@ -170,5 +192,32 @@ class HeroController extends Controller
                 }
             }
         }
+    }
+
+    /**
+     * Duplicate a hero section
+     */
+    public function duplicate(Hero $hero)
+    {
+        $newHero = $hero->replicate();
+        $newHero->title = $hero->title . ' (Copy)';
+        $newHero->is_active = false; // Set duplicate as inactive by default
+        $newHero->created_at = now();
+        $newHero->updated_at = now();
+        $newHero->save();
+
+        // Copy the background image if it exists
+        if ($hero->background_image) {
+            $extension = pathinfo($hero->background_image, PATHINFO_EXTENSION);
+            $newFilename = 'heroes/' . uniqid() . '_' . time() . '.' . $extension;
+            
+            if (Storage::disk('public')->exists($hero->background_image)) {
+                Storage::disk('public')->copy($hero->background_image, $newFilename);
+                $newHero->background_image = $newFilename;
+                $newHero->save();
+            }
+        }
+
+        return redirect()->route('admin.heroes.index')->with('success', 'Hero section duplicated successfully. You can now edit the copy.');
     }
 }

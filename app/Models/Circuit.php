@@ -16,6 +16,7 @@ class Circuit extends Model
         'tags',
         'itinerary',
         'destination_id',
+        'featured_image',
         'is_active',
         'sort_order',
     ];

@@ -103,7 +103,7 @@
 
   <main>
     <!-- Article Header -->
-    <section class="py-12 sm:py-16 lg:py-20">
+    <section class="py-16 sm:py-20 lg:py-32">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16">
         <div class="text-center mb-8">
           <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary font-medium text-sm mb-6">

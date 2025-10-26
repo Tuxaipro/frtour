@@ -169,18 +169,28 @@ Route::get('/sitemap.xml', function() {
     return response($sitemap, 200)->header('Content-Type', 'text/xml');
 })->name('sitemap');
 
+// Redirect /admin to /admin/dashboard
+Route::get('/admin', function () {
+    return redirect()->route('admin.dashboard');
+})->middleware(['auth', 'verified', 'admin']);
+
 // Admin routes
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('destinations', DestinationController::class);
+    Route::post('/destinations/{destination}/duplicate', [DestinationController::class, 'duplicate'])->name('destinations.duplicate');
     Route::resource('circuits', CircuitController::class);
+    Route::post('/circuits/{circuit}/duplicate', [CircuitController::class, 'duplicate'])->name('circuits.duplicate');
     Route::resource('blogs', BlogController::class);
+    Route::post('/blogs/{blog}/duplicate', [BlogController::class, 'duplicate'])->name('blogs.duplicate');
     Route::resource('pages', PageController::class);
+    Route::post('/pages/{page}/duplicate', [PageController::class, 'duplicate'])->name('pages.duplicate');
     Route::resource('galerie', GalerieController::class);
     Route::resource('galerie-category', GalerieCategoryController::class);
     Route::resource('faq', FaqController::class);
     Route::resource('heroes', HeroController::class);
+    Route::post('/heroes/{hero}/duplicate', [HeroController::class, 'duplicate'])->name('heroes.duplicate');
     Route::resource('quote-requests', AdminQuoteRequestController::class);
     Route::resource('contacts', AdminContactController::class)->only(['index', 'show', 'destroy']);
     Route::post('/contacts/{contact}/toggle-read', [AdminContactController::class, 'toggleRead'])->name('contacts.toggle-read');
