@@ -16,9 +16,13 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3B82F6',
-                        'primary-dark': '#1E40AF',
-                        'primary-light': '#DBEAFE'
+                        primary: 'hsl(220, 70%, 25%)',
+                        'primary-dark': 'hsl(220, 70%, 20%)',
+                        'primary-light': 'hsl(220, 60%, 35%)',
+                        accent: 'hsl(75, 45%, 40%)',
+                        'accent-light': 'hsl(80, 50%, 45%)',
+                        background: 'hsl(0, 0%, 98%)',
+                        foreground: 'hsl(215, 25%, 27%)'
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif']

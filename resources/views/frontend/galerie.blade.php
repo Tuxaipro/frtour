@@ -5,7 +5,7 @@
 
 @section('content')
         <!-- Hero Section -->
-        <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16 sm:py-20 lg:py-32">
+        <section class="text-white py-16 sm:py-20 lg:py-32" style="background-color: hsl(220, 70%, 25%);">
             <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
                 <div class="text-center max-w-4xl mx-auto">
                     <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white font-medium text-sm mb-8">
@@ -15,7 +15,7 @@
                         Galerie Photos
                     </div>
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">Galerie Photos</h1>
-                    <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
                         Découvrez les plus beaux moments de nos voyages à travers l'Inde, le Sri Lanka et le Népal
                     </p>
                 </div>
@@ -32,12 +32,12 @@
                             <h2 class="text-2xl font-bold text-slate-800 mb-4">Filtrer par catégorie</h2>
                             <div class="flex flex-wrap justify-center gap-3">
                                 <a href="{{ route('galerie') }}" 
-                                   class="px-6 py-3 rounded-full text-sm font-medium transition-colors duration-200 {{ !request('category_id') ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300' }}">
+                                   class="px-6 py-3 rounded-full text-sm font-medium transition-colors duration-200 {{ !request('category_id') ? 'text-white border-2 border-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300' }}"
                                     Toutes les photos
                                 </a>
                                 @foreach($categories as $category)
                                     <a href="{{ route('galerie', ['category_id' => $category->id]) }}" 
-                                       class="px-6 py-3 rounded-full text-sm font-medium transition-colors duration-200 {{ request('category_id') == $category->id ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300' }}">
+                                       class="px-6 py-3 rounded-full text-sm font-medium transition-colors duration-200 {{ request('category_id') == $category->id ? 'text-white border-2 border-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300' }}"
                                         {{ $category->name }}
                                         <span class="ml-1 text-xs opacity-75">({{ $category->galeries->count() }})</span>
                                     </a>

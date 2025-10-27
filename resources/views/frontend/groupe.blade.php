@@ -10,9 +10,13 @@
       theme: {
         extend: {
           colors: {
-            primary: '#3B82F6',
-            'primary-dark': '#1E40AF',
-            'primary-light': '#DBEAFE'
+            primary: 'hsl(220, 70%, 25%)',
+            'primary-dark': 'hsl(220, 70%, 20%)',
+            'primary-light': 'hsl(220, 60%, 35%)',
+            accent: 'hsl(75, 45%, 40%)',
+            'accent-light': 'hsl(80, 50%, 45%)',
+            background: 'hsl(0, 0%, 98%)',
+            foreground: 'hsl(215, 25%, 27%)'
           },
           fontFamily: {
             'sans': ['Inter', 'system-ui', 'sans-serif'],
@@ -163,7 +167,7 @@
     }
   </style>
 </head>
-<body class="bg-white">
+<body class="bg-[hsl(0,0%,98%)] text-[hsl(215,25%,27%)]">
   <!-- Page Loader -->
   <div id="page-loader">
     <div class="loader-container">
@@ -193,18 +197,18 @@
   <div id="header-container"></div>
 
 <!-- Hero Section -->
-  <section class="relative bg-gradient-to-r from-purple-50 to-indigo-50 py-16 sm:py-20 lg:py-32">
+  <section class="relative py-16 sm:py-20 lg:py-32" style="background-color: hsl(220, 70%, 25%);"
     <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%238B5CF6\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"4\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
     <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
       <div class="text-center max-w-4xl mx-auto">
-        <div class="inline-flex items-center px-4 py-2 rounded-full bg-purple-100 border border-purple-200 text-purple-800 font-medium text-sm mb-8">
+        <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white font-medium text-sm mb-8">
           <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path>
           </svg>
           Groupes & Entreprises
         </div>
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-          Voyages de <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Groupe</span>
+          Voyages de <span class="text-white">Groupe</span>
         </h1>
         <p class="text-xl text-slate-600 mb-8 leading-relaxed">
           Organisez des voyages inoubliables pour vos groupes : familles, amis, entreprises ou associations. Des circuits sur-mesure avec des tarifs préférentiels.

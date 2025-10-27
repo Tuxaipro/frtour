@@ -10,8 +10,8 @@
   <meta name="author" content="{{ $siteName }}">
   <meta name="language" content="French">
   <meta name="revisit-after" content="7 days">
-  <meta name="theme-color" content="#3B82F6">
-  <meta name="msapplication-TileColor" content="#3B82F6">
+  <meta name="theme-color" content="hsl(220, 70%, 25%)">
+  <meta name="msapplication-TileColor" content="hsl(220, 70%, 25%)">
   
   <!-- Dynamic SEO from settings -->
   <title>{{ $metaTitle }}</title>
@@ -33,9 +33,13 @@
       theme: {
         extend: {
           colors: {
-            primary: '#3B82F6',
-            'primary-dark': '#1E40AF',
-            'primary-light': '#DBEAFE'
+            primary: 'hsl(220, 70%, 25%)',
+            'primary-dark': 'hsl(220, 70%, 20%)',
+            'primary-light': 'hsl(220, 60%, 35%)',
+            accent: 'hsl(75, 45%, 40%)',
+            'accent-light': 'hsl(80, 50%, 45%)',
+            background: 'hsl(0, 0%, 98%)',
+            foreground: 'hsl(215, 25%, 27%)'
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif']
@@ -74,7 +78,7 @@
       left: 0;
       width: 0;
       height: 2px;
-      background-color: #3B82F6;
+      background-color: hsl(220, 70%, 25%);
       transition: width 0.3s ease;
     }
     
@@ -273,7 +277,7 @@
     }
   </style>
 </head>
-<body class="bg-white text-slate-900 font-sans antialiased">
+  <body class="bg-[hsl(0,0%,98%)] text-[hsl(215,25%,27%)] font-sans antialiased">
   <!-- Page Loader -->
   <div id="page-loader">
     <div class="loader-container">
@@ -347,7 +351,7 @@
                 <div class="hero-slider relative overflow-hidden">
                     <div class="hero-slides-container flex transition-transform duration-500 ease-in-out" id="heroSlides">
                         @foreach($heroes as $index => $hero)
-                            <div class="hero-slide w-full flex-shrink-0 relative bg-gradient-to-br from-primary-light via-blue-50 to-white py-16 sm:py-20 lg:py-32 overflow-hidden" 
+                            <div class="hero-slide w-full flex-shrink-0 relative py-16 sm:py-20 lg:py-32 overflow-hidden" style="background-color: hsl(220, 70%, 25%);" 
                                  @if($hero->background_image) style="background-image: url('{{ asset('storage/' . $hero->background_image) }}'); background-size: cover; background-position: center;" @endif>
                                 @if(!$hero->background_image)
                                     <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%233B82F6" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
@@ -365,31 +369,34 @@
                                             </div>
                                         @endif
                                         
-                                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
+                                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
                                             {!! $hero->title !!}
                                         </h1>
                                         
                                         @if($hero->subtitle)
-                                            <p class="text-xl text-slate-600 mb-6 max-w-3xl mx-auto leading-relaxed">
+                                            <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed">
                                                 {{ $hero->subtitle }}
                                             </p>
                                         @endif
                                         
                                         @if($hero->description)
-                                            <p class="text-lg text-slate-500 mb-10 max-w-3xl mx-auto leading-relaxed">
+                                            <p class="text-lg text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
                                                 {{ $hero->description }}
                                             </p>
                                         @endif
                                         
                                         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
                                             @if($hero->primary_button_text)
-                                                <a href="{{ $hero->primary_button_url ?: '#devis' }}" class="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                                <a href="{{ $hero->primary_button_url ?: '#devis' }}" class="w-full sm:w-auto text-white border-2 border-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center hover:bg-white/10">
                                                     {{ $hero->primary_button_text }}
+                                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                    </svg>
                                                 </a>
                                             @endif
                                             
                                             @if($hero->secondary_button_text)
-                                                <a href="{{ $hero->secondary_button_url ?: 'https://wa.me/XXXXXXXXXXX' }}" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-primary border-2 border-primary px-8 py-4 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center">
+                                                <a href="{{ $hero->secondary_button_url ?: 'https://wa.me/XXXXXXXXXXX' }}" class="w-full sm:w-auto text-white border-2 border-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center hover:bg-white/10">
                                                     @if(str_contains(strtolower($hero->secondary_button_text), 'whatsapp'))
                                                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.109"/>
@@ -438,7 +445,7 @@
                 </div>
             @else
                 <!-- Default Hero Section (fallback) -->
-            <section class="relative bg-gradient-to-br from-primary-light via-blue-50 to-white py-8 sm:py-12 lg:py-16 overflow-hidden">
+            <section class="relative py-8 sm:py-12 lg:py-16 overflow-hidden" style="background-color: hsl(220, 70%, 25%); color: white;"
                 <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%233B82F6" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
                 <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
                     <div class="text-center max-w-4xl mx-auto">
@@ -449,25 +456,28 @@
                             DMC certifié ISO 9001:2015
                         </div>
                         
-                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-4">
-                            Voyages <span class="text-primary">sur‑mesure</span> en Inde,<br class="hidden sm:block"> Sri Lanka, Népal & Bhoutan
+                        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
+                            Voyages <span class="text-white">sur‑mesure</span> en Inde,<br class="hidden sm:block"> Sri Lanka, Népal & Bhoutan
                         </h1>
                         
-                        <p class="text-lg text-slate-600 mb-6 max-w-3xl mx-auto leading-relaxed">
+                        <p class="text-lg text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed">
                             Circuits privés, chauffeurs anglophones/francophones, assistance 24/7 — pour voyageurs exigeants, agences et MICE.
                         </p>
                         
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                            <a href="#devis" class="w-full sm:w-auto bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            <a href="#devis" class="w-full sm:w-auto text-white border-2 border-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 hover:bg-white/10 flex items-center justify-center">
                                 Demander un devis
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
                             </a>
-                            <a href="https://wa.me/XXXXXXXXXXX" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-primary border-2 border-primary px-8 py-4 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center">
+                            <a href="https://wa.me/XXXXXXXXXXX" class="w-full sm:w-auto text-white border-2 border-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 hover:bg-white/10 flex items-center justify-center">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.109"/>
                                 </svg>
                                 WhatsApp
                             </a>
-                            <a href="https://calendly.com/votre-calendly/rdv-15min" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-primary border-2 border-primary px-8 py-4 rounded-xl font-semibold transition-all duration-200">
+                            <a href="https://calendly.com/votre-calendly/rdv-15min" class="w-full sm:w-auto text-white border-2 border-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 hover:bg-white/10">
                                 RDV visio 15 min
                             </a>
                         </div>
@@ -564,22 +574,19 @@
     </section>
 
     <!-- Quote Form Section -->
-    <section id="devis" class="py-8 sm:py-12 lg:py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden scroll-mt-20">
-      <!-- Background decoration -->
-      <div class="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-blue-600/5"></div>
-      <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-primary/10 to-transparent rounded-full -translate-y-48 translate-x-48"></div>
-      <div class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-blue-600/10 to-transparent rounded-full translate-y-40 -translate-x-40"></div>
+    <section id="devis" class="py-8 sm:py-12 lg:py-16 relative overflow-hidden scroll-mt-20" style="background-color: hsl(0, 0%, 98%);"
+      <!-- Background decoration (removed gradients for solid colors) -->
       
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div class="text-center mb-8">
-          <div class="inline-flex items-center bg-primary/10 text-primary px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-md backdrop-blur-sm border border-primary/20 animate-fade-in">
+          <div class="inline-flex items-center text-foreground px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-md backdrop-blur-sm border border-slate-200 animate-fade-in bg-white">
             <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             Devis gratuit et sans engagement
           </div>
           <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 animate-fade-in-up">
-            Obtenez un devis <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">personnalisé</span>
+            Obtenez un devis <span class="text-foreground">personnalisé</span>
           </h2>
           <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-6 animate-fade-in-up animation-delay-200">Trois étapes simples pour créer votre voyage sur-mesure. Réponse détaillée sous 24–48h (jours ouvrés).</p>
           
@@ -588,7 +595,7 @@
             <div class="flex items-center justify-between relative" id="progress-indicator">
               <!-- Progress Line Background -->
               <div class="absolute top-6 left-0 right-0 h-1 bg-slate-200 rounded-full"></div>
-              <div id="progress-bar" class="absolute top-6 left-0 h-1 bg-gradient-to-r from-primary to-blue-600 rounded-full transition-all duration-700 ease-out shadow-lg" style="width: 0%"></div>
+              <div id="progress-bar" class="absolute top-6 left-0 h-1 bg-primary rounded-full transition-all duration-700 ease-out shadow-lg" style="width: 0%"></div>
               
               <!-- Step 1 -->
               <div class="flex flex-col items-center relative z-10 group">
@@ -633,7 +640,7 @@
           <div id="step-1" class="step-content">
             <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto transform transition-all duration-700 ease-out animate-slide-in-right">
               <div class="flex items-center mb-6">
-                <div class="w-12 h-12 bg-gradient-to-r from-primary to-blue-600 text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
+                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
                   1
                 </div>
                 <div>
@@ -805,7 +812,7 @@
           <div id="step-2" class="step-content hidden">
             <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto transform transition-all duration-700 ease-out animate-slide-in-left">
               <div class="flex items-center mb-6">
-                <div class="w-12 h-12 bg-gradient-to-r from-primary to-blue-600 text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
+                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
                   2
                 </div>
                 <div>
@@ -939,7 +946,7 @@
                     Précédent
                   </span>
                 </button>
-                <button type="button" onclick="nextStep(3)" class="group bg-gradient-to-r from-primary to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-blue-600/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
+                <button type="button" onclick="nextStep(3)" class="group bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
                   <span class="flex items-center">
                     Suivant
                     <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -955,7 +962,7 @@
           <div id="step-3" class="step-content hidden">
             <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto transform transition-all duration-700 ease-out animate-slide-in-right">
               <div class="flex items-center mb-6">
-                <div class="w-12 h-12 bg-gradient-to-r from-primary to-blue-600 text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
+                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
                   3
                 </div>
                 <div>
@@ -1075,7 +1082,7 @@
                     Précédent
                   </span>
                 </button>
-                <button type="submit" class="group bg-gradient-to-r from-primary to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-blue-600/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
+                <button type="submit" class="group bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
                   <span class="flex items-center">
                     <svg class="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -1608,7 +1615,7 @@
           
           if (isValid) {
             nextButton.disabled = false;
-            nextButton.className = 'group bg-gradient-to-r from-primary to-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary/90 hover:to-blue-600/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform';
+            nextButton.className = 'group bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform';
             console.log('Next button enabled');
           } else {
             nextButton.disabled = true;

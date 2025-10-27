@@ -11,9 +11,13 @@
       theme: {
         extend: {
           colors: {
-            primary: '#3B82F6',
-            'primary-dark': '#1E40AF',
-            'primary-light': '#DBEAFE'
+            primary: 'hsl(220, 70%, 25%)',
+            'primary-dark': 'hsl(220, 70%, 20%)',
+            'primary-light': 'hsl(220, 60%, 35%)',
+            accent: 'hsl(75, 45%, 40%)',
+            'accent-light': 'hsl(80, 50%, 45%)',
+            background: 'hsl(0, 0%, 98%)',
+            foreground: 'hsl(215, 25%, 27%)'
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif']
@@ -46,13 +50,13 @@
     }
   </style>
 </head>
-<body class="bg-white text-slate-900 font-sans antialiased">
+  <body class="bg-[hsl(0,0%,98%)] text-[hsl(215,25%,27%)] font-sans antialiased">
   <!-- Header Container -->
   <div id="header-container"></div>
 
   <main>
 <!-- Hero Section -->
-<section class="relative bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 py-16 sm:py-20 lg:py-32 overflow-hidden">
+<section class="relative py-16 sm:py-20 lg:py-32 overflow-hidden" style="background-color: hsl(220, 70%, 25%);"
     <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%238B5CF6" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
     <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div class="text-center max-w-4xl mx-auto">
@@ -62,10 +66,10 @@
                 </svg>
                 Blog & Conseils
             </div>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-                Blog <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Voyages</span>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                Blog Voyages
             </h1>
-            <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+            <p class="text-xl text-gray-300 mb-8 leading-relaxed">
                 Découvrez nos conseils de voyage, récits d'expériences et actualités de l'Inde, du Sri Lanka, du Népal et du Bhoutan.
             </p>
         </div>

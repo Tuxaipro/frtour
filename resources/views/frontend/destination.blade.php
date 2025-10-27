@@ -41,9 +41,13 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3B82F6',
-                        'primary-dark': '#1E40AF',
-                        'primary-light': '#DBEAFE'
+                        primary: 'hsl(220, 70%, 25%)',
+                        'primary-dark': 'hsl(220, 70%, 20%)',
+                        'primary-light': 'hsl(220, 60%, 35%)',
+                        accent: 'hsl(75, 45%, 40%)',
+                        'accent-light': 'hsl(80, 50%, 45%)',
+                        background: 'hsl(0, 0%, 98%)',
+                        foreground: 'hsl(215, 25%, 27%)'
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif']
@@ -98,7 +102,7 @@
         }
     </style>
 </head>
-<body class="font-sans antialiased bg-gray-50">
+<body class="font-sans antialiased bg-[hsl(0,0%,98%)] text-[hsl(215,25%,27%)]">
     <div class="min-h-screen">
         <!-- Dynamic Header -->
         <div id="header-container"></div>
@@ -106,12 +110,12 @@
         <!-- Page Content -->
         <main>
 <!-- Hero Section -->
-<section class="relative py-16 sm:py-20 lg:py-32 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+<section class="relative py-16 sm:py-20 lg:py-32 text-white overflow-hidden" style="background-color: hsl(220, 70%, 25%);"
     <!-- Background Pattern -->
     <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
     
     <!-- Gradient Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-r from-orange-500/20 via-red-500/30 to-amber-500/20"></div>
+    <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, 0.1);"></div>
     
     <!-- Content Container -->
     <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 w-full">
@@ -120,11 +124,11 @@
             <div class="mb-6">
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight tracking-tight">
                     <span class="block text-white mb-2">Découvrez</span>
-                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-amber-400">
+                    <span class="block text-white">
                         {{ $destination->name }}
                     </span>
                 </h1>
-                <div class="w-20 h-1 bg-gradient-to-r from-orange-500 to-red-500 mx-auto rounded-full"></div>
+                <div class="w-20 h-1 bg-white mx-auto rounded-full"></div>
             </div>
             
             <!-- Description -->
@@ -134,14 +138,13 @@
             
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a href="#circuits" class="group relative bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-orange-500/25">
+                <a href="#circuits" class="group relative text-white border-2 border-white px-8 py-4 rounded-lg font-semibold text-base transition-all duration-300 flex items-center hover:bg-white/10">
                     <span class="relative z-10 flex items-center">
                         Voir nos circuits
                         <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                         </svg>
                     </span>
-                    <div class="absolute inset-0 bg-gradient-to-r from-orange-600 to-red-700 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </a>
                 
                 <a href="{{ route('home') }}#devis" class="group flex items-center text-slate-300 hover:text-white transition-colors duration-200 text-base font-medium">
@@ -160,7 +163,7 @@
     <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div class="text-center mb-16">
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-                Circuits <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-red-600">Populaires</span>
+                Circuits <span class="text-foreground">Populaires</span>
             </h2>
             <p class="text-xl text-slate-600 max-w-3xl mx-auto">
                 Découvrez nos circuits sur-mesure dans {{ $destination->name }}

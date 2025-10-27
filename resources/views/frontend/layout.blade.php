@@ -41,9 +41,13 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#3B82F6',
-                        'primary-dark': '#1E40AF',
-                        'primary-light': '#DBEAFE'
+                        primary: 'hsl(220, 70%, 25%)',
+                        'primary-dark': 'hsl(220, 70%, 20%)',
+                        'primary-light': 'hsl(220, 60%, 35%)',
+                        accent: 'hsl(75, 45%, 40%)',
+                        'accent-light': 'hsl(80, 50%, 45%)',
+                        background: 'hsl(0, 0%, 98%)',
+                        foreground: 'hsl(215, 25%, 27%)'
                     },
                     fontFamily: {
                         sans: ['Inter', 'system-ui', 'sans-serif']
@@ -126,7 +130,7 @@
         }
     </style>
 </head>
-<body class="font-sans antialiased bg-gray-50">
+<body class="font-sans antialiased bg-[hsl(0,0%,98%)] text-[hsl(215,25%,27%)]">
     <div class="min-h-screen">
         <!-- Header -->
         <div style="position: sticky !important; top: 0 !important; z-index: 50 !important; width: 100% !important;">

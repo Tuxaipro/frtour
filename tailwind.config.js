@@ -16,17 +16,17 @@ export default {
             },
             colors: {
                 primary: {
-                    50: '#eff6ff',
-                    100: '#dbeafe',
-                    200: '#bfdbfe',
-                    300: '#93c5fd',
-                    400: '#60a5fa',
-                    500: '#3b82f6',
-                    600: '#2563eb',
-                    700: '#1d4ed8',
-                    800: '#1e40af',
-                    900: '#1e3a8a',
+                    DEFAULT: 'hsl(220, 70%, 25%)', // Navy Blue
+                    light: 'hsl(220, 60%, 35%)',
+                    dark: 'hsl(220, 70%, 20%)',
                 },
+                accent: {
+                    DEFAULT: 'hsl(75, 45%, 40%)', // Olive Green
+                    light: 'hsl(80, 50%, 45%)',
+                    dark: 'hsl(75, 45%, 35%)',
+                },
+                background: 'hsl(0, 0%, 98%)', // Off-white
+                foreground: 'hsl(215, 25%, 27%)', // Charcoal gray
             },
         },
     },
