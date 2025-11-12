@@ -9,9 +9,11 @@
     </div>
 @endif
 
-<h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6 {{ $hero->content_alignment_classes }}">
-    {!! $hero->title !!}
-</h1>
+@if($hero->show_title ?? true)
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6 {{ $hero->content_alignment_classes }}">
+        {!! $hero->title !!}
+    </h1>
+@endif
 
 @if($hero->subtitle)
     <p class="text-xl sm:text-2xl text-gray-200 mb-6 max-w-3xl {{ $hero->content_alignment === 'center' ? 'mx-auto' : '' }}">

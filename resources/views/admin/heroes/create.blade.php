@@ -33,6 +33,14 @@
                 <form action="{{ route('admin.heroes.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     
+                    {{-- Hidden fields for default values --}}
+                    <input type="hidden" name="layout_type" value="minimal">
+                    <input type="hidden" name="content_alignment" value="center">
+                    <input type="hidden" name="overlay_color" value="#000000">
+                    <input type="hidden" name="overlay_opacity" value="0.5">
+                    <input type="hidden" name="animation_type" value="fade">
+                    <input type="hidden" name="animation_duration" value="500">
+                    
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <!-- Left Column -->
                         <div class="space-y-6">
@@ -46,7 +54,15 @@
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="md:col-span-2">
-                                <label for="title" class="block text-sm font-semibold text-slate-700 mb-2">Title <span class="text-red-500">*</span></label>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label for="title" class="block text-sm font-semibold text-slate-700">Title <span class="text-red-500">*</span></label>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="hidden" name="show_title" value="0">
+                                        <input type="checkbox" name="show_title" id="show_title" value="1" {{ old('show_title', true) ? 'checked' : '' }} 
+                                               class="w-4 h-4 text-primary border-2 border-slate-300 rounded focus:ring-2 focus:ring-primary transition-colors duration-200">
+                                        <label for="show_title" class="text-sm font-medium text-slate-700 cursor-pointer">Show Title</label>
+                                    </div>
+                                </div>
                                 <input type="text" name="title" id="title" value="{{ old('title') }}" required 
                                        class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('title') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" placeholder="Enter hero title">
                                 @error('title')
@@ -260,164 +276,6 @@
 
                         <!-- Right Column -->
                         <div class="space-y-6">
-                            <!-- Layout & Design -->
-                            <div class="mb-8">
-                                <div class="mb-6 pb-3 border-b-2 border-slate-200">
-                                    <h2 class="text-xl font-bold text-slate-900">Layout & Design</h2>
-                                    <p class="text-xs text-slate-500 mt-1">Choose the hero layout and design options</p>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 gap-6">
-                                    <div>
-                                        <label for="layout_type" class="block text-sm font-semibold text-slate-700 mb-2">Layout Type</label>
-                                        <select name="layout_type" id="layout_type" 
-                                                class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white">
-                                            <option value="full-width" {{ old('layout_type', 'full-width') === 'full-width' ? 'selected' : '' }}>Full Width</option>
-                                            <option value="split" {{ old('layout_type') === 'split' ? 'selected' : '' }}>Split (50/50)</option>
-                                            <option value="minimal" {{ old('layout_type') === 'minimal' ? 'selected' : '' }}>Minimal</option>
-                                            <option value="video" {{ old('layout_type') === 'video' ? 'selected' : '' }}>Video Background</option>
-                                            <option value="carousel" {{ old('layout_type') === 'carousel' ? 'selected' : '' }}>Carousel/Slider</option>
-                                        </select>
-                                        <p class="text-slate-500 text-xs mt-2 px-1">Choose how the hero section should be displayed</p>
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="content_alignment" class="block text-sm font-semibold text-slate-700 mb-2">Content Alignment</label>
-                                        <select name="content_alignment" id="content_alignment" 
-                                                class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white">
-                                            <option value="left" {{ old('content_alignment', 'center') === 'left' ? 'selected' : '' }}>Left</option>
-                                            <option value="center" {{ old('content_alignment', 'center') === 'center' ? 'selected' : '' }}>Center</option>
-                                            <option value="right" {{ old('content_alignment', 'center') === 'right' ? 'selected' : '' }}>Right</option>
-                                        </select>
-                                        <p class="text-slate-500 text-xs mt-2 px-1">Align the text content</p>
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="overlay_color" class="block text-sm font-semibold text-slate-700 mb-2">Overlay Color</label>
-                                        <div class="flex items-center gap-3">
-                                            <input type="color" name="overlay_color" id="overlay_color" value="{{ old('overlay_color', '#000000') }}" 
-                                                   class="w-16 h-12 border-2 border-slate-200 rounded-xl cursor-pointer">
-                                            <input type="text" name="overlay_color_text" id="overlay_color_text" value="{{ old('overlay_color', '#000000') }}" 
-                                                   pattern="^#[0-9A-Fa-f]{6}$"
-                                                   class="flex-1 px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900">
-                                        </div>
-                                        <p class="text-slate-500 text-xs mt-2 px-1">Color for the background overlay</p>
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="overlay_opacity" class="block text-sm font-semibold text-slate-700 mb-2">Overlay Opacity: <span id="opacity_value">{{ old('overlay_opacity', 0.50) }}</span></label>
-                                        <input type="range" name="overlay_opacity" id="overlay_opacity" min="0" max="1" step="0.05" value="{{ old('overlay_opacity', 0.50) }}" 
-                                               oninput="document.getElementById('opacity_value').textContent = this.value"
-                                               class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
-                                        <p class="text-slate-500 text-xs mt-2 px-1">Adjust overlay transparency (0 = transparent, 1 = opaque)</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Video Settings -->
-                            <div class="mb-8" id="video-settings" style="display: none;">
-                                <div class="mb-6 pb-3 border-b-2 border-slate-200">
-                                    <h2 class="text-xl font-bold text-slate-900">Video Background</h2>
-                                    <p class="text-xs text-slate-500 mt-1">Upload and configure background video</p>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 gap-6">
-                                    <div>
-                                        <label for="background_video" class="block text-sm font-semibold text-slate-700 mb-2">Background Video</label>
-                                        <input type="file" name="background_video" id="background_video" accept="video/*" 
-                                               class="block w-full text-sm text-slate-600 bg-white border-2 border-slate-200 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 file:mr-4 file:py-3 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
-                                        <p class="text-slate-500 text-xs mt-2 px-1">Upload MP4, WebM, or OGG video. Max: 10MB</p>
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="video_poster" class="block text-sm font-semibold text-slate-700 mb-2">Video Poster Image</label>
-                                        <input type="file" name="video_poster" id="video_poster" accept="image/*" 
-                                               class="block w-full text-sm text-slate-600 bg-white border-2 border-slate-200 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 file:mr-4 file:py-3 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
-                                        <p class="text-slate-500 text-xs mt-2 px-1">Thumbnail shown before video loads</p>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-3">
-                                        <input type="hidden" name="video_autoplay" value="0">
-                                        <input type="checkbox" name="video_autoplay" id="video_autoplay" value="1" {{ old('video_autoplay', true) ? 'checked' : '' }} 
-                                               class="w-5 h-5 text-primary border-2 border-slate-300 rounded focus:ring-2 focus:ring-primary">
-                                        <label for="video_autoplay" class="text-sm font-semibold text-slate-700 cursor-pointer">Autoplay video</label>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-3">
-                                        <input type="hidden" name="video_loop" value="0">
-                                        <input type="checkbox" name="video_loop" id="video_loop" value="1" {{ old('video_loop', true) ? 'checked' : '' }} 
-                                               class="w-5 h-5 text-primary border-2 border-slate-300 rounded focus:ring-2 focus:ring-primary">
-                                        <label for="video_loop" class="text-sm font-semibold text-slate-700 cursor-pointer">Loop video</label>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-3">
-                                        <input type="hidden" name="video_muted" value="0">
-                                        <input type="checkbox" name="video_muted" id="video_muted" value="1" {{ old('video_muted', true) ? 'checked' : '' }} 
-                                               class="w-5 h-5 text-primary border-2 border-slate-300 rounded focus:ring-2 focus:ring-primary">
-                                        <label for="video_muted" class="text-sm font-semibold text-slate-700 cursor-pointer">Muted (required for autoplay)</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Animation Settings -->
-                            <div class="mb-8">
-                                <div class="mb-6 pb-3 border-b-2 border-slate-200">
-                                    <h2 class="text-xl font-bold text-slate-900">Animation</h2>
-                                    <p class="text-xs text-slate-500 mt-1">Configure animation effects</p>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 gap-6">
-                                    <div>
-                                        <label for="animation_type" class="block text-sm font-semibold text-slate-700 mb-2">Animation Type</label>
-                                        <select name="animation_type" id="animation_type" 
-                                                class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white">
-                                            <option value="none" {{ old('animation_type', 'fade') === 'none' ? 'selected' : '' }}>None</option>
-                                            <option value="fade" {{ old('animation_type', 'fade') === 'fade' ? 'selected' : '' }}>Fade</option>
-                                            <option value="slide" {{ old('animation_type', 'fade') === 'slide' ? 'selected' : '' }}>Slide</option>
-                                            <option value="zoom" {{ old('animation_type', 'fade') === 'zoom' ? 'selected' : '' }}>Zoom</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="animation_duration" class="block text-sm font-semibold text-slate-700 mb-2">Animation Duration (ms)</label>
-                                        <input type="number" name="animation_duration" id="animation_duration" value="{{ old('animation_duration', 500) }}" min="100" max="3000" step="100" 
-                                               class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900">
-                                        <p class="text-slate-500 text-xs mt-2 px-1">Duration in milliseconds (100-3000)</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Carousel Settings -->
-                            <div class="mb-8" id="carousel-settings" style="display: none;">
-                                <div class="mb-6 pb-3 border-b-2 border-slate-200">
-                                    <h2 class="text-xl font-bold text-slate-900">Carousel Settings</h2>
-                                    <p class="text-xs text-slate-500 mt-1">Configure carousel behavior (only applies when layout is Carousel)</p>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 gap-6">
-                                    <div class="flex items-center space-x-3">
-                                        <input type="hidden" name="carousel_autoplay" value="0">
-                                        <input type="checkbox" name="carousel_autoplay" id="carousel_autoplay" value="1" {{ old('carousel_autoplay', true) ? 'checked' : '' }} 
-                                               class="w-5 h-5 text-primary border-2 border-slate-300 rounded focus:ring-2 focus:ring-primary">
-                                        <label for="carousel_autoplay" class="text-sm font-semibold text-slate-700 cursor-pointer">Auto-play carousel</label>
-                                    </div>
-                                    
-                                    <div>
-                                        <label for="carousel_interval" class="block text-sm font-semibold text-slate-700 mb-2">Auto-play Interval (ms)</label>
-                                        <input type="number" name="carousel_interval" id="carousel_interval" value="{{ old('carousel_interval', 5000) }}" min="1000" max="30000" step="500" 
-                                               class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900">
-                                        <p class="text-slate-500 text-xs mt-2 px-1">Time between slides (1000-30000ms)</p>
-                                    </div>
-                                    
-                                    <div class="flex items-center space-x-3">
-                                        <input type="hidden" name="carousel_pause_on_hover" value="0">
-                                        <input type="checkbox" name="carousel_pause_on_hover" id="carousel_pause_on_hover" value="1" {{ old('carousel_pause_on_hover', true) ? 'checked' : '' }} 
-                                               class="w-5 h-5 text-primary border-2 border-slate-300 rounded focus:ring-2 focus:ring-primary">
-                                        <label for="carousel_pause_on_hover" class="text-sm font-semibold text-slate-700 cursor-pointer">Pause on hover</label>
-                                    </div>
-                        </div>
-                    </div>
-
                     <!-- Settings -->
                     <div class="mb-8">
                         <div class="mb-6 pb-3 border-b-2 border-slate-200">
@@ -490,37 +348,5 @@ function clearNewImage() {
     document.getElementById('filename').textContent = '';
 }
 
-// Toggle video settings based on layout type
-document.getElementById('layout_type').addEventListener('change', function() {
-    const videoSettings = document.getElementById('video-settings');
-    const carouselSettings = document.getElementById('carousel-settings');
-    
-    if (this.value === 'video') {
-        videoSettings.style.display = 'block';
-        carouselSettings.style.display = 'none';
-    } else if (this.value === 'carousel') {
-        videoSettings.style.display = 'none';
-        carouselSettings.style.display = 'block';
-    } else {
-        videoSettings.style.display = 'none';
-        carouselSettings.style.display = 'none';
-    }
-});
-
-// Sync color picker with text input
-document.getElementById('overlay_color').addEventListener('change', function() {
-    document.getElementById('overlay_color_text').value = this.value;
-});
-
-document.getElementById('overlay_color_text').addEventListener('input', function() {
-    if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
-        document.getElementById('overlay_color').value = this.value;
-    }
-});
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('layout_type').dispatchEvent(new Event('change'));
-});
 </script>
 @endsection

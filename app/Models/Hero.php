@@ -8,6 +8,7 @@ class Hero extends Model
 {
     protected $fillable = [
         'title',
+        'show_title',
         'subtitle',
         'description',
         'primary_button_text',
@@ -51,6 +52,7 @@ class Hero extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
+        'show_title' => 'boolean',
         'video_autoplay' => 'boolean',
         'video_loop' => 'boolean',
         'video_muted' => 'boolean',

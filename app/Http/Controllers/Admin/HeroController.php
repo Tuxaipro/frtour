@@ -95,6 +95,7 @@ class HeroController extends Controller
 
         // Set boolean fields
         $data['is_active'] = $request->has('is_active');
+        $data['show_title'] = $request->input('show_title') == '1';
         $data['video_autoplay'] = $request->has('video_autoplay');
         $data['video_loop'] = $request->has('video_loop');
         $data['video_muted'] = $request->has('video_muted');
@@ -264,6 +265,7 @@ class HeroController extends Controller
 
         // Set boolean fields
         $data['is_active'] = $request->has('is_active');
+        $data['show_title'] = $request->input('show_title') == '1';
         $data['video_autoplay'] = $request->has('video_autoplay');
         $data['video_loop'] = $request->has('video_loop');
         $data['video_muted'] = $request->has('video_muted');
