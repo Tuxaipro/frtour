@@ -31,9 +31,14 @@ class ContactController extends Controller
             $query->where('is_read', $request->is_read === 'read');
         }
 
+        // Get stats from all records (before filters)
+        $totalCount = Contact::count();
+        $unreadCount = Contact::where('is_read', false)->count();
+        $readCount = Contact::where('is_read', true)->count();
+        
         $contacts = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
         
-        return view('admin.contacts.index', compact('contacts'));
+        return view('admin.contacts.index', compact('contacts', 'totalCount', 'unreadCount', 'readCount'));
     }
 
     /**

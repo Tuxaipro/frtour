@@ -48,51 +48,201 @@ Route::post('/quote-requests', [QuoteRequestController::class, 'store'])->name('
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/contact/captcha', [ContactController::class, 'refreshCaptcha'])->name('contact.captcha');
 Route::get('/api/destinations', function() {
+    try {
     $destinations = \App\Models\Destination::where('is_active', true)->orderBy('name')->get();
-    return response()->json($destinations);
+        return response()->json($destinations, 200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Illuminate\Database\QueryException $e) {
+        \Log::error('Database error in destinations API: ' . $e->getMessage());
+        return response()->json([
+            'error' => 'Database error',
+            'message' => 'Unable to load destinations'
+        ], 500);
+    } catch (\Exception $e) {
+        \Log::error('Error in destinations API: ' . $e->getMessage());
+        return response()->json([
+            'error' => 'Failed to load destinations',
+            'message' => 'An error occurred'
+        ], 500);
+    }
 })->name('api.destinations');
 
 Route::get('/api/logo-settings', function() {
+    try {
+        // Helper function to get image URL
+        $getImageUrl = function($path) {
+            if (empty($path)) {
+                return '';
+            }
+            
+            // Handle array values (if cast as array)
+            if (is_array($path)) {
+                $path = $path[0] ?? '';
+            }
+            
+            // Clean the path: remove quotes, trim whitespace, fix double slashes
+            $path = trim($path);
+            $path = trim($path, '"\'');
+            $path = preg_replace('#/+#', '/', $path); // Replace multiple slashes with single slash
+            $path = ltrim($path, '/'); // Remove only leading slashes (keep trailing if needed)
+            
+            if (empty($path)) {
+                return '';
+            }
+            
+            // If path starts with storage/, it's already a storage path
+            if (str_starts_with($path, 'storage/')) {
+                return asset($path);
+            }
+            
+            // If path starts with /images/, it's a public path
+            if (str_starts_with($path, '/images/')) {
+                return asset($path);
+            }
+            
+            // If path starts with images/, it's a public path
+            if (str_starts_with($path, 'images/')) {
+                return asset('/' . $path);
+            }
+            
+            // Default: treat as storage path
+            return asset('storage/' . $path);
+        };
+        
+        // Helper to decode Unicode escape sequences
+        $decodeUnicode = function($str) {
+            if (!is_string($str)) {
+                return $str;
+            }
+            // Decode Unicode escape sequences like \u00e9
+            return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function($match) {
+                return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+            }, $str);
+        };
+        
+        // Helper to safely get setting value
+        $getSetting = function($key, $default = '') use ($decodeUnicode) {
+            try {
+                $setting = \App\Models\Setting::where('key', $key)->first();
+                if (!$setting) {
+                    return $default;
+                }
+                $value = $setting->getAttributes()['value'] ?? $default;
+                
+                // Clean the value: remove quotes and trim whitespace
+                if (is_string($value) && !empty($value)) {
+                    $value = trim($value);
+                    $value = trim($value, '"\'');
+                    // Decode Unicode escape sequences
+                    $value = $decodeUnicode($value);
+                }
+                
+                // Handle array cast - if it's an array with one element, return the element
+                if (is_array($value) && count($value) === 1) {
+                    $value = $value[0];
+                    if (is_string($value)) {
+                        $value = trim($value);
+                        $value = trim($value, '"\'');
+                        $value = $decodeUnicode($value);
+                    }
+                }
+                
+                return is_array($value) ? $default : $value;
+            } catch (\Exception $e) {
+                return $default;
+            }
+        };
+        
     $settings = [
         'site_logo_url' => '',
         'logo_light_url' => '',
-        'site_name' => \App\Models\Setting::get('site_name', 'India Tourisme'),
-        'site_description' => \App\Models\Setting::get('site_description', 'Spécialiste des voyages sur-mesure'),
+            'site_name' => $getSetting('site_name', 'India Tourisme'),
+            'site_description' => $getSetting('site_description', 'Spécialiste des voyages sur-mesure'),
     ];
     
-    // Get logo URLs using the same logic as ViewServiceProvider
-    $provider = new \App\Providers\ViewServiceProvider(app());
-    $reflection = new ReflectionClass($provider);
-    $method = $reflection->getMethod('getImageUrl');
-    $method->setAccessible(true);
-    
-    $siteLogo = \App\Models\Setting::get('site_logo', '');
-    $logoLight = \App\Models\Setting::get('logo_light', '');
+        $siteLogo = $getSetting('site_logo', '');
+        $logoLight = $getSetting('logo_light', '');
     
     if ($siteLogo) {
-        $settings['site_logo_url'] = $method->invoke($provider, $siteLogo);
+            $settings['site_logo_url'] = $getImageUrl($siteLogo);
     }
     
     if ($logoLight) {
-        $settings['logo_light_url'] = $method->invoke($provider, $logoLight);
+            $settings['logo_light_url'] = $getImageUrl($logoLight);
+        }
+        
+        return response()->json($settings, 200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Illuminate\Database\QueryException $e) {
+        \Log::error('Database error in logo-settings API: ' . $e->getMessage());
+        return response()->json([
+            'error' => 'Database error',
+            'message' => 'Unable to load logo settings'
+        ], 500);
+    } catch (\Exception $e) {
+        \Log::error('Error in logo-settings API: ' . $e->getMessage());
+        return response()->json([
+            'error' => 'Failed to load logo settings',
+            'message' => 'An error occurred'
+        ], 500);
     }
-    
-    return response()->json($settings);
 })->name('api.logo-settings');
 
 Route::get('/api/social-settings', function() {
+    try {
+        // Helper to safely get setting value
+        $getSetting = function($key, $default = '') {
+            try {
+                $setting = \App\Models\Setting::where('key', $key)->first();
+                if (!$setting) {
+                    return $default;
+                }
+                $value = $setting->getAttributes()['value'] ?? $default;
+                
+                // Clean the value: remove quotes and trim whitespace
+                if (is_string($value) && !empty($value)) {
+                    $value = trim($value);
+                    $value = trim($value, '"\'');
+                }
+                
+                // Handle array cast - if it's an array with one element, return the element
+                if (is_array($value) && count($value) === 1) {
+                    $value = $value[0];
+                    if (is_string($value)) {
+                        $value = trim($value);
+                        $value = trim($value, '"\'');
+                    }
+                }
+                
+                return is_array($value) ? $default : $value;
+            } catch (\Exception $e) {
+                return $default;
+            }
+        };
+        
     $settings = [
-        'facebook_url' => \App\Models\Setting::get('facebook_url', '#'),
-        'twitter_url' => \App\Models\Setting::get('twitter_url', '#'),
-        'instagram_url' => \App\Models\Setting::get('instagram_url', '#'),
-        'linkedin_url' => \App\Models\Setting::get('linkedin_url', '#'),
-        'youtube_url' => \App\Models\Setting::get('youtube_url', '#'),
-        'contact_whatsapp_url' => \App\Models\Setting::get('contact_whatsapp_url', ''),
-        'contact_phone' => \App\Models\Setting::get('contact_phone', '+1 (555) 123-4567'),
-        'contact_email' => \App\Models\Setting::get('contact_email', 'info@example.com'),
+            'facebook_url' => $getSetting('facebook_url', '#'),
+            'twitter_url' => $getSetting('twitter_url', '#'),
+            'instagram_url' => $getSetting('instagram_url', '#'),
+            'linkedin_url' => $getSetting('linkedin_url', '#'),
+            'youtube_url' => $getSetting('youtube_url', '#'),
+            'contact_whatsapp_url' => $getSetting('contact_whatsapp_url', ''),
+            'contact_phone' => $getSetting('contact_phone', '+1 (555) 123-4567'),
+            'contact_email' => $getSetting('contact_email', 'info@example.com'),
     ];
     
-    return response()->json($settings);
+        return response()->json($settings, 200, [], JSON_UNESCAPED_UNICODE);
+    } catch (\Illuminate\Database\QueryException $e) {
+        \Log::error('Database error in social-settings API: ' . $e->getMessage());
+        return response()->json([
+            'error' => 'Database error',
+            'message' => 'Unable to load social settings'
+        ], 500);
+    } catch (\Exception $e) {
+        \Log::error('Error in social-settings API: ' . $e->getMessage());
+        return response()->json([
+            'error' => 'Failed to load social settings',
+            'message' => 'An error occurred'
+        ], 500);
+    }
 })->name('api.social-settings');
 
 // Sitemap Route

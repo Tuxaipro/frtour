@@ -13,9 +13,10 @@ class Setting extends Model
         'group',
     ];
 
-    protected $casts = [
-        'value' => 'array',
-    ];
+    // Don't cast value as array - values are stored as strings/text
+    // protected $casts = [
+    //     'value' => 'array',
+    // ];
 
     /**
      * Get a setting value by key.
@@ -26,8 +27,30 @@ class Setting extends Model
      */
     public static function get($key, $default = null)
     {
+        try {
         $setting = self::where('key', $key)->first();
-        return $setting ? $setting->value : $default;
+            if (!$setting) {
+                return $default;
+            }
+            // Return the raw value (as string/text)
+            $value = $setting->getAttributes()['value'] ?? $default;
+            
+            // Clean the value: remove quotes and fix double slashes if it's a path
+            if (is_string($value) && !empty($value)) {
+                $value = trim($value);
+                $value = trim($value, '"\'');
+                // Fix double slashes in paths
+                $value = preg_replace('#/+#', '/', $value);
+                // Decode Unicode escape sequences like \u00e9
+                $value = preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function($match) {
+                    return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+                }, $value);
+            }
+            
+            return $value;
+        } catch (\Exception $e) {
+            return $default;
+        }
     }
 
     /**

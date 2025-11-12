@@ -2,6 +2,15 @@
 
 use Illuminate\Support\Str;
 
+// PHP 8.5 compatibility: Use new Pdo\Mysql constants if available, fallback to PDO constants
+// In PHP 8.5+, PDO::MYSQL_ATTR_* constants are deprecated in favor of \Pdo\Mysql::ATTR_*
+if (class_exists(\Pdo\Mysql::class)) {
+    define('MYSQL_ATTR_SSL_CA_CONST', \Pdo\Mysql::ATTR_SSL_CA);
+} else {
+    // Fallback for PHP < 8.5
+    define('MYSQL_ATTR_SSL_CA_CONST', PDO::MYSQL_ATTR_SSL_CA);
+}
+
 return [
 
     /*
@@ -59,7 +68,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                MYSQL_ATTR_SSL_CA_CONST => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 
@@ -79,7 +88,7 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                MYSQL_ATTR_SSL_CA_CONST => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
 

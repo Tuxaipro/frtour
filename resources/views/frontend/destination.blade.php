@@ -122,11 +122,8 @@
         <div class="max-w-4xl mx-auto text-center">
             <!-- Main Heading -->
             <div class="mb-6">
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight tracking-tight">
-                    <span class="block text-white mb-2">Découvrez</span>
-                    <span class="block text-white">
-                        {{ $destination->name }}
-                    </span>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight tracking-tight text-white">
+                    Découvrez {{ $destination->name }}
                 </h1>
                 <div class="w-20 h-1 bg-white mx-auto rounded-full"></div>
             </div>

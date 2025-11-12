@@ -1,61 +1,355 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Travel OnePage CMS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, feature-rich Content Management System built with Laravel for travel agencies. This application provides a complete solution for managing destinations, tours, blogs, galleries, and customer inquiries for travel businesses.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Frontend Features
+- **Homepage** with dynamic hero sections, featured circuits, gallery categories, FAQs, and latest blog posts
+- **Destinations** - Browse and view detailed destination pages with associated tours
+- **Circuits/Tours** - Detailed tour pages with itineraries, highlights, pricing, and duration
+- **Blog System** - Full-featured blog with categories and individual post pages
+- **Gallery** - Image gallery with category organization
+- **Static Pages** - Customizable CMS pages (About, Contact, etc.)
+- **Quote Request Form** - Customer inquiry form for tour quotes
+- **Contact Form** - Contact form with math captcha protection
+- **FAQ Section** - Frequently asked questions with sorting
+- **Sitemap** - Auto-generated XML sitemap for SEO
+- **Responsive Design** - Mobile-first design with Tailwind CSS
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Admin Panel Features
+- **Dashboard** - Overview of key metrics and recent activity
+- **Destinations Management** - Create, edit, duplicate, and manage travel destinations
+- **Circuits Management** - Manage tour packages with detailed information
+- **Blog Management** - Full CRUD operations for blog posts
+- **Gallery Management** - Upload and organize images with categories
+- **FAQ Management** - Create and manage frequently asked questions
+- **Hero Sections** - Manage homepage hero banners
+- **Pages Management** - Create and manage custom CMS pages
+- **Quote Requests** - View and manage customer quote requests
+- **Contact Messages** - Manage contact form submissions
+- **Settings** - Comprehensive site settings including:
+  - General settings (site name, description, contact info)
+  - Logo and branding
+  - SEO settings
+  - Social media links
+  - Business hours
+  - Currency and timezone
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Technical Features
+- **User Authentication** - Secure login system with Laravel Breeze
+- **Admin Middleware** - Role-based access control for admin panel
+- **Image Management** - File upload and storage system
+- **SEO Optimization** - Meta tags, sitemap, and SEO-friendly URLs
+- **API Endpoints** - JSON APIs for destinations, logo settings, and social settings
+- **Database Migrations** - Comprehensive database schema
+- **Seeders** - Sample data seeders for quick setup
+- **Testing** - Pest PHP testing framework setup
 
-## Learning Laravel
+## 📋 Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP >= 8.5 (recommended) or PHP >= 8.2 (minimum)
+- Composer
+- Node.js >= 18.x and npm
+- SQLite (default) or MySQL/PostgreSQL
+- Web server (Apache/Nginx) or PHP built-in server
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+> **Note:** This project is configured for PHP 8.5. See [PHP_8.5_MIGRATION.md](PHP_8.5_MIGRATION.md) for migration instructions.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Installation
 
-## Laravel Sponsors
+### 1. Clone the repository
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+git clone <repository-url>
+cd travel-onepage-cms
+```
 
-### Premium Partners
+### 2. Install PHP dependencies
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+composer install
+```
 
-## Contributing
+### 3. Install Node.js dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+npm install
+```
 
-## Code of Conduct
+### 4. Environment setup
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+### 5. Configure database
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Edit `.env` file and configure your database settings. By default, the project uses SQLite:
 
-## License
+```env
+DB_CONNECTION=sqlite
+DB_DATABASE=/absolute/path/to/database/database.sqlite
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+For MySQL/PostgreSQL:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=travel_cms
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+### 6. Create database (if using SQLite)
+
+```bash
+touch database/database.sqlite
+```
+
+### 7. Run migrations and seeders
+
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+This will:
+- Create all necessary database tables
+- Seed an admin user (check `database/seeders/AdminUserSeeder.php` for credentials)
+- Add sample data for destinations, circuits, blogs, pages, etc.
+
+### 8. Create storage link
+
+```bash
+php artisan storage:link
+```
+
+### 9. Build frontend assets
+
+For development:
+```bash
+npm run dev
+```
+
+For production:
+```bash
+npm run build
+```
+
+### 10. Start the development server
+
+```bash
+php artisan serve
+```
+
+Or use the convenient dev script that runs everything:
+```bash
+composer dev
+```
+
+This will start:
+- Laravel development server
+- Queue worker
+- Log viewer (Pail)
+- Vite dev server
+
+Visit `http://localhost:8000` in your browser.
+
+## 🔐 Default Admin Credentials
+
+After running the seeders, you can log in with the default admin account. Check `database/seeders/AdminUserSeeder.php` for the default credentials, or create a new admin user:
+
+```bash
+php artisan tinker
+```
+
+```php
+$user = \App\Models\User::create([
+    'name' => 'Admin',
+    'email' => 'admin@example.com',
+    'password' => bcrypt('password'),
+    'is_admin' => true,
+]);
+```
+
+## 📁 Project Structure
+
+```
+travel-onepage-cms/
+├── app/
+│   ├── Helpers/              # Helper functions (SettingHelper, MathCaptcha)
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Admin/        # Admin panel controllers
+│   │   │   ├── ContactController.php
+│   │   │   ├── FrontendController.php
+│   │   │   ├── ProfileController.php
+│   │   │   └── QuoteRequestController.php
+│   │   ├── Middleware/       # Custom middleware
+│   │   └── Requests/         # Form request validation
+│   ├── Models/               # Eloquent models
+│   ├── Providers/            # Service providers
+│   └── View/                 # View components
+├── database/
+│   ├── migrations/           # Database migrations
+│   ├── seeders/              # Database seeders
+│   └── database.sqlite       # SQLite database (default)
+├── public/                   # Public assets
+│   ├── build/                # Compiled assets
+│   ├── images/               # Uploaded images
+│   └── storage/              # Storage symlink
+├── resources/
+│   ├── css/                  # Stylesheets
+│   ├── js/                   # JavaScript files
+│   └── views/                # Blade templates
+│       ├── admin/            # Admin panel views
+│       ├── auth/             # Authentication views
+│       ├── components/       # Reusable components
+│       └── frontend/         # Frontend views
+├── routes/
+│   ├── web.php               # Web routes
+│   └── auth.php              # Authentication routes
+└── tests/                    # Pest PHP tests
+```
+
+## 🎨 Technologies Used
+
+### Backend
+- **Laravel 12.0** - PHP web framework
+- **PHP 8.2+** - Programming language
+- **SQLite/MySQL/PostgreSQL** - Database
+
+### Frontend
+- **Tailwind CSS 3.1** - Utility-first CSS framework
+- **Alpine.js 3.4** - Lightweight JavaScript framework
+- **Vite 7.0** - Next-generation frontend tooling
+
+### Development Tools
+- **Laravel Breeze** - Authentication scaffolding
+- **Pest PHP** - Testing framework
+- **Laravel Pint** - Code style fixer
+- **Laravel Pail** - Log viewer
+
+## 📝 Key Models
+
+- **Destination** - Travel destinations
+- **Circuit** - Tour packages/circuits
+- **Blog** - Blog posts
+- **Galerie** - Gallery images
+- **GalerieCategory** - Gallery categories
+- **Faq** - Frequently asked questions
+- **Hero** - Homepage hero sections
+- **Page** - Custom CMS pages
+- **QuoteRequest** - Customer quote requests
+- **Contact** - Contact form submissions
+- **Setting** - Site settings
+- **User** - Application users
+
+## 🔧 Configuration
+
+### Settings Management
+
+The application uses a flexible settings system. Access settings in the admin panel at `/admin/settings` or use the helper function:
+
+```php
+use App\Models\Setting;
+
+// Get a setting
+$siteName = Setting::get('site_name', 'Default Name');
+
+// Or use the helper function
+$siteName = setting('site_name', 'Default Name');
+```
+
+### File Storage
+
+Uploaded files are stored in `storage/app/public/images/`. Make sure to run `php artisan storage:link` to create the symbolic link.
+
+### Mail Configuration
+
+Configure mail settings in `.env` for quote request and contact form notifications:
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+## 🧪 Testing
+
+Run tests using Pest PHP:
+
+```bash
+php artisan test
+```
+
+Or use the composer script:
+
+```bash
+composer test
+```
+
+## 🚀 Deployment
+
+### Production Build
+
+1. **Optimize for production:**
+```bash
+composer install --optimize-autoloader --no-dev
+npm run build
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+2. **Set environment variables:**
+   - Update `.env` with production values
+   - Set `APP_ENV=production`
+   - Set `APP_DEBUG=false`
+
+3. **Run migrations:**
+```bash
+php artisan migrate --force
+```
+
+4. **Set proper permissions:**
+```bash
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+```
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📞 Support
+
+For support, email contact@indiatourisme.fr or open an issue in the repository.
+
+## 🎯 Roadmap
+
+- [ ] Multi-language support
+- [ ] Payment gateway integration
+- [ ] Email notifications for quote requests
+- [ ] Advanced search functionality
+- [ ] Booking system
+- [ ] Customer portal
+- [ ] Analytics integration
+- [ ] Social media integration enhancements
+
+---
+
+**Built with ❤️ using Laravel**

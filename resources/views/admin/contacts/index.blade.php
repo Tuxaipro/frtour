@@ -7,88 +7,90 @@
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">Contact Messages</h1>
-            <p class="text-slate-600 mt-1">Manage messages received through the contact form</p>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Contact Messages</h1>
+            <p class="text-sm text-slate-600 mt-1.5 font-medium">Manage messages received through the contact form</p>
         </div>
         <div class="flex items-center space-x-4">
-            <div class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                {{ $contacts->total() }} message{{ $contacts->total() > 1 ? 's' : '' }} total
+            <div class="text-sm text-slate-600 bg-white border-2 border-slate-200 px-4 py-2 rounded-xl font-semibold shadow-sm">
+                {{ $totalCount }} message{{ $totalCount > 1 ? 's' : '' }} total
             </div>
         </div>
     </div>
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
+        <div class="group bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative flex items-center">
+                <div class="p-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-slate-600">Total Messages</p>
-                    <p class="text-3xl font-bold text-slate-900">{{ $contacts->total() }}</p>
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Total Messages</p>
+                    <p class="text-3xl font-bold text-slate-900 mt-1">{{ $totalCount }}</p>
                 </div>
             </div>
         </div>
         
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
+        <div class="group bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative flex items-center">
+                <div class="p-4 bg-gradient-to-br from-orange-100 to-orange-50 rounded-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-7 h-7 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-slate-600">Unread</p>
-                    <p class="text-3xl font-bold text-slate-900">{{ $contacts->where('is_read', false)->count() }}</p>
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Unread</p>
+                    <p class="text-3xl font-bold text-slate-900 mt-1">{{ $unreadCount }}</p>
                 </div>
             </div>
         </div>
         
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
+        <div class="group bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative flex items-center">
+                <div class="p-4 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-slate-600">Read</p>
-                    <p class="text-3xl font-bold text-slate-900">{{ $contacts->where('is_read', true)->count() }}</p>
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Read</p>
+                    <p class="text-3xl font-bold text-slate-900 mt-1">{{ $readCount }}</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Search and Filter Bar -->
-    <form method="GET" action="{{ route('admin.contacts.index') }}" class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+    <form method="GET" action="{{ route('admin.contacts.index') }}" class="bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, subject..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            <select name="is_read" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, subject..." class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400">
+            <select name="is_read" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white">
                 <option value="">All Messages</option>
                 <option value="unread" {{ request('is_read') === 'unread' ? 'selected' : '' }}>Unread</option>
                 <option value="read" {{ request('is_read') === 'read' ? 'selected' : '' }}>Read</option>
             </select>
-            <div class="flex space-x-2">
-                <button type="submit" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200">Apply</button>
-                <a href="{{ route('admin.contacts.index') }}" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-center">Clear</a>
+            <div class="flex space-x-3">
+                <button type="submit" class="flex-1 bg-primary hover:bg-primary-dark text-white px-5 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg">Apply</button>
+                <a href="{{ route('admin.contacts.index') }}" class="flex-1 bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-200 px-5 py-3 rounded-xl font-semibold transition-all duration-200 text-center shadow-sm hover:shadow-md">Clear</a>
             </div>
         </div>
     </form>
 
     <!-- Messages Table -->
-    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 overflow-hidden">
         @if($contacts->count() > 0)
+            <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+                <h2 class="text-lg font-bold text-slate-900">All Contact Messages</h2>
+                <p class="text-xs text-slate-600 mt-1">Total: {{ $contacts->count() }} message(s)</p>
+            </div>
+            <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-slate-200">
-                <thead class="bg-slate-50">
+                <thead class="bg-slate-50/50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                                 From
@@ -109,7 +111,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-slate-200">
                         @foreach($contacts as $contact)
-                            <tr class="hover:bg-slate-50">
+                            <tr class="hover:bg-primary/5 transition-colors duration-150">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-12 w-12">
@@ -186,20 +188,23 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
             
             <!-- Pagination -->
-            <div class="bg-slate-50 px-6 py-4 border-t border-slate-200">
+            <div class="bg-slate-50/50 px-6 py-4 border-t border-slate-200">
                 {{ $contacts->links() }}
             </div>
         @else
-            <div class="text-center py-16">
-                <div class="mx-auto w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                    </svg>
+            <div class="p-12 text-center">
+                <div class="max-w-md mx-auto">
+                    <div class="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">No messages found</h3>
+                    <p class="text-sm text-slate-600">No contact messages have been received yet.</p>
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">No messages</h3>
-                <p class="text-slate-500">No contact messages have been received yet.</p>
             </div>
         @endif
     </div>

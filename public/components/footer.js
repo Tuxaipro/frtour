@@ -2,6 +2,20 @@ async function loadFooter() {
   const footerContainer = document.getElementById('footer-container');
   if (footerContainer) {
     try {
+      // Helper function to decode Unicode escape sequences
+      const decodeUnicode = (str) => {
+        if (typeof str !== 'string') return str;
+        // First try to parse as JSON string (handles \u escape sequences)
+        try {
+          return JSON.parse('"' + str + '"');
+        } catch (e) {
+          // If that fails, manually replace Unicode escape sequences
+          return str.replace(/\\u([0-9a-fA-F]{4})/g, (match, code) => {
+            return String.fromCharCode(parseInt(code, 16));
+          });
+        }
+      };
+      
       // Fetch social media settings, logo settings, and destinations
       const [socialResponse, logoResponse, destinationsResponse] = await Promise.all([
         fetch('/api/social-settings'),
@@ -9,9 +23,27 @@ async function loadFooter() {
         fetch('/api/destinations')
       ]);
       
+      // Check if all responses are ok
+      if (!socialResponse.ok || !logoResponse.ok || !destinationsResponse.ok) {
+        throw new Error('One or more API requests failed');
+      }
+      
       const settings = await socialResponse.json();
       const logoSettings = await logoResponse.json();
       const destinations = await destinationsResponse.json();
+      
+      // Check for error responses
+      if (settings.error || logoSettings.error || destinations.error) {
+        throw new Error(settings.error || logoSettings.error || destinations.error);
+      }
+      
+      // Decode Unicode escape sequences in text fields
+      if (logoSettings.site_description) {
+        logoSettings.site_description = decodeUnicode(logoSettings.site_description);
+      }
+      if (logoSettings.site_name) {
+        logoSettings.site_name = decodeUnicode(logoSettings.site_name);
+      }
       
       // Generate logo HTML
       let logoHtml = '';
@@ -140,16 +172,16 @@ async function loadFooter() {
                 <h4 class="font-semibold mb-4">Contact</h4>
                 <ul class="space-y-3 text-slate-300">
                   <li class="flex items-start">
-                    <svg class="w-5 h-5 mr-3 mt-0.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 mr-3 mt-0.5 text-primary" fill="none" stroke="white" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                     </svg>
-                    <span>${settings.contact_phone}</span>
+                    <span>${(settings.contact_phone || '').replace(/^["']|["']$/g, '')}</span>
                   </li>
                   <li class="flex items-start">
-                    <svg class="w-5 h-5 mr-3 mt-0.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 mr-3 mt-0.5 text-primary" fill="none" stroke="white" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
-                    <span>${settings.contact_email}</span>
+                    <span>${(settings.contact_email || '').replace(/^["']|["']$/g, '')}</span>
                   </li>
                 </ul>
               </div>

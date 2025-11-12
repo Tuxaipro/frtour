@@ -1,11 +1,13 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900">
-                <h1 class="text-2xl font-bold mb-6">Edit Destination</h1>
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-200 bg-slate-50">
+            <h1 class="text-2xl font-bold text-slate-900">Edit Destination</h1>
+            <p class="text-sm text-slate-600 mt-1">Update destination information</p>
+        </div>
+        <div class="p-6">
 
                 @if ($errors->any())
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -95,16 +97,18 @@
                         </label>
                     </div>
                     
-                    <div class="flex items-center justify-between">
-                        <a href="{{ route('admin.destinations.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    <div class="flex items-center justify-end gap-3">
+                        <a href="{{ route('admin.destinations.index') }}" class="px-5 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-all duration-200 shadow-sm hover:shadow-md">
                             Cancel
                         </a>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        <button type="submit" class="px-6 py-2.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200 shadow-md hover:shadow-lg flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
                             Update Destination
                         </button>
                     </div>
                 </form>
-            </div>
         </div>
     </div>
 </div>

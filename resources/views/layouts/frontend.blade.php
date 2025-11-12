@@ -10,6 +10,20 @@
     @else
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
     @endif
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS via Vite -->
+    @php
+        $hasViteManifest = file_exists(public_path('build/manifest.json'));
+    @endphp
+    
+    @if($hasViteManifest)
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <!-- Fallback for development without Vite build - should not be used in production -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -31,7 +45,7 @@
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    @endif
     <style>
         body { 
             font-family: 'Inter', sans-serif; 

@@ -22,34 +22,48 @@
   @else
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
   @endif
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  {{-- Optional favicon files - uncomment when files are added to public directory --}}
+  {{-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"> --}}
+  {{-- <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"> --}}
+  {{-- <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"> --}}
   <link rel="manifest" href="/site.webmanifest">
   
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: 'hsl(220, 70%, 25%)',
-            'primary-dark': 'hsl(220, 70%, 20%)',
-            'primary-light': 'hsl(220, 60%, 35%)',
-            accent: 'hsl(75, 45%, 40%)',
-            'accent-light': 'hsl(80, 50%, 45%)',
-            background: 'hsl(0, 0%, 98%)',
-            foreground: 'hsl(215, 25%, 27%)'
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif']
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via Vite -->
+  @php
+      $hasViteManifest = file_exists(public_path('build/manifest.json'));
+  @endphp
+  
+  @if($hasViteManifest)
+      @vite(['resources/css/app.css', 'resources/js/app.js'])
+  @else
+      <!-- Fallback for development without Vite build - should not be used in production -->
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                primary: 'hsl(220, 70%, 25%)',
+                'primary-dark': 'hsl(220, 70%, 20%)',
+                'primary-light': 'hsl(220, 60%, 35%)',
+                accent: 'hsl(75, 45%, 40%)',
+                'accent-light': 'hsl(80, 50%, 45%)',
+                background: 'hsl(0, 0%, 98%)',
+                foreground: 'hsl(215, 25%, 27%)'
+              },
+              fontFamily: {
+                sans: ['Inter', 'system-ui', 'sans-serif']
+              }
+            }
           }
         }
-      }
-    }
-  </script>
+      </script>
+  @endif
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
     html { scroll-behavior: smooth; }
     
     /* Enhanced sticky header */
@@ -310,7 +324,7 @@
           <div class="flex items-center">
             <a href="/" class="text-xl font-bold text-slate-900">{{ $siteName ?? 'India Tourisme' }}</a>
           </div>
-          <div class="hidden lg:flex items-center space-x-6">
+          <div class="hidden lg:flex items-center justify-end space-x-6 ml-auto">
             <a href="/" class="text-slate-700 hover:text-primary font-medium text-sm">Accueil</a>
             <a href="/#services" class="text-slate-700 hover:text-primary font-medium text-sm">Services</a>
             <a href="/galerie" class="text-slate-700 hover:text-primary font-medium text-sm">Galerie</a>
@@ -346,103 +360,22 @@
   <div style="height: 56px;"></div>
 
   <main>
-            <!-- Hero Slider Section -->
+            <!-- Hero Section -->
             @if($heroes->count() > 0)
-                <div class="hero-slider relative overflow-hidden">
-                    <div class="hero-slides-container flex transition-transform duration-500 ease-in-out" id="heroSlides">
-                        @foreach($heroes as $index => $hero)
-                            <div class="hero-slide w-full flex-shrink-0 relative py-16 sm:py-20 lg:py-32 overflow-hidden" style="background-color: hsl(220, 70%, 25%);" 
-                                 @if($hero->background_image) style="background-image: url('{{ asset('storage/' . $hero->background_image) }}'); background-size: cover; background-position: center;" @endif>
-                                @if(!$hero->background_image)
-                                    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%233B82F6" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
-                                @else
-                                    <div class="absolute inset-0 bg-black/20"></div>
-                                @endif
-                                <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-                                    <div class="text-center max-w-4xl mx-auto">
-                                        @if($hero->badge_text)
-                                            <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary font-medium text-sm mb-8">
-                                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                                </svg>
-                                                {{ $hero->badge_text }}
-                                            </div>
-                                        @endif
-                                        
-                                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-                                            {!! $hero->title !!}
-                                        </h1>
-                                        
-                                        @if($hero->subtitle)
-                                            <p class="text-xl text-gray-300 mb-6 max-w-3xl mx-auto leading-relaxed">
-                                                {{ $hero->subtitle }}
-                                            </p>
-                                        @endif
-                                        
-                                        @if($hero->description)
-                                            <p class="text-lg text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-                                                {{ $hero->description }}
-                                            </p>
-                                        @endif
-                                        
-                                        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                                            @if($hero->primary_button_text)
-                                                <a href="{{ $hero->primary_button_url ?: '#devis' }}" class="w-full sm:w-auto text-white border-2 border-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center hover:bg-white/10">
-                                                    {{ $hero->primary_button_text }}
-                                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                                    </svg>
-                                                </a>
-                                            @endif
-                                            
-                                            @if($hero->secondary_button_text)
-                                                <a href="{{ $hero->secondary_button_url ?: 'https://wa.me/XXXXXXXXXXX' }}" class="w-full sm:w-auto text-white border-2 border-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center hover:bg-white/10">
-                                                    @if(str_contains(strtolower($hero->secondary_button_text), 'whatsapp'))
-                                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                                                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.109"/>
-                                                        </svg>
-                                                    @endif
-                                                    {{ $hero->secondary_button_text }}
-                                                </a>
-                                            @endif
-                                            
-                                            @if($hero->tertiary_button_text)
-                                                <a href="{{ $hero->tertiary_button_url ?: 'https://calendly.com/votre-calendly/rdv-15min' }}" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-primary border-2 border-primary px-8 py-4 rounded-xl font-semibold transition-all duration-200">
-                                                    {{ $hero->tertiary_button_text }}
-                                                </a>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <!-- Navigation Arrows -->
-                    @if($heroes->count() > 1)
-                        <button class="hero-nav hero-nav-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 hover:text-primary p-3 rounded-full shadow-lg transition-all duration-200 z-10" onclick="changeSlide(-1)">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
-                        </button>
-                        <button class="hero-nav hero-nav-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 hover:text-primary p-3 rounded-full shadow-lg transition-all duration-200 z-10" onclick="changeSlide(1)">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                    @endif
-
-                    <!-- Dots Indicator -->
-                    @if($heroes->count() > 1)
-                        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-                            @foreach($heroes as $index => $hero)
-                                <button class="hero-dot w-3 h-3 rounded-full transition-all duration-200 {{ $index === 0 ? 'bg-white' : 'bg-white/50' }}" 
-                                        onclick="currentSlide({{ $index }})" 
-                                        data-slide="{{ $index }}"></button>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
+                @php
+                    // Check if any hero uses carousel layout
+                    $hasCarousel = $heroes->where('layout_type', 'carousel')->count() > 0;
+                @endphp
+                
+                @if($hasCarousel)
+                    {{-- Render all heroes as carousel --}}
+                    <x-hero.carousel :heroes="$heroes" />
+                @else
+                    {{-- Render individual heroes based on their layout type --}}
+                    @foreach($heroes as $hero)
+                        <x-hero :hero="$hero" />
+                    @endforeach
+                @endif
             @else
                 <!-- Default Hero Section (fallback) -->
             <section class="relative py-8 sm:py-12 lg:py-16 overflow-hidden" style="background-color: hsl(220, 70%, 25%); color: white;"
@@ -1102,14 +1035,24 @@
       let currentStep = 1;
       let formData = {};
       let autoSaveInterval;
+      let formInitialized = false;
       
       // Initialize form
       document.addEventListener('DOMContentLoaded', function() {
+        // Prevent multiple initializations
+        if (formInitialized) return;
+        formInitialized = true;
+        
         initializeForm();
         loadSavedData();
         startAutoSave();
         initializeDatePicker();
         setupValidation();
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+          stopAutoSave();
+        });
       });
       
       function initializeForm() {
@@ -1278,41 +1221,27 @@
             const travelers = document.getElementById('number_of_travelers');
             const budget = document.getElementById('budget_range');
             
-            // Debug logging
-            console.log('Validating Step 1:');
-            console.log('Travel dates value:', travelDates.value);
-            console.log('Travelers value:', travelers.value);
-            console.log('Budget value:', budget.value);
-            
             // Clear any existing error
             hideError('travel_dates_error');
             
             if (!travelDates.value || travelDates.value.trim() === '' || travelDates.value === 'Sélectionnez vos dates') {
-              console.log('Travel dates validation failed: empty or placeholder');
               showError('travel_dates_error', 'Veuillez sélectionner vos dates de voyage');
               isValid = false;
             } else {
               // Additional validation for date format
               const datePattern = /^\d{2}\/\d{2}\/\d{4} - \d{2}\/\d{2}\/\d{4}$/;
               if (!datePattern.test(travelDates.value)) {
-                console.log('Travel dates validation failed: invalid format');
                 showError('travel_dates_error', 'Format de date invalide');
                 isValid = false;
-              } else {
-                console.log('Travel dates validation passed');
               }
             }
             
             if (!travelers.value || travelers.value < 1) {
-              console.log('Travelers validation failed');
               isValid = false;
             }
             if (!budget.value) {
-              console.log('Budget validation failed');
               isValid = false;
             }
-            
-            console.log('Step 1 validation result:', isValid);
             break;
           case 2:
             const destinations = document.querySelectorAll('input[name="destinations[]"]:checked');
@@ -1606,24 +1535,17 @@
       
       function updateNextButton() {
         const nextButton = document.getElementById(`step${currentStep}-next`);
-        console.log('Updating next button for step:', currentStep);
-        console.log('Next button element:', nextButton);
         
         if (nextButton) {
           const isValid = validateCurrentStep();
-          console.log('Next button validation result:', isValid);
           
           if (isValid) {
             nextButton.disabled = false;
             nextButton.className = 'group bg-primary text-white px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform';
-            console.log('Next button enabled');
           } else {
             nextButton.disabled = true;
             nextButton.className = 'group bg-slate-300 text-slate-500 px-8 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg cursor-not-allowed';
-            console.log('Next button disabled');
           }
-        } else {
-          console.log('Next button not found for step:', currentStep);
         }
       }
       
@@ -1938,7 +1860,7 @@
             <div class="space-y-4">
               <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
-                  <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                   </svg>
                 </div>
@@ -1950,7 +1872,7 @@
               
               <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
-                  <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                   </svg>
                 </div>
@@ -2163,94 +2085,7 @@
       });
     });
 
-    // Hero Slider Functionality
-    let currentSlideIndex = 0;
-    const totalSlides = {{ $heroes->count() }};
-    let slideInterval;
-
-    function showSlide(index) {
-      const slidesContainer = document.getElementById('heroSlides');
-      const dots = document.querySelectorAll('.hero-dot');
-      
-      if (slidesContainer && totalSlides > 0) {
-        // Update slide position
-        slidesContainer.style.transform = `translateX(-${index * 100}%)`;
-        
-        // Update dots
-        dots.forEach((dot, i) => {
-          if (i === index) {
-            dot.classList.remove('bg-white/50');
-            dot.classList.add('bg-white');
-          } else {
-            dot.classList.remove('bg-white');
-            dot.classList.add('bg-white/50');
-          }
-        });
-        
-        currentSlideIndex = index;
-      }
-    }
-
-    function changeSlide(direction) {
-      if (totalSlides <= 1) return;
-      
-      let newIndex = currentSlideIndex + direction;
-      
-      // Loop around
-      if (newIndex >= totalSlides) {
-        newIndex = 0;
-      } else if (newIndex < 0) {
-        newIndex = totalSlides - 1;
-      }
-      
-      showSlide(newIndex);
-      resetAutoSlide();
-    }
-
-    function currentSlide(index) {
-      showSlide(index);
-      resetAutoSlide();
-    }
-
-    function resetAutoSlide() {
-      clearInterval(slideInterval);
-      if (totalSlides > 1) {
-        slideInterval = setInterval(() => {
-          changeSlide(1);
-        }, 5000); // Auto-advance every 5 seconds
-      }
-    }
-
-    // Initialize slider
-    document.addEventListener('DOMContentLoaded', function() {
-      if (totalSlides > 1) {
-        // Start auto-slide
-        resetAutoSlide();
-        
-        // Pause on hover
-        const slider = document.querySelector('.hero-slider');
-        if (slider) {
-          slider.addEventListener('mouseenter', () => {
-            clearInterval(slideInterval);
-          });
-          
-          slider.addEventListener('mouseleave', () => {
-            resetAutoSlide();
-          });
-        }
-      }
-    });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-      if (totalSlides > 1) {
-        if (e.key === 'ArrowLeft') {
-          changeSlide(-1);
-        } else if (e.key === 'ArrowRight') {
-          changeSlide(1);
-        }
-      }
-    });
+    // Hero functionality is now handled by the hero components
   </script>
 </body>
 </html>

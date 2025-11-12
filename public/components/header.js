@@ -1,6 +1,8 @@
 async function loadHeader() {
   const headerContainer = document.getElementById('header-container');
   if (headerContainer) {
+    // Return a promise for proper async handling
+    return new Promise(async (resolve) => {
     // Fetch destinations and logo settings dynamically
     let destinationsHtml = '';
     let logoHtml = '';
@@ -8,7 +10,14 @@ async function loadHeader() {
     try {
       // Fetch destinations
       const destinationsResponse = await fetch('/api/destinations');
+      if (!destinationsResponse.ok) {
+        throw new Error(`HTTP error! status: ${destinationsResponse.status}`);
+      }
       const destinations = await destinationsResponse.json();
+      
+      if (destinations.error) {
+        throw new Error(destinations.message || destinations.error);
+      }
       
       destinationsHtml = destinations.map(destination => 
         `<a href="/destinations/${destination.slug}" class="block px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 hover:text-primary">${destination.name}</a>`
@@ -16,7 +25,14 @@ async function loadHeader() {
       
       // Fetch logo settings
       const logoResponse = await fetch('/api/logo-settings');
+      if (!logoResponse.ok) {
+        throw new Error(`HTTP error! status: ${logoResponse.status}`);
+      }
       const logoSettings = await logoResponse.json();
+      
+      if (logoSettings.error) {
+        throw new Error(logoSettings.message || logoSettings.error);
+      }
       
       // Generate logo HTML
       if (logoSettings.site_logo_url) {
@@ -68,7 +84,7 @@ async function loadHeader() {
             </div>
 
             <!-- Navigation Menu -->
-            <div class="hidden lg:flex items-center space-x-6">
+            <div class="hidden lg:flex items-center justify-end space-x-6 ml-auto">
               <a href="/" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Accueil</a>
               <div class="relative group">
                 <a href="#" class="nav-link text-slate-700 hover:text-primary font-medium flex items-center text-sm">
@@ -87,14 +103,12 @@ async function loadHeader() {
               <a href="/galerie" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Galerie</a>
               <a href="/blog" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Blog</a>
               <a href="/#contact" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Contact</a>
-            </div>
-
-            <!-- CTA Button -->
-            <div class="hidden lg:flex items-center">
               <a href="/#devis" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-sm">
                 Demander un devis
               </a>
             </div>
+            
+            <!-- Mobile menu button -->
             <div class="-mr-2 flex items-center lg:hidden">
               <button type="button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()">
                 <span class="sr-only">Ouvrir le menu principal</span>
@@ -124,7 +138,10 @@ async function loadHeader() {
         </div>
       </nav>
     `;
+      resolve();
+    });
   }
+  return Promise.resolve();
 }
 
 function toggleMobileMenu() {
@@ -134,23 +151,27 @@ function toggleMobileMenu() {
   }
 }
 
-// Load header when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Loading header...');
-  loadHeader();
-  console.log('Header loaded successfully');
+// Store references to prevent duplicate listeners
+let scrollHandler = null;
+let anchorClickHandlers = [];
+
+// Enhanced sticky header behavior
+function setupStickyHeader() {
+  const header = document.querySelector('nav');
+  if (!header) {
+    return;
+  }
   
-  // Enhanced sticky header behavior
-  setTimeout(() => {
-    const header = document.querySelector('nav');
-    console.log('Header found:', header);
-    let lastScrollY = window.scrollY;
-    
-    if (header) {
-      console.log('Setting up sticky header behavior');
-      
-      // Add scroll effect to header
-      window.addEventListener('scroll', () => {
+  // Remove existing scroll handler if any
+  if (scrollHandler) {
+    window.removeEventListener('scroll', scrollHandler);
+  }
+  
+  // Create throttled scroll handler to prevent excessive calls
+  let ticking = false;
+  scrollHandler = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
         const currentScrollY = window.scrollY;
         
         // Add/remove shadow based on scroll position
@@ -162,40 +183,59 @@ document.addEventListener('DOMContentLoaded', function() {
           header.classList.remove('shadow-lg');
         }
         
-        lastScrollY = currentScrollY;
+        ticking = false;
       });
-      
-      // Smooth scroll for anchor links
-      const anchorLinks = document.querySelectorAll('a[href^="#"]');
-      console.log('Found anchor links:', anchorLinks.length);
-      anchorLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          const href = this.getAttribute('href');
-          if (href === '#') return;
-          
-          const target = document.querySelector(href);
-          if (target) {
-            e.preventDefault();
-            const headerHeight = header.offsetHeight;
-            const targetPosition = target.offsetTop - headerHeight - 20;
-            
-            console.log('Scrolling to:', href, 'at position:', targetPosition);
-            
-            window.scrollTo({
-              top: targetPosition,
-              behavior: 'smooth'
-            });
-            
-            // Close mobile menu if open
-            const mobileMenu = document.getElementById('mobile-menu');
-            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-              mobileMenu.classList.add('hidden');
-            }
-          }
-        });
-      });
-    } else {
-      console.error('Header not found!');
+      ticking = true;
     }
-  }, 100); // Small delay to ensure header is loaded
+  };
+  
+  window.addEventListener('scroll', scrollHandler, { passive: true });
+  
+  // Remove existing anchor link handlers
+  anchorClickHandlers.forEach(handler => {
+    handler.element.removeEventListener('click', handler.fn);
+  });
+  anchorClickHandlers = [];
+  
+  // Smooth scroll for anchor links
+  const anchorLinks = document.querySelectorAll('a[href^="#"]');
+  anchorLinks.forEach(link => {
+    const clickHandler = function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return;
+      
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        const headerHeight = header.offsetHeight;
+        const targetPosition = target.offsetTop - headerHeight - 20;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+        
+        // Close mobile menu if open
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+        }
+      }
+    };
+    
+    link.addEventListener('click', clickHandler);
+    anchorClickHandlers.push({ element: link, fn: clickHandler });
+  });
+}
+
+// Load header when DOM is ready
+let headerLoaded = false;
+document.addEventListener('DOMContentLoaded', function() {
+  if (!headerLoaded) {
+    headerLoaded = true;
+    loadHeader().then(() => {
+      // Setup sticky header after header is loaded
+      setTimeout(setupStickyHeader, 100);
+    });
+  }
 });

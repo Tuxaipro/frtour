@@ -1,0 +1,17 @@
+{
+    "name": "Sysnx Voyage",
+    "short_name": "Sysnx Voyage",
+    "description": "Travel and tourism website",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "hsl(220, 70%, 25%)",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "any",
+            "type": "image/x-icon"
+        }
+    ]
+}
+

@@ -32,9 +32,14 @@ class QuoteRequestController extends Controller
             $query->where('is_processed', $request->is_processed === 'processed');
         }
 
+        // Get stats from all records (before filters)
+        $totalCount = QuoteRequest::count();
+        $pendingCount = QuoteRequest::where('is_processed', false)->count();
+        $processedCount = QuoteRequest::where('is_processed', true)->count();
+        
         $quoteRequests = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
         
-        return view('admin.quote-requests.index', compact('quoteRequests'));
+        return view('admin.quote-requests.index', compact('quoteRequests', 'totalCount', 'pendingCount', 'processedCount'));
     }
 
     /**

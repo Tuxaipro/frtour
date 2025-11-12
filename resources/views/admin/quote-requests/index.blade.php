@@ -7,94 +7,99 @@
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900">Quote Requests</h1>
-            <p class="text-slate-600 mt-1">Manage custom quote requests</p>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Quote Requests</h1>
+            <p class="text-sm text-slate-600 mt-1.5 font-medium">Manage custom quote requests</p>
         </div>
         <div class="flex items-center space-x-4">
-            <div class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                {{ $quoteRequests->count() }} request{{ $quoteRequests->count() > 1 ? 's' : '' }} total
+            <div class="text-sm text-slate-600 bg-white border-2 border-slate-200 px-4 py-2 rounded-xl font-semibold shadow-sm">
+                {{ $totalCount }} request{{ $totalCount > 1 ? 's' : '' }} total
             </div>
         </div>
     </div>
 
     @if(session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4">
+        <div class="bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-500 text-green-800 px-5 py-4 rounded-xl shadow-md flex items-center">
+            <svg class="w-5 h-5 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
             {{ session('success') }}
         </div>
     @endif
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
+        <div class="group bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative flex items-center">
+                <div class="p-4 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-slate-600">Total Demandes</p>
-                    <p class="text-3xl font-bold text-slate-900">{{ $quoteRequests->count() }}</p>
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Total Demandes</p>
+                    <p class="text-3xl font-bold text-slate-900 mt-1">{{ $totalCount }}</p>
                 </div>
             </div>
         </div>
         
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
+        <div class="group bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative flex items-center">
+                <div class="p-4 bg-gradient-to-br from-amber-100 to-amber-50 rounded-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-slate-600">Pending</p>
-                    <p class="text-3xl font-bold text-slate-900">{{ $quoteRequests->where('is_processed', false)->count() }}</p>
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Pending</p>
+                    <p class="text-3xl font-bold text-slate-900 mt-1">{{ $pendingCount }}</p>
                 </div>
             </div>
         </div>
         
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
+        <div class="group bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-full -mr-16 -mt-16"></div>
+            <div class="relative flex items-center">
+                <div class="p-4 bg-gradient-to-br from-green-100 to-green-50 rounded-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+                    <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-slate-600">Processed</p>
-                    <p class="text-3xl font-bold text-slate-900">{{ $quoteRequests->where('is_processed', true)->count() }}</p>
+                    <p class="text-sm font-medium text-slate-500 uppercase tracking-wide">Processed</p>
+                    <p class="text-3xl font-bold text-slate-900 mt-1">{{ $processedCount }}</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Search and Filter Bar -->
-    <form method="GET" action="{{ route('admin.quote-requests.index') }}" class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+    <form method="GET" action="{{ route('admin.quote-requests.index') }}" class="bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, destination..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            <select name="is_processed" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by name, email, destination..." class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400">
+            <select name="is_processed" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white">
                 <option value="">All Requests</option>
                 <option value="pending" {{ request('is_processed') === 'pending' ? 'selected' : '' }}>Pending</option>
                 <option value="processed" {{ request('is_processed') === 'processed' ? 'selected' : '' }}>Processed</option>
             </select>
-            <div class="flex space-x-2">
-                <button type="submit" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200">Apply</button>
-                <a href="{{ route('admin.quote-requests.index') }}" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-medium transition-colors duration-200 text-center">Clear</a>
+            <div class="flex space-x-3">
+                <button type="submit" class="flex-1 bg-primary hover:bg-primary-dark text-white px-5 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg">Apply</button>
+                <a href="{{ route('admin.quote-requests.index') }}" class="flex-1 bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-200 px-5 py-3 rounded-xl font-semibold transition-all duration-200 text-center shadow-sm hover:shadow-md">Clear</a>
             </div>
         </div>
     </form>
 
     <!-- Quote Requests Table -->
-    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 overflow-hidden">
         @if($quoteRequests->count() > 0)
+            <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+                <h2 class="text-lg font-bold text-slate-900">All Quote Requests</h2>
+                <p class="text-xs text-slate-600 mt-1">Total: {{ $quoteRequests->count() }} request(s)</p>
+            </div>
+            <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-slate-200">
-                <thead class="bg-slate-50">
+                <thead class="bg-slate-50/50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
                             Client
@@ -115,7 +120,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-slate-200">
                         @foreach($quoteRequests as $request)
-                            <tr class="hover:bg-slate-50">
+                            <tr class="hover:bg-primary/5 transition-colors duration-150">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-12 w-12">
@@ -229,15 +234,25 @@
                         @endforeach
                     </tbody>
                 </table>
-        @else
-            <div class="text-center py-16">
-                <div class="mx-auto w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
+            </div>
+            
+            <!-- Pagination -->
+            @if($quoteRequests->hasPages())
+                <div class="bg-slate-50/50 px-6 py-4 border-t border-slate-200">
+                    {{ $quoteRequests->links() }}
                 </div>
-                <h3 class="text-lg font-semibold text-slate-900 mb-2">No quote requests</h3>
-                <p class="text-slate-500">New requests will appear here.</p>
+            @endif
+        @else
+            <div class="p-12 text-center">
+                <div class="max-w-md mx-auto">
+                    <div class="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">No quote requests found</h3>
+                    <p class="text-sm text-slate-600">New requests will appear here.</p>
+                </div>
             </div>
         @endif
     </div>

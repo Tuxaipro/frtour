@@ -69,6 +69,16 @@ class ViewServiceProvider extends ServiceProvider
             return '';
         }
         
+        // Clean the path: remove quotes, trim whitespace, fix double slashes
+        $path = trim($path);
+        $path = trim($path, '"\'');
+        $path = preg_replace('#/+#', '/', $path); // Replace multiple slashes with single slash
+        $path = ltrim($path, '/'); // Remove only leading slashes (keep trailing if needed)
+        
+        if (empty($path)) {
+            return '';
+        }
+        
         // If path starts with storage/, it's already a storage path
         if (str_starts_with($path, 'storage/')) {
             return asset($path);

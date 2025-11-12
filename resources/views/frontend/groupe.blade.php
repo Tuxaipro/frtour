@@ -197,7 +197,7 @@
   <div id="header-container"></div>
 
 <!-- Hero Section -->
-  <section class="relative py-16 sm:py-20 lg:py-32" style="background-color: hsl(220, 70%, 25%);"
+  <section class="relative py-16 sm:py-20 lg:py-32" style="background-color: hsl(220, 70%, 25%);">
     <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%238B5CF6\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"4\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
     <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
       <div class="text-center max-w-4xl mx-auto">
@@ -207,10 +207,10 @@
           </svg>
           Groupes & Entreprises
         </div>
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-          Voyages de <span class="text-white">Groupe</span>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          Voyages de Groupe
         </h1>
-        <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+        <p class="text-xl text-white mb-8 leading-relaxed">
           Organisez des voyages inoubliables pour vos groupes : familles, amis, entreprises ou associations. Des circuits sur-mesure avec des tarifs préférentiels.
         </p>
       </div>

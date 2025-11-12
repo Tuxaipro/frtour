@@ -10,33 +10,28 @@
                 </a>
             </div>
             
-            <div class="hidden md:block">
-                <div class="ml-10 flex items-baseline space-x-8">
-                    <a href="{{ route('home') }}" class="text-slate-900 hover:text-primary transition-colors duration-200 font-medium">Accueil</a>
+            <div class="hidden md:flex items-center justify-end space-x-8 ml-auto">
+                <a href="{{ route('home') }}" class="text-slate-900 hover:text-primary transition-colors duration-200 font-medium">Accueil</a>
+                
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" class="text-slate-600 hover:text-primary transition-colors duration-200 font-medium flex items-center">
+                        Circuits
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
                     
-                    <div class="relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="text-slate-600 hover:text-primary transition-colors duration-200 font-medium flex items-center">
-                            Circuits
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        
-                        <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 origin-top-right">
-                            @foreach(App\Models\Destination::where('is_active', true)->get() as $destination)
-                                <a href="{{ route('destination', $destination->slug) }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-primary transition-colors duration-200">
-                                    {{ $destination->name }}
-                                </a>
-                            @endforeach
-                        </div>
+                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 origin-top-right">
+                        @foreach(App\Models\Destination::where('is_active', true)->get() as $destination)
+                            <a href="{{ route('destination', $destination->slug) }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 hover:text-primary transition-colors duration-200">
+                                {{ $destination->name }}
+                            </a>
+                        @endforeach
                     </div>
-                    
-                    <a href="{{ route('groupe') }}" class="text-slate-600 hover:text-primary transition-colors duration-200 font-medium">Groupe</a>
-                    <a href="{{ route('home') }}#devis" class="text-slate-600 hover:text-primary transition-colors duration-200 font-medium">Devis</a>
                 </div>
-            </div>
-            
-            <div class="hidden md:block">
+                
+                <a href="{{ route('groupe') }}" class="text-slate-600 hover:text-primary transition-colors duration-200 font-medium">Groupe</a>
+                <a href="{{ route('home') }}#devis" class="text-slate-600 hover:text-primary transition-colors duration-200 font-medium">Devis</a>
                 <a href="{{ route('login') }}" class="text-slate-600 hover:text-primary transition-colors duration-200 font-medium">Connexion</a>
             </div>
             
