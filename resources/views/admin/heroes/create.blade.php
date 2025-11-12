@@ -272,7 +272,7 @@
                             @enderror
                             </div>
                         </div>
-                        </div>
+                    </div>
 
                         <!-- Right Column -->
                         <div class="space-y-6">

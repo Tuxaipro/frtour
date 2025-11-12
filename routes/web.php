@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\GalerieController;
 use App\Http\Controllers\Admin\GalerieCategoryController;
 use App\Http\Controllers\Admin\HeroController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\QuoteRequestController as AdminQuoteRequestController;
 use App\Http\Controllers\Admin\SettingController;
@@ -26,7 +27,8 @@ Route::match(['GET', 'HEAD'], '/', function () {
     $faqs = \App\Models\Faq::where('is_active', true)->orderBy('sort_order')->get();
     $blogs = \App\Models\Blog::where('is_published', true)->orderBy('created_at', 'desc')->take(3)->get();
     $destinations = \App\Models\Destination::where('is_active', true)->orderBy('name')->get();
-    return view('welcome', compact('heroes', 'circuits', 'categories', 'faqs', 'blogs', 'destinations'));
+    $reviews = \App\Models\Review::getActive();
+    return view('welcome', compact('heroes', 'circuits', 'categories', 'faqs', 'blogs', 'destinations', 'reviews'));
 })->name('home');
 Route::get('/destinations/{slug}', [FrontendController::class, 'destination'])->name('destination');
 Route::get('/circuits/{slug}', [FrontendController::class, 'circuit'])->name('circuit');
@@ -341,6 +343,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::resource('faq', FaqController::class);
     Route::resource('heroes', HeroController::class);
     Route::post('/heroes/{hero}/duplicate', [HeroController::class, 'duplicate'])->name('heroes.duplicate');
+    Route::resource('reviews', ReviewController::class);
     Route::resource('quote-requests', AdminQuoteRequestController::class);
     Route::resource('contacts', AdminContactController::class)->only(['index', 'show', 'destroy']);
     Route::post('/contacts/{contact}/toggle-read', [AdminContactController::class, 'toggleRead'])->name('contacts.toggle-read');

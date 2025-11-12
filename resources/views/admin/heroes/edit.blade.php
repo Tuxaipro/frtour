@@ -219,7 +219,7 @@
                             @enderror
                         </div>
                     </div>
-                        
+
                     <!-- Settings -->
                     <div class="bg-gray-50 p-6 rounded-lg">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
@@ -385,7 +385,7 @@ function clearCurrentImage() {
                 console.error('WARNING: Remove flag was reset! Setting it again...');
                 verifyInput.value = '1';
                 verifyInput.setAttribute('value', '1');
-            }
+    }
         }, 100);
     }
 }

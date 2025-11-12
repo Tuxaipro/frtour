@@ -41,12 +41,34 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: 'hsl(220, 70%, 25%)',
-                        'primary-dark': 'hsl(220, 70%, 20%)',
-                        'primary-light': 'hsl(220, 60%, 35%)',
-                        accent: 'hsl(75, 45%, 40%)',
-                        'accent-light': 'hsl(80, 50%, 45%)',
-                        background: 'hsl(0, 0%, 98%)',
+                        primary: {
+                            DEFAULT: 'hsl(201, 96%, 32%)',
+                            light: 'hsl(201, 96%, 42%)',
+                            dark: 'hsl(201, 96%, 22%)',
+                            50: 'hsl(201, 96%, 95%)',
+                            100: 'hsl(201, 96%, 90%)',
+                            500: 'hsl(201, 96%, 32%)',
+                            600: 'hsl(201, 96%, 22%)',
+                        },
+                        accent: {
+                            DEFAULT: 'hsl(142, 71%, 45%)',
+                            light: 'hsl(142, 71%, 55%)',
+                            dark: 'hsl(142, 71%, 35%)',
+                            50: 'hsl(142, 71%, 95%)',
+                            100: 'hsl(142, 71%, 90%)',
+                            500: 'hsl(142, 71%, 45%)',
+                        },
+                        sunset: {
+                            DEFAULT: 'hsl(25, 95%, 53%)',
+                            light: 'hsl(25, 95%, 63%)',
+                            dark: 'hsl(25, 95%, 43%)',
+                        },
+                        sand: {
+                            DEFAULT: 'hsl(45, 55%, 85%)',
+                            light: 'hsl(45, 55%, 95%)',
+                            dark: 'hsl(45, 55%, 75%)',
+                        },
+                        background: 'hsl(0, 0%, 99%)',
                         foreground: 'hsl(215, 25%, 27%)'
                     },
                     fontFamily: {

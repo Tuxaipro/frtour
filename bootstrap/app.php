@@ -7,7 +7,7 @@ if (php_sapi_name() === 'cli') {
     @ini_set('max_execution_time', '0');
     @set_time_limit(0);
 } else {
-    @ini_set('max_execution_time', '300');
+@ini_set('max_execution_time', '300');
 }
 @ini_set('max_input_time', '300');
 

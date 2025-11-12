@@ -16,16 +16,46 @@ export default {
             },
             colors: {
                 primary: {
-                    DEFAULT: 'hsl(220, 70%, 25%)', // Navy Blue
-                    light: 'hsl(220, 60%, 35%)',
-                    dark: 'hsl(220, 70%, 20%)',
+                    DEFAULT: 'hsl(201, 96%, 32%)', // Ocean Blue - inspired by tropical waters
+                    light: 'hsl(201, 96%, 42%)',
+                    dark: 'hsl(201, 96%, 22%)',
+                    50: 'hsl(201, 96%, 95%)',
+                    100: 'hsl(201, 96%, 90%)',
+                    200: 'hsl(201, 96%, 80%)',
+                    300: 'hsl(201, 96%, 70%)',
+                    400: 'hsl(201, 96%, 50%)',
+                    500: 'hsl(201, 96%, 32%)',
+                    600: 'hsl(201, 96%, 22%)',
+                    700: 'hsl(201, 96%, 18%)',
+                    800: 'hsl(201, 96%, 15%)',
+                    900: 'hsl(201, 96%, 12%)',
                 },
                 accent: {
-                    DEFAULT: 'hsl(75, 45%, 40%)', // Olive Green
-                    light: 'hsl(80, 50%, 45%)',
-                    dark: 'hsl(75, 45%, 35%)',
+                    DEFAULT: 'hsl(142, 71%, 45%)', // Forest Green - nature inspired
+                    light: 'hsl(142, 71%, 55%)',
+                    dark: 'hsl(142, 71%, 35%)',
+                    50: 'hsl(142, 71%, 95%)',
+                    100: 'hsl(142, 71%, 90%)',
+                    200: 'hsl(142, 71%, 80%)',
+                    300: 'hsl(142, 71%, 70%)',
+                    400: 'hsl(142, 71%, 55%)',
+                    500: 'hsl(142, 71%, 45%)',
+                    600: 'hsl(142, 71%, 35%)',
+                    700: 'hsl(142, 71%, 28%)',
+                    800: 'hsl(142, 71%, 22%)',
+                    900: 'hsl(142, 71%, 18%)',
                 },
-                background: 'hsl(0, 0%, 98%)', // Off-white
+                sunset: {
+                    DEFAULT: 'hsl(25, 95%, 53%)', // Sunset Orange
+                    light: 'hsl(25, 95%, 63%)',
+                    dark: 'hsl(25, 95%, 43%)',
+                },
+                sand: {
+                    DEFAULT: 'hsl(45, 55%, 85%)', // Beach Sand
+                    light: 'hsl(45, 55%, 95%)',
+                    dark: 'hsl(45, 55%, 75%)',
+                },
+                background: 'hsl(0, 0%, 99%)', // Pure white with slight warmth
                 foreground: 'hsl(215, 25%, 27%)', // Charcoal gray
             },
         },

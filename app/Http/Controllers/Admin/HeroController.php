@@ -188,7 +188,7 @@ class HeroController extends Controller
         // Get the remove flag BEFORE excluding fields
         $removeImage = $request->input('remove_background_image');
         $removeImage = ($removeImage === '1' || $removeImage === 1 || $removeImage === true || $removeImage === 'true');
-        
+
         // Log for debugging
         \Log::info('Hero update - remove_background_image flag:', [
             'raw_value' => $request->input('remove_background_image'),
@@ -204,7 +204,7 @@ class HeroController extends Controller
             // Delete the file from storage if it exists
             if ($hero->background_image) {
                 try {
-                    Storage::disk('public')->delete($hero->background_image);
+            Storage::disk('public')->delete($hero->background_image);
                     \Log::info('Deleted hero background image from storage:', ['path' => $hero->background_image]);
                 } catch (\Exception $e) {
                     // Log error but continue with database update
@@ -218,7 +218,7 @@ class HeroController extends Controller
             // Delete old image if exists
             if ($hero->background_image) {
                 try {
-                    Storage::disk('public')->delete($hero->background_image);
+                Storage::disk('public')->delete($hero->background_image);
                 } catch (\Exception $e) {
                     \Log::warning('Failed to delete old hero background image: ' . $e->getMessage());
                 }

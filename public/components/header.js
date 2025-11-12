@@ -20,7 +20,7 @@ async function loadHeader() {
       }
       
       destinationsHtml = destinations.map(destination => 
-        `<a href="/destinations/${destination.slug}" class="block px-3 py-1.5 text-xs text-slate-700 hover:bg-slate-50 hover:text-primary">${destination.name}</a>`
+        `<a href="/destinations/${destination.slug}" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-primary/5 hover:text-primary transition-colors duration-200 rounded-lg mx-1">${destination.name}</a>`
       ).join('');
       
       // Fetch logo settings
@@ -86,15 +86,15 @@ async function loadHeader() {
             <!-- Navigation Menu -->
             <div class="hidden lg:flex items-center justify-end space-x-6 ml-auto">
               <a href="/" class="nav-link text-slate-700 hover:text-primary font-medium text-sm">Accueil</a>
-              <div class="relative group">
-                <a href="#" class="nav-link text-slate-700 hover:text-primary font-medium flex items-center text-sm">
+              <div class="relative circuits-dropdown" id="circuits-dropdown">
+                <button type="button" class="nav-link text-slate-700 hover:text-primary font-medium flex items-center text-sm bg-transparent border-none cursor-pointer p-0">
                   Circuits
-                  <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-3 h-3 ml-1 transition-transform duration-200" id="circuits-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
-                </a>
-                <div class="absolute left-0 top-full mt-1 w-40 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 border border-slate-200" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
-                  <div class="py-1">
+                </button>
+                <div class="circuits-menu absolute left-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl opacity-0 invisible transition-all duration-300 z-50 border border-slate-200" id="circuits-menu" style="background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+                  <div class="py-2">
                     ${destinationsHtml}
                   </div>
                 </div>
@@ -224,7 +224,7 @@ function setupMobileMenu() {
   mobileMenuLinks.forEach(link => {
     link.addEventListener('click', function() {
       // Small delay to allow navigation
-      setTimeout(() => {
+  setTimeout(() => {
         toggleMobileMenu();
       }, 100);
     });
@@ -253,6 +253,56 @@ function setupMobileMenu() {
 // Store references to prevent duplicate listeners
 let scrollHandler = null;
 let anchorClickHandlers = [];
+
+// Setup circuits dropdown menu
+function setupCircuitsDropdown() {
+  const dropdown = document.getElementById('circuits-dropdown');
+  const menu = document.getElementById('circuits-menu');
+  const arrow = document.getElementById('circuits-arrow');
+  
+  if (!dropdown || !menu) return;
+  
+  // Show menu on hover
+  dropdown.addEventListener('mouseenter', function() {
+    menu.classList.remove('opacity-0', 'invisible');
+    menu.classList.add('opacity-100', 'visible');
+    if (arrow) arrow.classList.add('rotate-180');
+  });
+  
+  // Hide menu on mouse leave
+  dropdown.addEventListener('mouseleave', function() {
+    menu.classList.add('opacity-0', 'invisible');
+    menu.classList.remove('opacity-100', 'visible');
+    if (arrow) arrow.classList.remove('rotate-180');
+  });
+  
+  // Also handle click for better mobile/tablet support
+  const button = dropdown.querySelector('button');
+  if (button) {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      const isVisible = !menu.classList.contains('invisible');
+      if (isVisible) {
+        menu.classList.add('opacity-0', 'invisible');
+        menu.classList.remove('opacity-100', 'visible');
+        if (arrow) arrow.classList.remove('rotate-180');
+      } else {
+        menu.classList.remove('opacity-0', 'invisible');
+        menu.classList.add('opacity-100', 'visible');
+        if (arrow) arrow.classList.add('rotate-180');
+      }
+    });
+  }
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!dropdown.contains(e.target)) {
+      menu.classList.add('opacity-0', 'invisible');
+      menu.classList.remove('opacity-100', 'visible');
+      if (arrow) arrow.classList.remove('rotate-180');
+    }
+  });
+}
 
 // Enhanced sticky header behavior
 function setupStickyHeader() {
@@ -293,33 +343,33 @@ function setupStickyHeader() {
   // Remove existing anchor link handlers
   anchorClickHandlers.forEach(handler => {
     handler.element.removeEventListener('click', handler.fn);
-  });
+      });
   anchorClickHandlers = [];
-  
-  // Smooth scroll for anchor links
-  const anchorLinks = document.querySelectorAll('a[href^="#"]');
-  anchorLinks.forEach(link => {
-    const clickHandler = function(e) {
-      const href = this.getAttribute('href');
-      if (href === '#') return;
       
-      const target = document.querySelector(href);
-      if (target) {
-        e.preventDefault();
-        const headerHeight = header.offsetHeight;
-        const targetPosition = target.offsetTop - headerHeight - 20;
-        
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
-        
-        // Close mobile menu if open
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-          mobileMenu.classList.add('hidden');
-        }
-      }
+      // Smooth scroll for anchor links
+      const anchorLinks = document.querySelectorAll('a[href^="#"]');
+      anchorLinks.forEach(link => {
+    const clickHandler = function(e) {
+          const href = this.getAttribute('href');
+          if (href === '#') return;
+          
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            const headerHeight = header.offsetHeight;
+            const targetPosition = target.offsetTop - headerHeight - 20;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+            
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+              mobileMenu.classList.add('hidden');
+            }
+          }
     };
     
     link.addEventListener('click', clickHandler);
@@ -333,10 +383,11 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!headerLoaded) {
     headerLoaded = true;
     loadHeader().then(() => {
-      // Setup sticky header and mobile menu after header is loaded
+      // Setup sticky header, mobile menu, and circuits dropdown after header is loaded
       setTimeout(() => {
         setupStickyHeader();
         setupMobileMenu();
+        setupCircuitsDropdown();
       }, 100);
     });
   }

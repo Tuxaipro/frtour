@@ -47,12 +47,33 @@
           theme: {
             extend: {
               colors: {
-                primary: 'hsl(220, 70%, 25%)',
-                'primary-dark': 'hsl(220, 70%, 20%)',
-                'primary-light': 'hsl(220, 60%, 35%)',
-                accent: 'hsl(75, 45%, 40%)',
-                'accent-light': 'hsl(80, 50%, 45%)',
-                background: 'hsl(0, 0%, 98%)',
+                primary: {
+                  DEFAULT: 'hsl(201, 96%, 32%)',
+                  light: 'hsl(201, 96%, 42%)',
+                  dark: 'hsl(201, 96%, 22%)',
+                  50: 'hsl(201, 96%, 95%)',
+                  100: 'hsl(201, 96%, 90%)',
+                  500: 'hsl(201, 96%, 32%)',
+                  600: 'hsl(201, 96%, 22%)',
+                },
+                accent: {
+                  DEFAULT: 'hsl(142, 71%, 45%)',
+                  light: 'hsl(142, 71%, 55%)',
+                  dark: 'hsl(142, 71%, 35%)',
+                  50: 'hsl(142, 71%, 95%)',
+                  500: 'hsl(142, 71%, 45%)',
+                },
+                sunset: {
+                  DEFAULT: 'hsl(25, 95%, 53%)',
+                  light: 'hsl(25, 95%, 63%)',
+                  dark: 'hsl(25, 95%, 43%)',
+                },
+                sand: {
+                  DEFAULT: 'hsl(45, 55%, 85%)',
+                  light: 'hsl(45, 55%, 95%)',
+                  dark: 'hsl(45, 55%, 75%)',
+                },
+                background: 'hsl(0, 0%, 99%)',
                 foreground: 'hsl(215, 25%, 27%)'
               },
               fontFamily: {
@@ -92,12 +113,78 @@
       left: 0;
       width: 0;
       height: 2px;
-      background-color: hsl(220, 70%, 25%);
+      background: linear-gradient(90deg, hsl(201, 96%, 32%), hsl(142, 71%, 45%));
       transition: width 0.3s ease;
     }
     
     .nav-link:hover::after {
       width: 100%;
+    }
+    
+    /* Enhanced animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Scroll animations */
+    .fade-in-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    
+    .fade-in-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Enhanced card hover effects */
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* Trust icon animations */
+    .trust-icon {
+      transition: all 0.3s ease;
+    }
+    
+    .trust-icon:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    /* Review card enhancements */
+    .review-card {
+      transition: all 0.3s ease;
+    }
+    
+    .review-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
     
     /* Ensure sticky positioning works */
@@ -407,112 +494,193 @@
             </section>
             @endif
 
-    <!-- Circuits Section -->
-    <section id="circuits" class="py-16 sm:py-20 lg:py-32">
-      <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div class="text-center mb-12 sm:mb-16">
-          <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Nos idées de voyages (10–14 jours)</h2>
-          <p class="text-xl text-slate-600 max-w-2xl mx-auto">Personnalisables selon vos envies. Prix indicatifs "à partir de".</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          @forelse($circuits as $index => $circuit)
-            @php
-              $gradients = [
-                'from-orange-400 to-red-500',
-                'from-green-400 to-emerald-600', 
-                'from-blue-400 to-indigo-600',
-                'from-purple-400 to-violet-600',
-                'from-pink-400 to-rose-500',
-                'from-cyan-400 to-blue-500'
-              ];
-              $gradient = $gradients[$index % count($gradients)];
-              
-              // Extract tags for display
-              $tags = $circuit->tags ? explode(',', $circuit->tags) : [];
-              $tags = array_map('trim', $tags);
-              $tags = array_slice($tags, 0, 3); // Limit to 3 tags
-            @endphp
-            <article class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-              <div class="h-48 relative overflow-hidden">
-                @if($circuit->featured_image)
-                  <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                @else
-                  <div class="w-full h-full bg-gradient-to-br {{ $gradient }}">
-                    <div class="absolute inset-0 bg-black/20"></div>
-                  </div>
-                @endif
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div class="absolute bottom-4 left-4">
-                  <h3 class="text-lg font-bold text-white mb-1">{{ $circuit->name }}</h3>
-                  <p class="text-sm text-white/90">{{ $circuit->duration_days }} jours</p>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="space-y-3 mb-4">
-                  @if($circuit->description)
-                    <p class="text-slate-600 text-sm">{{ Str::limit($circuit->description, 80) }}</p>
-                  @endif
-                </div>
-                <div class="flex justify-between items-center mb-4">
-                  @if($circuit->price_from)
-                    <span class="text-lg font-bold text-amber-600">€{{ number_format($circuit->price_from, 0, ',', ' ') }}</span>
-                  @endif
-                  <a href="{{ route('circuit', $circuit->slug) }}" class="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary-dark text-white font-medium rounded-lg transition-colors duration-200 text-sm">
-                    Voir les détails
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  </a>
-                </div>
-                @if($circuit->tags)
-                  @php
-                    $circuitTags = explode(',', $circuit->tags);
-                    $circuitTags = array_map('trim', $circuitTags);
-                    $circuitTags = array_slice($circuitTags, 0, 3);
-                  @endphp
-                  @if(count($circuitTags) > 0)
-                    <div class="flex flex-wrap gap-1 mt-3">
-                      @foreach($circuitTags as $index => $tag)
-                        @php
-                          $colors = ['bg-blue-100 text-blue-700', 'bg-green-100 text-green-700', 'bg-amber-100 text-amber-700'];
-                          $colorClass = $colors[$index % count($colors)];
-                        @endphp
-                        <span class="px-2 py-1 {{ $colorClass }} text-xs font-medium rounded-full">{{ $tag }}</span>
-                      @endforeach
+    <!-- Trust Elements Section -->
+    <section class="py-12 sm:py-16 lg:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 lg:gap-12 mb-16 sm:mb-20 lg:mb-24">
+                <!-- Trust Badge 1: Certified -->
+                <div class="text-center group">
+                    <div class="w-20 h-20 mx-auto mb-5 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary-100">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
                     </div>
-                  @endif
-                @endif
-              </div>
-            </article>
-          @empty
-            <div class="col-span-full text-center py-12">
-              <div class="text-slate-500 text-lg">Aucun circuit disponible pour le moment.</div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">DMC Certifié</h3>
+                    <p class="text-sm text-slate-500">ISO 9001:2015</p>
+                </div>
+
+                <!-- Trust Badge 2: 24/7 Support -->
+                <div class="text-center group">
+                    <div class="w-20 h-20 mx-auto mb-5 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary-100">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Assistance 24/7</h3>
+                    <p class="text-sm text-slate-500">Support continu</p>
+                </div>
+
+                <!-- Trust Badge 3: Secure Booking -->
+                <div class="text-center group">
+                    <div class="w-20 h-20 mx-auto mb-5 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary-100">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Paiement Sécurisé</h3>
+                    <p class="text-sm text-slate-500">Transactions protégées</p>
+                </div>
+
+                <!-- Trust Badge 4: Best Price -->
+                <div class="text-center group">
+                    <div class="w-20 h-20 mx-auto mb-5 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary-100">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Meilleur Prix</h3>
+                    <p class="text-sm text-slate-500">Garanti</p>
+                </div>
             </div>
-          @endforelse
+
+            <!-- Reviews Section -->
+            <div class="pt-16 sm:pt-20 lg:pt-24">
+                @php
+                    $reviews = $reviews ?? collect([]);
+                    $avgRating = $reviews->count() > 0 ? round($reviews->avg('rating'), 1) : 4.9;
+                @endphp
+                <div class="text-center mb-8 sm:mb-10">
+                    <div class="flex items-center justify-center gap-3 mb-5">
+                        <div class="flex items-center gap-0.5">
+                            @for($i = 1; $i <= 5; $i++)
+                                <svg class="w-7 h-7 text-primary-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            @endfor
+                        </div>
+                        <span class="text-3xl font-bold text-slate-900">{{ $avgRating }}/5</span>
+                    </div>
+                    <p class="text-lg text-slate-600">Basé sur <strong class="text-slate-900 font-bold">500+</strong> avis clients vérifiés</p>
+                </div>
+
+                @if($reviews && $reviews->count() > 0)
+                    <!-- Reviews Carousel -->
+                    <div class="reviews-carousel-container relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="reviews-carousel-wrapper overflow-hidden">
+                            <div class="reviews-carousel-track flex transition-transform duration-500 ease-in-out" id="reviewsCarouselTrack" style="width: 100%;">
+                                @foreach($reviews as $review)
+                                    <div class="reviews-carousel-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-3">
+                                        <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-all duration-300 border border-slate-200 flex flex-col h-full">
+                                            <div class="flex items-center gap-1 mb-4">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    <svg class="w-5 h-5 {{ $i <= $review->rating ? 'text-primary-600' : 'text-slate-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                    </svg>
+                                                @endfor
+                                            </div>
+                                            <p class="text-slate-700 mb-6 text-sm leading-relaxed flex-grow">"{{ $review->comment }}"</p>
+                                            <div class="flex items-center pt-4 border-t border-slate-200 mt-auto">
+                                                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-semibold text-sm mr-3 flex-shrink-0">
+                                                    {{ $review->avatar_initials }}
+                                                </div>
+                                                <div class="min-w-0">
+                                                    <p class="font-semibold text-slate-900 text-sm truncate">{{ $review->name }}</p>
+                                                    @if($review->circuit)
+                                                        <p class="text-xs text-slate-500 mt-0.5 truncate">{{ $review->circuit }}</p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        
+                        <!-- Navigation Buttons -->
+                        @if($reviews->count() > 3)
+                            <button class="reviews-carousel-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 z-10 border border-slate-200 hover:bg-primary hover:text-white hover:border-primary" aria-label="Previous review">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <button class="reviews-carousel-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 z-10 border border-slate-200 hover:bg-primary hover:text-white hover:border-primary" aria-label="Next review">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        @endif
+                    </div>
+                @else
+                    <!-- Fallback: Static Reviews -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                        <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-all duration-300 fade-in-on-scroll border border-slate-200 flex flex-col h-full">
+                            <div class="flex items-center gap-1 mb-4">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <svg class="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                @endfor
+                            </div>
+                            <p class="text-slate-700 mb-6 text-sm leading-relaxed flex-grow">"Un voyage exceptionnel ! L'équipe a su créer un circuit sur-mesure qui correspondait parfaitement à nos attentes. Service impeccable et accompagnement de qualité."</p>
+                            <div class="flex items-center pt-4 border-t border-slate-200 mt-auto">
+                                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-semibold text-sm mr-3 flex-shrink-0">SM</div>
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-slate-900 text-sm truncate">Sophie Martin</p>
+                                    <p class="text-xs text-slate-500 mt-0.5 truncate">Circuit Inde du Nord</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-all duration-300 fade-in-on-scroll border border-slate-200 flex flex-col h-full">
+                            <div class="flex items-center gap-1 mb-4">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <svg class="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                @endfor
+                            </div>
+                            <p class="text-slate-700 mb-6 text-sm leading-relaxed flex-grow">"Professionnalisme et réactivité remarquables. Notre voyage au Sri Lanka était parfaitement organisé. Je recommande vivement leurs services !"</p>
+                            <div class="flex items-center pt-4 border-t border-slate-200 mt-auto">
+                                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-semibold text-sm mr-3 flex-shrink-0">JD</div>
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-slate-900 text-sm truncate">Jean Dubois</p>
+                                    <p class="text-xs text-slate-500 mt-0.5 truncate">Circuit Sri Lanka</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-all duration-300 fade-in-on-scroll border border-slate-200 flex flex-col h-full">
+                            <div class="flex items-center gap-1 mb-4">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <svg class="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                @endfor
+                            </div>
+                            <p class="text-slate-700 mb-6 text-sm leading-relaxed flex-grow">"Une expérience inoubliable au Népal ! L'organisation était parfaite et le guide local très compétent. Merci pour ce magnifique voyage."</p>
+                            <div class="flex items-center pt-4 border-t border-slate-200 mt-auto">
+                                <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-semibold text-sm mr-3 flex-shrink-0">ML</div>
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-slate-900 text-sm truncate">Marie Laurent</p>
+                                    <p class="text-xs text-slate-500 mt-0.5 truncate">Trek Népal</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
         </div>
-      </div>
     </section>
 
     <!-- Quote Form Section -->
-    <section id="devis" class="py-8 sm:py-12 lg:py-16 relative overflow-hidden scroll-mt-20" style="background-color: hsl(0, 0%, 98%);"
-      <!-- Background decoration (removed gradients for solid colors) -->
+    <section id="devis" class="py-8 sm:py-12 lg:py-16 relative overflow-hidden scroll-mt-20 bg-gradient-to-br from-slate-50 to-white">
+      <!-- Background decoration -->
       
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div class="text-center mb-8">
-          <div class="inline-flex items-center text-foreground px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-md backdrop-blur-sm border border-slate-200 animate-fade-in bg-white">
+          <div class="inline-flex items-center text-foreground px-3 py-1.5 rounded-full text-xs font-medium mb-3 shadow-md backdrop-blur-sm border border-slate-200 bg-white">
             <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             Devis gratuit et sans engagement
           </div>
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 animate-fade-in-up">
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3">
             Obtenez un devis <span class="text-foreground">personnalisé</span>
           </h2>
-          <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-6 animate-fade-in-up animation-delay-200">Trois étapes simples pour créer votre voyage sur-mesure. Réponse détaillée sous 24–48h (jours ouvrés).</p>
+          <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-6">Trois étapes simples pour créer votre voyage sur-mesure. Réponse détaillée sous 24–48h (jours ouvrés).</p>
           
           <!-- Enhanced Progress Indicator -->
-          <div class="max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+          <div class="max-w-2xl mx-auto">
             <div class="flex items-center justify-between relative" id="progress-indicator">
               <!-- Progress Line Background -->
               <div class="absolute top-6 left-0 right-0 h-1 bg-slate-200 rounded-full"></div>
@@ -559,9 +727,9 @@
           @csrf
           <!-- Step 1: Dates & Voyageurs -->
           <div id="step-1" class="step-content">
-            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto transform transition-all duration-700 ease-out animate-slide-in-right">
+            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto">
               <div class="flex items-center mb-6">
-                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
+                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg">
                   1
                 </div>
                 <div>
@@ -731,9 +899,9 @@
 
           <!-- Step 2: Préférences -->
           <div id="step-2" class="step-content hidden">
-            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto transform transition-all duration-700 ease-out animate-slide-in-left">
+            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto">
               <div class="flex items-center mb-6">
-                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
+                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg">
                   2
                 </div>
                 <div>
@@ -881,9 +1049,9 @@
 
           <!-- Step 3: Contact -->
           <div id="step-3" class="step-content hidden">
-            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto transform transition-all duration-700 ease-out animate-slide-in-right">
+            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-xl border border-slate-200 w-full max-w-4xl mx-auto">
               <div class="flex items-center mb-6">
-                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg animate-pulse">
+                <div class="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center text-lg font-bold mr-4 shadow-lg">
                   3
                 </div>
                 <div>
@@ -1076,63 +1244,35 @@
       function nextStep(step) {
         if (!validateCurrentStep()) return;
         
-        // Hide current step with animation
+        // Hide current step
         const currentStepEl = document.getElementById(`step-${currentStep}`);
-        currentStepEl.style.transform = 'translateX(-100%)';
-        currentStepEl.style.opacity = '0';
-        
-        setTimeout(() => {
-          currentStepEl.classList.add('hidden');
-          currentStepEl.style.transform = '';
-          currentStepEl.style.opacity = '';
+        currentStepEl.classList.add('hidden');
         
         // Update current step
         currentStep = step;
         
-          // Show new step with animation
-          const newStepEl = document.getElementById(`step-${currentStep}`);
-          newStepEl.classList.remove('hidden');
-          newStepEl.style.transform = 'translateX(100%)';
-          newStepEl.style.opacity = '0';
-          
-          setTimeout(() => {
-            newStepEl.style.transform = 'translateX(0)';
-            newStepEl.style.opacity = '1';
-          }, 50);
+        // Show new step
+        const newStepEl = document.getElementById(`step-${currentStep}`);
+        newStepEl.classList.remove('hidden');
         
         // Update progress indicator
         updateProgressIndicator();
-        }, 300);
       }
       
       function prevStep(step) {
-        // Hide current step with animation
+        // Hide current step
         const currentStepEl = document.getElementById(`step-${currentStep}`);
-        currentStepEl.style.transform = 'translateX(100%)';
-        currentStepEl.style.opacity = '0';
+        currentStepEl.classList.add('hidden');
         
-        setTimeout(() => {
-          currentStepEl.classList.add('hidden');
-          currentStepEl.style.transform = '';
-          currentStepEl.style.opacity = '';
-          
-          // Update current step
-          currentStep = step;
-          
-          // Show new step with animation
-          const newStepEl = document.getElementById(`step-${currentStep}`);
-          newStepEl.classList.remove('hidden');
-          newStepEl.style.transform = 'translateX(-100%)';
-          newStepEl.style.opacity = '0';
-          
-          setTimeout(() => {
-            newStepEl.style.transform = 'translateX(0)';
-            newStepEl.style.opacity = '1';
-          }, 50);
-          
-          // Update progress indicator
-          updateProgressIndicator();
-        }, 300);
+        // Update current step
+        currentStep = step;
+        
+        // Show previous step
+        const prevStepEl = document.getElementById(`step-${currentStep}`);
+        prevStepEl.classList.remove('hidden');
+        
+        // Update progress indicator
+        updateProgressIndicator();
       }
       
       function updateProgressIndicator() {
@@ -1835,20 +1975,26 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-8 sm:py-12 lg:py-16 bg-white scroll-mt-20">
-      <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div class="text-center mb-8">
-          <h2 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-3">Contactez-nous</h2>
-          <p class="text-lg text-slate-600">Une question ? Nous sommes là pour vous aider.</p>
+    <section id="contact" class="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-white to-slate-50 scroll-mt-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary font-medium text-sm mb-4">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Contactez-nous
+          </div>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 tracking-tight">Une question ?</h2>
+          <p class="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto">Nous sommes là pour vous aider à créer votre voyage sur-mesure.</p>
         </div>
         
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-          <div class="bg-slate-50 rounded-xl p-4 sm:p-6">
-            <h3 class="text-lg font-bold text-slate-900 mb-4">Nos coordonnées</h3>
-            <div class="space-y-4">
-              <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
-                  <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <div class="bg-white rounded-2xl shadow-lg p-6 lg:p-8">
+            <h3 class="text-xl font-bold text-slate-900 mb-6">Nos coordonnées</h3>
+            <div class="space-y-6">
+              <div class="flex items-start space-x-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                   </svg>
                 </div>
@@ -1965,6 +2111,27 @@
   <script src="components/header.js"></script>
   <script src="components/footer.js"></script>
   <script>
+    // Scroll-triggered animations
+    document.addEventListener('DOMContentLoaded', function() {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      // Observe all fade-in-on-scroll elements
+      document.querySelectorAll('.fade-in-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    });
+
     // Mobile menu toggle function
     function toggleMobileMenu() {
       const mobileMenu = document.getElementById('mobile-menu');
@@ -2074,6 +2241,141 @@
     });
 
     // Hero functionality is now handled by the hero components
+
+    // Reviews Carousel
+    (function() {
+      const carouselTrack = document.getElementById('reviewsCarouselTrack');
+      const prevButton = document.querySelector('.reviews-carousel-prev');
+      const nextButton = document.querySelector('.reviews-carousel-next');
+      
+      if (!carouselTrack) return;
+      
+      let currentIndex = 0;
+      const slides = carouselTrack.querySelectorAll('.reviews-carousel-slide');
+      const totalSlides = slides.length;
+      
+      if (totalSlides === 0) return;
+      
+      // Determine how many slides to show at once based on screen size
+      function getSlidesToShow() {
+        if (window.innerWidth >= 1024) return 3; // lg: 3 slides
+        if (window.innerWidth >= 768) return 2;  // md: 2 slides
+        return 1; // sm: 1 slide
+      }
+      
+      function updateCarousel() {
+        const slidesToShow = getSlidesToShow();
+        const maxIndex = Math.max(0, totalSlides - slidesToShow);
+        
+        // Clamp currentIndex to valid range
+        if (currentIndex > maxIndex) {
+          currentIndex = maxIndex;
+        }
+        
+        // Calculate translateX based on slide width
+        // Each slide takes 100% / slidesToShow of the container width
+        const slideWidthPercent = 100 / slidesToShow;
+        const translateX = -(currentIndex * slideWidthPercent);
+        carouselTrack.style.transform = `translateX(${translateX}%)`;
+        
+        // Update button states
+        if (prevButton) {
+          prevButton.disabled = currentIndex === 0;
+          prevButton.style.opacity = currentIndex === 0 ? '0.5' : '1';
+          prevButton.style.cursor = currentIndex === 0 ? 'not-allowed' : 'pointer';
+          prevButton.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
+        }
+        
+        if (nextButton) {
+          nextButton.disabled = currentIndex >= maxIndex;
+          nextButton.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
+          nextButton.style.cursor = currentIndex >= maxIndex ? 'not-allowed' : 'pointer';
+          nextButton.style.pointerEvents = currentIndex >= maxIndex ? 'none' : 'auto';
+        }
+      }
+      
+      // Navigation functions
+      function goToNext() {
+        const slidesToShow = getSlidesToShow();
+        const maxIndex = Math.max(0, totalSlides - slidesToShow);
+        if (currentIndex < maxIndex) {
+          currentIndex++;
+          updateCarousel();
+        }
+      }
+      
+      function goToPrev() {
+        if (currentIndex > 0) {
+          currentIndex--;
+          updateCarousel();
+        }
+      }
+      
+      // Event listeners
+      if (nextButton) {
+        nextButton.addEventListener('click', goToNext);
+      }
+      
+      if (prevButton) {
+        prevButton.addEventListener('click', goToPrev);
+      }
+      
+      // Handle window resize
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          currentIndex = 0; // Reset to first slide on resize
+          updateCarousel();
+        }, 250);
+      });
+      
+      // Initialize
+      updateCarousel();
+      
+      // Auto-play (optional - can be enabled/disabled)
+      let autoplayInterval = null;
+      const autoplayEnabled = true; // Set to false to disable autoplay
+      const autoplayDelay = 5000; // 5 seconds
+      
+      function startAutoplay() {
+        if (!autoplayEnabled) return;
+        
+        autoplayInterval = setInterval(function() {
+          const slidesToShow = getSlidesToShow();
+          const maxIndex = Math.max(0, totalSlides - slidesToShow);
+          
+          if (currentIndex >= maxIndex) {
+            currentIndex = 0; // Loop back to start
+          } else {
+            currentIndex++;
+          }
+          updateCarousel();
+        }, autoplayDelay);
+      }
+      
+      function stopAutoplay() {
+        if (autoplayInterval) {
+          clearInterval(autoplayInterval);
+          autoplayInterval = null;
+        }
+      }
+      
+      // Pause autoplay on hover
+      const carouselContainer = document.querySelector('.reviews-carousel-container');
+      if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', stopAutoplay);
+        carouselContainer.addEventListener('mouseleave', startAutoplay);
+      }
+      
+      // Start autoplay
+      startAutoplay();
+      
+      // Cleanup on page unload
+      window.addEventListener('beforeunload', function() {
+        stopAutoplay();
+      });
+    })();
   </script>
 </body>
 </html>
