@@ -43,6 +43,11 @@ class SettingSeeder extends Seeder
             ['key' => 'timezone', 'value' => 'Europe/Paris', 'type' => 'string', 'group' => 'business'],
             ['key' => 'language', 'value' => 'fr', 'type' => 'string', 'group' => 'business'],
             
+            // Carousel settings
+            ['key' => 'carousel_autoplay', 'value' => '1', 'type' => 'boolean', 'group' => 'carousel'],
+            ['key' => 'carousel_interval', 'value' => '5000', 'type' => 'integer', 'group' => 'carousel'],
+            ['key' => 'carousel_pause_on_hover', 'value' => '1', 'type' => 'boolean', 'group' => 'carousel'],
+            
         ];
 
         foreach ($settings as $setting) {

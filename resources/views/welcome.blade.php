@@ -362,20 +362,8 @@
   <main>
             <!-- Hero Section -->
             @if($heroes->count() > 0)
-                @php
-                    // Check if any hero uses carousel layout
-                    $hasCarousel = $heroes->where('layout_type', 'carousel')->count() > 0;
-                @endphp
-                
-                @if($hasCarousel)
-                    {{-- Render all heroes as carousel --}}
-                    <x-hero.carousel :heroes="$heroes" />
-                @else
-                    {{-- Render individual heroes based on their layout type --}}
-                    @foreach($heroes as $hero)
-                        <x-hero :hero="$hero" />
-                    @endforeach
-                @endif
+                {{-- Render all heroes as carousel --}}
+                <x-hero.carousel :heroes="$heroes" />
             @else
                 <!-- Default Hero Section (fallback) -->
             <section class="relative py-8 sm:py-12 lg:py-16 overflow-hidden" style="background-color: hsl(220, 70%, 25%); color: white;"

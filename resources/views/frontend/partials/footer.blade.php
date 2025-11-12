@@ -101,10 +101,3 @@
         </div>
     </div>
 </footer>
-
-<!-- Sticky CTA -->
-<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 md:hidden">
-    <a href="{{ route('home') }}#devis" class="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
-        Demander un devis
-    </a>
-</div>

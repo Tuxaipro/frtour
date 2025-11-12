@@ -1,6 +1,6 @@
 @props(['hero'])
 
-<section class="hero-section hero-full-width relative min-h-screen flex items-center justify-center overflow-hidden" 
+<section class="hero-section hero-full-width relative h-[500px] sm:h-[600px] lg:h-[600px] flex items-center justify-center overflow-hidden w-full" 
          data-hero-id="{{ $hero->id }}"
          data-animation-type="{{ $hero->animation_type ?? 'fade' }}"
          data-animation-duration="{{ $hero->animation_duration ?? 500 }}">
@@ -29,11 +29,13 @@
         <div class="absolute inset-0 bg-primary z-0"></div>
     @endif
 
-    <!-- Overlay -->
-    <x-hero.partials.hero-overlay :hero="$hero" />
+    <!-- Overlay (only for video or when no background image) -->
+    @if(!$hero->background_image)
+        <x-hero.partials.hero-overlay :hero="$hero" />
+    @endif
 
     <!-- Content -->
-    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-32">
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col {{ $hero->content_alignment_classes }} max-w-5xl {{ $hero->content_alignment === 'center' ? 'mx-auto' : '' }}">
             <x-hero.partials.hero-content :hero="$hero" />
             <x-hero.partials.hero-buttons :hero="$hero" :alignment="$hero->content_alignment ?? 'center'" />

@@ -1,12 +1,12 @@
 @props(['hero'])
 
-<section class="hero-section hero-minimal relative py-20 sm:py-24 lg:py-32 overflow-hidden bg-gradient-to-br from-primary via-primary-dark to-primary-light" 
+<section class="hero-section hero-minimal relative h-[500px] sm:h-[600px] lg:h-[600px] flex items-center justify-center overflow-hidden {{ $hero->background_image ? '' : 'bg-gradient-to-br from-primary via-primary-dark to-primary-light' }} w-full" 
          data-hero-id="{{ $hero->id }}"
          data-animation-type="{{ $hero->animation_type ?? 'fade' }}"
          data-animation-duration="{{ $hero->animation_duration ?? 500 }}">
     
     @if($hero->background_image)
-        <div class="absolute inset-0 opacity-10 overflow-hidden">
+        <div class="absolute inset-0 w-full h-full z-0 overflow-hidden">
             <img src="{{ $hero->background_image_url }}" 
                  alt="{{ $hero->title ?? 'Hero background' }}"
                  class="w-full h-full object-cover object-center"

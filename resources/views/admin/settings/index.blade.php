@@ -40,18 +40,95 @@
                                     </label>
                                     <input type="hidden" name="settings[{{ $setting->key }}][key]" value="{{ $setting->key }}">
                                     
-                                    @if(in_array($setting->key, ['site_logo', 'logo_light', 'site_favicon']))
+                                    @if($setting->type === 'boolean')
+                                        <!-- Boolean/Checkbox Field -->
+                                        <div class="flex items-center space-x-3">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][value]" value="0">
+                                            <input 
+                                                type="checkbox" 
+                                                name="settings[{{ $setting->key }}][value]" 
+                                                id="settings[{{ $setting->key }}][value]" 
+                                                value="1"
+                                                {{ old('settings.' . $setting->key . '.value', $setting->value) == '1' || old('settings.' . $setting->key . '.value', $setting->value) == 1 || old('settings.' . $setting->key . '.value', $setting->value) === true ? 'checked' : '' }}
+                                                class="w-5 h-5 text-primary border-2 border-slate-300 rounded focus:ring-2 focus:ring-primary transition-colors duration-200"
+                                            >
+                                            <label for="settings[{{ $setting->key }}][value]" class="text-sm font-medium text-slate-700 cursor-pointer">
+                                                Enable {{ str_replace('_', ' ', $setting->key) }}
+                                            </label>
+                                        </div>
+                                    @elseif($setting->key === 'timezone')
+                                        <!-- Timezone Dropdown -->
+                                        <select 
+                                            name="settings[{{ $setting->key }}][value]" 
+                                            id="settings[{{ $setting->key }}][value]" 
+                                            onchange="updateCurrencyAndLanguage(this.value)"
+                                            class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white @error("settings.{$setting->key}.value") border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+                                        >
+                                            @foreach($timezones as $tz)
+                                                <option value="{{ $tz }}" {{ old('settings.' . $setting->key . '.value', $setting->value) == $tz ? 'selected' : '' }}>
+                                                    {{ $tz }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <p class="text-xs text-slate-500 mt-2 px-1">Select your timezone. Currency and language will be auto-selected based on your choice.</p>
+                                    @elseif($setting->key === 'currency')
+                                        <!-- Currency Dropdown -->
+                                        <select 
+                                            name="settings[{{ $setting->key }}][value]" 
+                                            id="settings[{{ $setting->key }}][value]" 
+                                            class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white @error("settings.{$setting->key}.value") border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+                                        >
+                                            @foreach($currencies as $code => $label)
+                                                <option value="{{ $code }}" {{ old('settings.' . $setting->key . '.value', $setting->value) == $code ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @elseif($setting->key === 'language')
+                                        <!-- Language Dropdown -->
+                                        <select 
+                                            name="settings[{{ $setting->key }}][value]" 
+                                            id="settings[{{ $setting->key }}][value]" 
+                                            class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white @error("settings.{$setting->key}.value") border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+                                        >
+                                            @foreach($languages as $code => $label)
+                                                <option value="{{ $code }}" {{ old('settings.' . $setting->key . '.value', $setting->value) == $code ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @elseif($setting->type === 'integer' || $setting->type === 'number')
+                                        <!-- Number Field -->
+                                        <div class="space-y-1">
+                                            <input 
+                                                type="number" 
+                                                name="settings[{{ $setting->key }}][value]" 
+                                                id="settings[{{ $setting->key }}][value]" 
+                                                value="{{ old('settings.' . $setting->key . '.value', $setting->value) }}" 
+                                                class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error("settings.{$setting->key}.value") border-red-300 focus:ring-red-500 focus:border-red-500 @enderror"
+                                                placeholder="Enter {{ str_replace('_', ' ', $setting->key) }}"
+                                                @if($setting->key === 'carousel_interval') min="1000" max="30000" step="500" @endif
+                                            >
+                                            @if($setting->key === 'carousel_interval')
+                                                <p class="text-xs text-slate-500 px-1">Time between slides in milliseconds (1000-30000ms)</p>
+                                            @endif
+                                        </div>
+                                    @elseif(in_array($setting->key, ['site_logo', 'logo_light', 'site_favicon']))
                                         <!-- Image Upload Field -->
                                         <div class="space-y-3">
                                             <!-- Current Image Display -->
                                             <div id="current-image-{{ $setting->key }}" class="{{ $setting->value ? '' : 'hidden' }}">
                                                 <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
                                                     <div class="flex-shrink-0">
-                                                        <img src="{{ $setting->value ? asset('storage/' . $setting->value) : '' }}" alt="{{ $setting->key }}" class="h-20 w-20 object-contain border-2 border-slate-200 rounded-lg bg-white p-1" id="preview-{{ $setting->key }}">
+                                                        @php
+                                                            $imagePath = $setting->value ? trim(trim($setting->value, '"\''), '/') : '';
+                                                            $imageUrl = $imagePath ? asset('storage/' . ltrim($imagePath, '/')) : '';
+                                                        @endphp
+                                                        <img src="{{ $imageUrl }}" alt="{{ $setting->key }}" class="h-20 w-20 object-contain border-2 border-slate-200 rounded-lg bg-white p-1" id="preview-{{ $setting->key }}" onerror="this.style.display='none'">
                                                     </div>
                                                     <div class="flex-1 min-w-0">
                                                         <p class="text-sm font-medium text-slate-700">Current Image</p>
-                                                        <p class="text-xs text-slate-500 truncate">{{ $setting->value }}</p>
+                                                        <p class="text-xs text-slate-500 truncate">{{ $setting->value ? basename($setting->value) : '' }}</p>
                                                     </div>
                                                     <button type="button" onclick="clearImage('{{ $setting->key }}')" class="flex-shrink-0 p-2 rounded-lg hover:bg-red-50 transition-colors duration-200 text-red-600 hover:text-red-800" title="Remove image">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -236,6 +313,88 @@ function clearImage(settingKey) {
         
         // Hide new image preview if visible
         document.getElementById('new-image-preview-' + settingKey).classList.add('hidden');
+    }
+}
+
+// Timezone to Currency and Language mapping
+const timezoneMappings = {
+    // Europe
+    'Europe/Paris': { currency: 'EUR', language: 'fr' },
+    'Europe/London': { currency: 'GBP', language: 'en' },
+    'Europe/Berlin': { currency: 'EUR', language: 'de' },
+    'Europe/Madrid': { currency: 'EUR', language: 'es' },
+    'Europe/Rome': { currency: 'EUR', language: 'it' },
+    'Europe/Amsterdam': { currency: 'EUR', language: 'nl' },
+    'Europe/Brussels': { currency: 'EUR', language: 'fr' },
+    'Europe/Vienna': { currency: 'EUR', language: 'de' },
+    'Europe/Zurich': { currency: 'CHF', language: 'de' },
+    'Europe/Stockholm': { currency: 'SEK', language: 'en' },
+    'Europe/Oslo': { currency: 'NOK', language: 'en' },
+    'Europe/Copenhagen': { currency: 'DKK', language: 'en' },
+    'Europe/Warsaw': { currency: 'PLN', language: 'en' },
+    'Europe/Prague': { currency: 'CZK', language: 'en' },
+    'Europe/Budapest': { currency: 'HUF', language: 'en' },
+    'Europe/Moscow': { currency: 'RUB', language: 'ru' },
+    'Europe/Lisbon': { currency: 'EUR', language: 'pt' },
+    'Europe/Athens': { currency: 'EUR', language: 'en' },
+    'Europe/Dublin': { currency: 'EUR', language: 'en' },
+    'Europe/Helsinki': { currency: 'EUR', language: 'en' },
+    
+    // Americas
+    'America/New_York': { currency: 'USD', language: 'en' },
+    'America/Chicago': { currency: 'USD', language: 'en' },
+    'America/Denver': { currency: 'USD', language: 'en' },
+    'America/Los_Angeles': { currency: 'USD', language: 'en' },
+    'America/Toronto': { currency: 'CAD', language: 'en' },
+    'America/Mexico_City': { currency: 'MXN', language: 'es' },
+    'America/Sao_Paulo': { currency: 'BRL', language: 'pt' },
+    'America/Buenos_Aires': { currency: 'USD', language: 'es' },
+    'America/Lima': { currency: 'USD', language: 'es' },
+    'America/Bogota': { currency: 'USD', language: 'es' },
+    'America/Santiago': { currency: 'USD', language: 'es' },
+    
+    // Asia
+    'Asia/Kolkata': { currency: 'INR', language: 'hi' },
+    'Asia/Dubai': { currency: 'AED', language: 'ar' },
+    'Asia/Singapore': { currency: 'SGD', language: 'en' },
+    'Asia/Hong_Kong': { currency: 'HKD', language: 'zh' },
+    'Asia/Tokyo': { currency: 'JPY', language: 'ja' },
+    'Asia/Seoul': { currency: 'KRW', language: 'ko' },
+    'Asia/Shanghai': { currency: 'CNY', language: 'zh' },
+    'Asia/Bangkok': { currency: 'THB', language: 'th' },
+    'Asia/Kuala_Lumpur': { currency: 'MYR', language: 'en' },
+    'Asia/Jakarta': { currency: 'IDR', language: 'en' },
+    'Asia/Manila': { currency: 'PHP', language: 'en' },
+    'Asia/Ho_Chi_Minh': { currency: 'VND', language: 'vi' },
+    
+    // Oceania
+    'Australia/Sydney': { currency: 'AUD', language: 'en' },
+    'Australia/Melbourne': { currency: 'AUD', language: 'en' },
+    'Pacific/Auckland': { currency: 'NZD', language: 'en' },
+    
+    // Africa
+    'Africa/Johannesburg': { currency: 'ZAR', language: 'en' },
+    'Africa/Cairo': { currency: 'EGP', language: 'ar' },
+};
+
+function updateCurrencyAndLanguage(timezone) {
+    const mapping = timezoneMappings[timezone];
+    if (mapping) {
+        // Update currency - use querySelector with name attribute
+        const currencySelect = document.querySelector('select[name="settings[currency][value]"]');
+        if (currencySelect) {
+            currencySelect.value = mapping.currency;
+            // Trigger change event to ensure any listeners are notified
+            currencySelect.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        
+        // Update language - use querySelector with name attribute
+        const languageSelect = document.querySelector('select[name="settings[language][value]"]');
+        if (languageSelect) {
+            languageSelect.value = mapping.language;
+            // Trigger change event to ensure any listeners are notified
+            languageSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        }
     }
 }
 </script>

@@ -37,13 +37,13 @@ async function loadHeader() {
       // Generate logo HTML
       if (logoSettings.site_logo_url) {
         logoHtml = `
-          <a href="/" class="flex items-center space-x-3">
+          <a href="/" class="flex items-center">
             <img src="${logoSettings.site_logo_url}" alt="${logoSettings.site_name}" class="h-12 w-auto">
           </a>
         `;
       } else {
         logoHtml = `
-          <a href="/" class="flex items-center space-x-3">
+          <a href="/" class="flex items-center">
             <div class="w-14 h-14 bg-primary rounded-lg flex items-center justify-center">
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -64,7 +64,7 @@ async function loadHeader() {
       `;
       
       logoHtml = `
-        <a href="/" class="flex items-center space-x-3">
+        <a href="/" class="flex items-center">
           <div class="w-14 h-14 bg-primary rounded-lg flex items-center justify-center">
             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -110,10 +110,13 @@ async function loadHeader() {
             
             <!-- Mobile menu button -->
             <div class="-mr-2 flex items-center lg:hidden">
-              <button type="button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()">
+              <button type="button" id="mobile-menu-button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" aria-controls="mobile-menu" aria-expanded="false">
                 <span class="sr-only">Ouvrir le menu principal</span>
-                <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <svg id="mobile-menu-open-icon" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg id="mobile-menu-close-icon" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
@@ -124,7 +127,20 @@ async function loadHeader() {
         <div class="lg:hidden hidden" id="mobile-menu">
           <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-slate-200" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
             <a href="/" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Accueil</a>
-            <a href="/#circuits" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Circuits</a>
+            
+            <!-- Mobile Destinations Dropdown -->
+            <div class="relative">
+              <button type="button" id="mobile-circuits-toggle" class="w-full text-left nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium flex items-center justify-between">
+                <span>Circuits</span>
+                <svg id="mobile-circuits-arrow" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div id="mobile-circuits-menu" class="hidden pl-4 mt-1 space-y-1">
+                ${destinationsHtml}
+              </div>
+            </div>
+            
             <a href="/groupe" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Groupe</a>
             <a href="/galerie" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Galerie</a>
             <a href="/blog" class="nav-link text-slate-700 hover:text-primary block px-3 py-2 text-sm font-medium">Blog</a>
@@ -146,8 +162,91 @@ async function loadHeader() {
 
 function toggleMobileMenu() {
   const mobileMenu = document.getElementById('mobile-menu');
-  if (mobileMenu) {
-    mobileMenu.classList.toggle('hidden');
+  const menuButton = document.getElementById('mobile-menu-button');
+  const openIcon = document.getElementById('mobile-menu-open-icon');
+  const closeIcon = document.getElementById('mobile-menu-close-icon');
+  
+  if (mobileMenu && menuButton) {
+    const isHidden = mobileMenu.classList.contains('hidden');
+    
+    if (isHidden) {
+      mobileMenu.classList.remove('hidden');
+      menuButton.setAttribute('aria-expanded', 'true');
+      if (openIcon) openIcon.classList.add('hidden');
+      if (closeIcon) closeIcon.classList.remove('hidden');
+    } else {
+      mobileMenu.classList.add('hidden');
+      menuButton.setAttribute('aria-expanded', 'false');
+      if (openIcon) openIcon.classList.remove('hidden');
+      if (closeIcon) closeIcon.classList.add('hidden');
+      
+      // Also close circuits submenu if open
+      const circuitsMenu = document.getElementById('mobile-circuits-menu');
+      const circuitsArrow = document.getElementById('mobile-circuits-arrow');
+      if (circuitsMenu) circuitsMenu.classList.add('hidden');
+      if (circuitsArrow) circuitsArrow.classList.remove('rotate-180');
+    }
+  }
+}
+
+// Make toggleMobileMenu globally accessible
+window.toggleMobileMenu = toggleMobileMenu;
+
+// Setup mobile menu event listeners after header is loaded
+function setupMobileMenu() {
+  // Setup mobile menu button - use event listener instead of onclick
+  const menuButton = document.getElementById('mobile-menu-button');
+  if (menuButton) {
+    // Remove any existing listeners by cloning and replacing
+    const newButton = menuButton.cloneNode(true);
+    menuButton.parentNode.replaceChild(newButton, menuButton);
+    newButton.addEventListener('click', toggleMobileMenu);
+  }
+  
+  // Setup mobile circuits dropdown
+  const circuitsToggle = document.getElementById('mobile-circuits-toggle');
+  const circuitsMenu = document.getElementById('mobile-circuits-menu');
+  const circuitsArrow = document.getElementById('mobile-circuits-arrow');
+  
+  if (circuitsToggle && circuitsMenu) {
+    circuitsToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      circuitsMenu.classList.toggle('hidden');
+      if (circuitsArrow) {
+        circuitsArrow.classList.toggle('rotate-180');
+      }
+    });
+  }
+  
+  // Close mobile menu when clicking on a link (but not on circuits toggle)
+  const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+  mobileMenuLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      // Small delay to allow navigation
+      setTimeout(() => {
+        toggleMobileMenu();
+      }, 100);
+    });
+  });
+  
+  // Close mobile menu when clicking outside (only add once)
+  if (!window.mobileMenuClickOutsideHandler) {
+    window.mobileMenuClickOutsideHandler = function(event) {
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuButton = document.getElementById('mobile-menu-button');
+      const circuitsToggle = document.getElementById('mobile-circuits-toggle');
+      
+      if (mobileMenu && menuButton && 
+          !mobileMenu.contains(event.target) && 
+          !menuButton.contains(event.target) &&
+          !(circuitsToggle && circuitsToggle.contains(event.target))) {
+        if (!mobileMenu.classList.contains('hidden')) {
+          toggleMobileMenu();
+        }
+      }
+    };
+    document.addEventListener('click', window.mobileMenuClickOutsideHandler);
   }
 }
 
@@ -234,8 +333,11 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!headerLoaded) {
     headerLoaded = true;
     loadHeader().then(() => {
-      // Setup sticky header after header is loaded
-      setTimeout(setupStickyHeader, 100);
+      // Setup sticky header and mobile menu after header is loaded
+      setTimeout(() => {
+        setupStickyHeader();
+        setupMobileMenu();
+      }, 100);
     });
   }
 });

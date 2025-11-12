@@ -16,7 +16,132 @@ class SettingController extends Controller
     {
         $settings = Setting::orderBy('group')->orderBy('key')->get()->groupBy('group');
         
-        return view('admin.settings.index', compact('settings'));
+        // Get all timezones for dropdown
+        $timezones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
+        
+        // Common currencies
+        $currencies = [
+            'EUR' => 'EUR - Euro',
+            'USD' => 'USD - US Dollar',
+            'GBP' => 'GBP - British Pound',
+            'INR' => 'INR - Indian Rupee',
+            'CNY' => 'CNY - Chinese Yuan',
+            'JPY' => 'JPY - Japanese Yen',
+            'AUD' => 'AUD - Australian Dollar',
+            'CAD' => 'CAD - Canadian Dollar',
+            'CHF' => 'CHF - Swiss Franc',
+            'NZD' => 'NZD - New Zealand Dollar',
+            'SGD' => 'SGD - Singapore Dollar',
+            'HKD' => 'HKD - Hong Kong Dollar',
+            'SEK' => 'SEK - Swedish Krona',
+            'NOK' => 'NOK - Norwegian Krone',
+            'DKK' => 'DKK - Danish Krone',
+            'PLN' => 'PLN - Polish Zloty',
+            'CZK' => 'CZK - Czech Koruna',
+            'HUF' => 'HUF - Hungarian Forint',
+            'RUB' => 'RUB - Russian Ruble',
+            'BRL' => 'BRL - Brazilian Real',
+            'MXN' => 'MXN - Mexican Peso',
+            'ZAR' => 'ZAR - South African Rand',
+            'KRW' => 'KRW - South Korean Won',
+            'THB' => 'THB - Thai Baht',
+            'AED' => 'AED - UAE Dirham',
+            'MYR' => 'MYR - Malaysian Ringgit',
+            'IDR' => 'IDR - Indonesian Rupiah',
+            'PHP' => 'PHP - Philippine Peso',
+            'VND' => 'VND - Vietnamese Dong',
+            'EGP' => 'EGP - Egyptian Pound',
+        ];
+        
+        // Common languages (widely spoken languages)
+        $languages = [
+            'en' => 'English',
+            'zh' => '中文 (Chinese - Mandarin)',
+            'hi' => 'हिन्दी (Hindi)',
+            'es' => 'Español (Spanish)',
+            'fr' => 'Français (French)',
+            'ar' => 'العربية (Arabic)',
+            'bn' => 'বাংলা (Bengali)',
+            'pt' => 'Português (Portuguese)',
+            'ru' => 'Русский (Russian)',
+            'ja' => '日本語 (Japanese)',
+            'de' => 'Deutsch (German)',
+            'ko' => '한국어 (Korean)',
+            'tr' => 'Türkçe (Turkish)',
+            'vi' => 'Tiếng Việt (Vietnamese)',
+            'it' => 'Italiano (Italian)',
+            'th' => 'ไทย (Thai)',
+            'ur' => 'اردو (Urdu)',
+            'pl' => 'Polski (Polish)',
+            'nl' => 'Nederlands (Dutch)',
+            'id' => 'Bahasa Indonesia (Indonesian)',
+            'ms' => 'Bahasa Melayu (Malay)',
+            'sw' => 'Kiswahili (Swahili)',
+            'ta' => 'தமிழ் (Tamil)',
+            'te' => 'తెలుగు (Telugu)',
+            'mr' => 'मराठी (Marathi)',
+            'gu' => 'ગુજરાતી (Gujarati)',
+            'kn' => 'ಕನ್ನಡ (Kannada)',
+            'pa' => 'ਪੰਜਾਬੀ (Punjabi)',
+            'fa' => 'فارسی (Persian/Farsi)',
+            'he' => 'עברית (Hebrew)',
+            'cs' => 'Čeština (Czech)',
+            'sv' => 'Svenska (Swedish)',
+            'ro' => 'Română (Romanian)',
+            'hu' => 'Magyar (Hungarian)',
+            'el' => 'Ελληνικά (Greek)',
+            'da' => 'Dansk (Danish)',
+            'fi' => 'Suomi (Finnish)',
+            'no' => 'Norsk (Norwegian)',
+            'sk' => 'Slovenčina (Slovak)',
+            'bg' => 'Български (Bulgarian)',
+            'hr' => 'Hrvatski (Croatian)',
+            'sr' => 'Српски (Serbian)',
+            'uk' => 'Українська (Ukrainian)',
+            'ca' => 'Català (Catalan)',
+            'eu' => 'Euskara (Basque)',
+            'ga' => 'Gaeilge (Irish)',
+            'cy' => 'Cymraeg (Welsh)',
+            'mt' => 'Malti (Maltese)',
+            'is' => 'Íslenska (Icelandic)',
+            'lv' => 'Latviešu (Latvian)',
+            'lt' => 'Lietuvių (Lithuanian)',
+            'et' => 'Eesti (Estonian)',
+            'sl' => 'Slovenščina (Slovenian)',
+            'mk' => 'Македонски (Macedonian)',
+            'sq' => 'Shqip (Albanian)',
+            'bs' => 'Bosanski (Bosnian)',
+            'ka' => 'ქართული (Georgian)',
+            'hy' => 'Հայերեն (Armenian)',
+            'az' => 'Azərbaycan (Azerbaijani)',
+            'kk' => 'Қазақ (Kazakh)',
+            'uz' => 'Oʻzbek (Uzbek)',
+            'ky' => 'Кыргызча (Kyrgyz)',
+            'mn' => 'Монгол (Mongolian)',
+            'ne' => 'नेपाली (Nepali)',
+            'si' => 'සිංහල (Sinhala)',
+            'my' => 'မြန်မာ (Burmese)',
+            'km' => 'ខ្មែរ (Khmer)',
+            'lo' => 'ລາວ (Lao)',
+            'am' => 'አማርኛ (Amharic)',
+            'zu' => 'isiZulu (Zulu)',
+            'af' => 'Afrikaans',
+            'xh' => 'isiXhosa (Xhosa)',
+            'yo' => 'Yorùbá (Yoruba)',
+            'ig' => 'Igbo',
+            'ha' => 'Hausa',
+            'so' => 'Soomaali (Somali)',
+            'rw' => 'Kinyarwanda',
+            'mg' => 'Malagasy',
+            'jv' => 'Basa Jawa (Javanese)',
+            'su' => 'Basa Sunda (Sundanese)',
+            'ceb' => 'Cebuano',
+            'tl' => 'Tagalog (Filipino)',
+            'haw' => 'ʻŌlelo Hawaiʻi (Hawaiian)',
+            'mi' => 'Te Reo Māori (Māori)',
+        ];
+        
+        return view('admin.settings.index', compact('settings', 'timezones', 'currencies', 'languages'));
     }
 
     /**
@@ -144,16 +269,40 @@ class SettingController extends Controller
                     
                     if ($shouldClear) {
                         // Delete existing file
-                        if ($oldSetting && $oldSetting->value) {
-                            Storage::disk('public')->delete($oldSetting->value);
+                        if ($oldSetting) {
+                            $oldRawValue = $oldSetting->getAttributes()['value'] ?? null;
+                            if ($oldRawValue) {
+                                // Clean the path before deleting
+                                $oldPath = trim(trim($oldRawValue, '"\''), '/');
+                                if ($oldPath) {
+                                    try {
+                                        Storage::disk('public')->delete($oldPath);
+                                    } catch (\Exception $e) {
+                                        // Log error but continue
+                                        \Log::warning("Failed to delete setting file: {$oldPath}", ['error' => $e->getMessage()]);
+                                    }
+                                }
+                            }
                         }
                         $settingValue = null; // Clear the setting
                     }
                     // Handle new file upload (only if clear is not set)
                     elseif ($file && $file->isValid()) {
                         // Delete old file if exists
-                        if ($oldSetting && $oldSetting->value) {
-                            Storage::disk('public')->delete($oldSetting->value);
+                        if ($oldSetting) {
+                            $oldRawValue = $oldSetting->getAttributes()['value'] ?? null;
+                            if ($oldRawValue) {
+                                // Clean the path before deleting
+                                $oldPath = trim(trim($oldRawValue, '"\''), '/');
+                                if ($oldPath) {
+                                    try {
+                                        Storage::disk('public')->delete($oldPath);
+                                    } catch (\Exception $e) {
+                                        // Log error but continue
+                                        \Log::warning("Failed to delete setting file: {$oldPath}", ['error' => $e->getMessage()]);
+                                    }
+                                }
+                            }
                         }
                         
                         // Store new file using Storage facade
@@ -163,7 +312,24 @@ class SettingController extends Controller
                     }
                     // If no clear and no new file, keep existing value
                     elseif ($oldSetting && $oldSetting->value) {
-                        $settingValue = $oldSetting->value;
+                        // Get raw value from database to preserve it
+                        $rawValue = $oldSetting->getAttributes()['value'] ?? null;
+                        $settingValue = $rawValue;
+                    }
+                } else {
+                    // For non-image settings, clean the value before saving
+                    $setting = Setting::where('key', $actualSettingKey)->first();
+                    $settingType = $setting->type ?? 'string';
+                    
+                    if ($settingType === 'boolean') {
+                        // Convert to '1' or '0' string for boolean settings
+                        $settingValue = ($settingValue == '1' || $settingValue == 1 || $settingValue === true) ? '1' : '0';
+                    } elseif ($settingType === 'integer' || $settingType === 'number') {
+                        // Ensure integer values are properly formatted
+                        $settingValue = $settingValue !== null ? (string) (int) $settingValue : null;
+                    } elseif (is_string($settingValue) && !empty($settingValue)) {
+                        $settingValue = trim($settingValue);
+                        // Don't trim quotes for text fields, only clean whitespace
                     }
                 }
                 

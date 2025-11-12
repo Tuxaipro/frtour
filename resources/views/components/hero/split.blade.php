@@ -1,11 +1,11 @@
 @props(['hero', 'imagePosition' => 'right'])
 
-<section class="hero-section hero-split relative min-h-[80vh] flex items-center overflow-hidden bg-white" 
+<section class="hero-section hero-split relative py-12 lg:py-20 flex items-center overflow-hidden bg-white w-full" 
          data-hero-id="{{ $hero->id }}"
          data-animation-type="{{ $hero->animation_type ?? 'fade' }}"
          data-animation-duration="{{ $hero->animation_duration ?? 500 }}">
     
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             
             @if($imagePosition === 'left')
