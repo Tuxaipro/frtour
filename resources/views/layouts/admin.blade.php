@@ -275,18 +275,18 @@
                         Reviews
                     </a>
                     
-                    <a href="{{ route('admin.contacts.index') }}" class="group flex items-center px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-white {{ request()->routeIs('admin.contacts.*') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' }}">
-                        <svg class="w-4 h-4 mr-2 text-white group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                        Messages de contact
-                    </a>
-                    
-                    <a href="{{ route('admin.quote-requests.index') }}" class="group flex items-center px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-white {{ request()->routeIs('admin.quote-requests.*') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' }}">
-                        <svg class="w-4 h-4 mr-2 text-white group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                        </svg>
-                        Quote Requests
+                    <a href="{{ route('admin.quote-requests.index') }}" class="group flex items-center justify-between px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-white {{ request()->routeIs('admin.quote-requests.*') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' }}">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-white group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            Quote Requests
+                        </div>
+                        @if(isset($unreadQuoteRequestsCount) && $unreadQuoteRequestsCount > 0)
+                            <span class="ml-2 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-red-500 rounded-full animate-pulse shadow-lg">
+                                {{ $unreadQuoteRequestsCount > 99 ? '99+' : $unreadQuoteRequestsCount }}
+                            </span>
+                        @endif
                     </a>
                     
                     <a href="{{ route('admin.settings.index') }}" class="group flex items-center px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 text-white {{ request()->routeIs('admin.settings.*') ? 'bg-white/20 shadow-lg' : 'hover:bg-white/10' }}">

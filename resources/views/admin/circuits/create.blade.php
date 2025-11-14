@@ -113,8 +113,9 @@
                     </div>
                     
                     <div>
-                        <label for="sort_order" class="block text-sm font-semibold text-slate-700 mb-2">Sort Order</label>
-                        <input type="number" name="sort_order" id="sort_order" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('sort_order') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" value="{{ old('sort_order', 0) }}" min="0">
+                        <label for="sort_order" class="block text-sm font-semibold text-slate-700 mb-2">Display Order</label>
+                        <input type="number" name="sort_order" id="sort_order" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('sort_order') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" value="{{ old('sort_order', $nextSortOrder ?? 1) }}" min="0">
+                        <p class="text-slate-500 text-xs mt-2 px-1">Auto-assigned ({{ $nextSortOrder ?? 1 }}), but you can change it. Lower numbers appear first.</p>
                         @error('sort_order')
                             <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
                                 <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

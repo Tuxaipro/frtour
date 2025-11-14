@@ -4,26 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quand partir en Inde (par régions) — India Tourisme</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3B82F6',
-            'primary-dark': '#1E40AF',
-            'primary-light': '#DBEAFE'
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
+  
+  <!-- Tailwind CSS via Vite -->
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+    
+    /* Gradient Text Effect */
+    .gradient-text {
+      background: linear-gradient(135deg, hsl(201, 96%, 32%), hsl(142, 71%, 45%));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     
     /* 2025 Responsive Standards */
     @media (max-width: 430px) {
@@ -95,11 +92,34 @@
     .dropdown-arrow.rotated {
       transform: rotate(180deg);
     }
+    
+    /* Button Shimmer Effect */
+    .btn-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-shimmer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .btn-shimmer:hover::before {
+      left: 100%;
+    }
   </style>
 </head>
 <body class="bg-white text-slate-900 font-sans antialiased">
-  <!-- Header Container -->
-  <div id="header-container"></div>
+  <!-- Navigation -->
+  @php
+    include resource_path('views/includes/navigation.php');
+  @endphp
 
   <main>
     <!-- Article Header -->
@@ -113,8 +133,8 @@
             Guide Voyage
           </div>
           
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight mb-6">
-            Quand partir en Inde <span class="text-primary">(par régions)</span>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 leading-tight mb-6">
+            Quand partir en Inde <span class="gradient-text">(par régions)</span>
           </h1>
           
           <p class="text-xl text-slate-600 mb-8 leading-relaxed">
@@ -172,7 +192,7 @@
                 </svg>
               </div>
               <div>
-                <h3 class="text-xl font-bold text-slate-900 mb-2">À retenir</h3>
+                <h3 class="text-xl font-display font-bold text-slate-900 mb-2">À retenir</h3>
                 <p class="text-slate-700 leading-relaxed">
                   L'Inde étant un sous-continent immense, le climat varie énormément selon les régions. La période idéale dépend de votre itinéraire : octobre à mars pour le nord, novembre à février pour le sud, et des fenêtres spécifiques pour l'Himalaya.
                 </p>
@@ -182,7 +202,7 @@
 
           <!-- Table of Contents -->
           <div class="bg-slate-50 rounded-2xl p-6 sm:p-8 mb-12">
-            <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center">
+            <h3 class="text-xl font-display font-bold text-slate-900 mb-4 flex items-center">
               <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
               </svg>
@@ -200,7 +220,7 @@
 
           <!-- Section 1 -->
           <section id="climat-general" class="mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6 flex items-center">
               <span class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-sm font-bold mr-3">1</span>
               Le climat général de l'Inde
             </h2>
@@ -216,7 +236,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                   </svg>
                 </div>
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Saison fraîche</h3>
+                <h3 class="text-lg font-display font-bold text-slate-900 mb-2">Saison fraîche</h3>
                 <p class="text-sm text-slate-600 mb-2">Octobre à Mars</p>
                 <p class="text-slate-700">Période idéale pour la plupart des régions. Températures agréables et peu de pluie.</p>
               </div>
@@ -227,7 +247,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                   </svg>
                 </div>
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Saison chaude</h3>
+                <h3 class="text-lg font-display font-bold text-slate-900 mb-2">Saison chaude</h3>
                 <p class="text-sm text-slate-600 mb-2">Avril à Juin</p>
                 <p class="text-slate-700">Très chaud et sec. À éviter dans la plupart des régions, sauf l'Himalaya.</p>
               </div>
@@ -238,7 +258,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
                   </svg>
                 </div>
-                <h3 class="text-lg font-bold text-slate-900 mb-2">Mousson</h3>
+                <h3 class="text-lg font-display font-bold text-slate-900 mb-2">Mousson</h3>
                 <p class="text-sm text-slate-600 mb-2">Juillet à Septembre</p>
                 <p class="text-slate-700">Pluies intenses. Période à éviter pour la plupart des voyages touristiques.</p>
               </div>
@@ -247,13 +267,13 @@
 
           <!-- Section 2 -->
           <section id="nord-inde" class="mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6 flex items-center">
               <span class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-sm font-bold mr-3">2</span>
               Nord de l'Inde
             </h2>
             
             <div class="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-2xl p-6 sm:p-8 mb-8">
-              <h3 class="text-xl font-bold text-slate-900 mb-4">🏛️ Régions concernées</h3>
+              <h3 class="text-xl font-display font-bold text-slate-900 mb-4">🏛️ Régions concernées</h3>
               <p class="text-slate-700 mb-4">Delhi, Rajasthan (Jaipur, Jodhpur, Udaipur), Agra, Varanasi, Punjab</p>
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -281,13 +301,13 @@
 
           <!-- Section 3 -->
           <section id="sud-inde" class="mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6 flex items-center">
               <span class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-sm font-bold mr-3">3</span>
               Sud de l'Inde
             </h2>
             
             <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 sm:p-8 mb-8">
-              <h3 class="text-xl font-bold text-slate-900 mb-4">🌴 Régions concernées</h3>
+              <h3 class="text-xl font-display font-bold text-slate-900 mb-4">🌴 Régions concernées</h3>
               <p class="text-slate-700 mb-4">Kerala, Tamil Nadu, Karnataka (Bangalore, Mysore), Andhra Pradesh</p>
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -315,13 +335,13 @@
 
           <!-- Section 4 -->
           <section id="himalaya" class="mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6 flex items-center">
               <span class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-sm font-bold mr-3">4</span>
               Himalaya indien
             </h2>
             
             <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6 sm:p-8 mb-8">
-              <h3 class="text-xl font-bold text-slate-900 mb-4">🏔️ Régions concernées</h3>
+              <h3 class="text-xl font-display font-bold text-slate-900 mb-4">🏔️ Régions concernées</h3>
               <p class="text-slate-700 mb-4">Ladakh, Himachal Pradesh (Manali, Shimla), Uttarakhand, Sikkim</p>
               
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -349,14 +369,14 @@
 
           <!-- Practical Tips -->
           <section id="conseils-pratiques" class="mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6 flex items-center">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6 flex items-center">
               <span class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center text-sm font-bold mr-3">6</span>
               Conseils pratiques
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
-                <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center">
+                <h3 class="text-lg font-display font-bold text-slate-900 mb-4 flex items-center">
                   <svg class="w-5 h-5 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                   </svg>
@@ -371,7 +391,7 @@
               </div>
               
               <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center">
+                <h3 class="text-lg font-display font-bold text-slate-900 mb-4 flex items-center">
                   <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
@@ -395,7 +415,7 @@
     <section class="py-16 sm:py-20 lg:py-32 bg-slate-50">
       <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div class="text-center mb-12">
-          <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Articles similaires</h2>
+          <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-4">Articles similaires</h2>
           <p class="text-xl text-slate-600">Continuez votre lecture</p>
         </div>
         
@@ -409,7 +429,7 @@
             </div>
             <div class="p-6">
               <div class="text-sm text-slate-500 mb-2">05 août 2025</div>
-              <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors duration-200">Visa & e‑Visa Inde : mode d'emploi</h3>
+              <h3 class="text-xl font-display font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors duration-200">Visa & e‑Visa Inde : mode d'emploi</h3>
               <p class="text-slate-600">Types de visas, délais, documents et astuces.</p>
             </div>
           </article>
@@ -423,7 +443,7 @@
             </div>
             <div class="p-6">
               <div class="text-sm text-slate-500 mb-2">28 juillet 2025</div>
-              <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors duration-200">Quel budget pour un voyage en Inde ?</h3>
+              <h3 class="text-xl font-display font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors duration-200">Quel budget pour un voyage en Inde ?</h3>
               <p class="text-slate-600">Repères par niveau d'hôtels, saison et activités.</p>
             </div>
           </article>
@@ -437,16 +457,16 @@
             </div>
             <div class="p-6">
               <div class="text-sm text-slate-500 mb-2">15 juillet 2025</div>
-              <h3 class="text-xl font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors duration-200">Étiquette et coutumes en Inde</h3>
+              <h3 class="text-xl font-display font-bold text-slate-900 mb-3 group-hover:text-primary transition-colors duration-200">Étiquette et coutumes en Inde</h3>
               <p class="text-slate-600">Guide pratique pour respecter les traditions locales.</p>
             </div>
           </article>
         </div>
         
         <div class="text-center mt-12">
-          <a href="{{ route('home') }}#blog" class="inline-flex items-center bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200">
+          <a href="{{ route('home') }}#blog" class="inline-flex items-center px-8 py-4 bg-primary text-white rounded-xl font-semibold text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg hover:shadow-xl btn-shimmer">
             Voir tous les articles
-            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
           </a>
@@ -459,12 +479,10 @@
   <div id="footer-container"></div>
 
   <!-- Load Common Components -->
-  <script src="/components/header.js"></script>
   <script src="/components/footer.js"></script>
   <script>
     // Load components when page loads
     document.addEventListener('DOMContentLoaded', function() {
-      loadHeader();
       loadFooter();
     });
   </script>

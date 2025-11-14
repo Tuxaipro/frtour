@@ -13,7 +13,7 @@
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS via Vite -->
     @php
@@ -30,16 +30,36 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: 'hsl(220, 70%, 25%)',
-                        'primary-dark': 'hsl(220, 70%, 20%)',
-                        'primary-light': 'hsl(220, 60%, 35%)',
-                        accent: 'hsl(75, 45%, 40%)',
-                        'accent-light': 'hsl(80, 50%, 45%)',
-                        background: 'hsl(0, 0%, 98%)',
-                        foreground: 'hsl(215, 25%, 27%)'
+                        primary: {
+                            DEFAULT: 'hsl(201, 96%, 32%)',
+                            light: 'hsl(201, 96%, 42%)',
+                            dark: 'hsl(201, 96%, 22%)',
+                            50: 'hsl(201, 96%, 95%)',
+                            100: 'hsl(201, 96%, 90%)',
+                            500: 'hsl(201, 96%, 32%)',
+                            600: 'hsl(201, 96%, 22%)',
+                        },
+                        accent: {
+                            DEFAULT: 'hsl(142, 71%, 45%)',
+                            light: 'hsl(142, 71%, 55%)',
+                            dark: 'hsl(142, 71%, 35%)',
+                            50: 'hsl(142, 71%, 95%)',
+                            500: 'hsl(142, 71%, 45%)',
+                        },
+                        sunset: {
+                            DEFAULT: 'hsl(25, 95%, 53%)',
+                            light: 'hsl(25, 95%, 63%)',
+                            dark: 'hsl(25, 95%, 43%)',
+                        },
+                        sand: {
+                            DEFAULT: 'hsl(45, 55%, 85%)',
+                            light: 'hsl(45, 55%, 95%)',
+                            dark: 'hsl(45, 55%, 75%)',
+                        }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif']
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Playfair Display', 'serif']
                     }
                 }
             }
@@ -47,66 +67,73 @@
     </script>
     @endif
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
+        html { scroll-behavior: smooth; }
+        
+        /* Scroll Offset */
+        section[id] { scroll-margin-top: 5rem; }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, hsl(201, 96%, 32%), hsl(142, 71%, 45%));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        /* Smooth scrolling for anchor links */
-        html {
-            scroll-behavior: smooth;
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Enhanced sticky header with backdrop blur */
-        .sticky-header {
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.95);
-            transition: all 0.3s ease;
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
         
-        /* Ensure sticky positioning works for galerie page */
-        #header-container {
-            position: -webkit-sticky !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 50 !important;
-            width: 100% !important;
+        /* Image Zoom Effect */
+        .img-zoom {
+            overflow: hidden;
         }
         
-        #header-container > nav {
-            position: -webkit-sticky !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 50 !important;
-            background-color: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
+        .img-zoom img {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Scroll offset for anchor links */
-        section[id] {
-            scroll-margin-top: 4rem;
+        .img-zoom:hover img {
+            transform: scale(1.1);
         }
         
-        /* Smooth transitions for navigation */
-        .nav-link {
+        /* Fade In On Scroll */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Button Shimmer Effect */
+        .btn-shimmer {
             position: relative;
-            transition: all 0.3s ease;
+            overflow: hidden;
         }
         
-        .nav-link::after {
+        .btn-shimmer::before {
             content: '';
             position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #3B82F6;
-            transition: width 0.3s ease;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
         }
         
-        .nav-link:hover::after {
-            width: 100%;
+        .btn-shimmer:hover::before {
+            left: 100%;
         }
         
         /* Page Loader Styles */
@@ -175,7 +202,7 @@
         }
     </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-white text-slate-900 font-sans antialiased">
     <!-- Page Loader -->
     <div id="page-loader">
         <div class="loader-container">
@@ -201,11 +228,13 @@
         });
     </script>
 
-    <!-- Header Container -->
-    <div id="header-container"></div>
+    <!-- Navigation -->
+    @php
+        include resource_path('views/includes/navigation.php');
+    @endphp
 
     <!-- Main Content -->
-    <main class="min-h-screen">
+    <main class="overflow-hidden min-h-screen">
         @yield('content')
     </main>
 
@@ -213,8 +242,27 @@
     <div id="footer-container"></div>
 
     <!-- Scripts -->
-    <script src="/components/header.js"></script>
     <script src="/components/footer.js"></script>
+    <script>
+        // Load footer
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFooter();
+            
+            // Fade In On Scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const fadeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(el => fadeObserver.observe(el));
+        });
+    </script>
     
     @yield('scripts')
 </body>

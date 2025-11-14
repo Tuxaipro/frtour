@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('destinations', function (Blueprint $table) {
-            $table->integer('sort_order')->default(0)->after('is_active');
+        Schema::table('quote_requests', function (Blueprint $table) {
+            $table->boolean('is_read')->default(false)->after('is_processed');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('destinations', function (Blueprint $table) {
-            $table->dropColumn('sort_order');
+        Schema::table('quote_requests', function (Blueprint $table) {
+            $table->dropColumn('is_read');
         });
     }
 };

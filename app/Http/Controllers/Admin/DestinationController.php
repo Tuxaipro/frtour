@@ -43,7 +43,8 @@ class DestinationController extends Controller
      */
     public function create()
     {
-        return view('admin.destinations.create');
+        $nextSortOrder = (Destination::max('sort_order') ?? 0) + 1;
+        return view('admin.destinations.create', compact('nextSortOrder'));
     }
 
     /**
@@ -56,6 +57,7 @@ class DestinationController extends Controller
                 'name' => 'required|string|max:255',
                 'slug' => 'required|string|max:255|unique:destinations',
                 'description' => 'nullable|string',
+                'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
                 'hero_title' => 'nullable|string|max:255',
                 'hero_description' => 'nullable|string',
                 'meta_title' => 'nullable|string|max:255',
@@ -65,6 +67,17 @@ class DestinationController extends Controller
             ]);
 
             $validated['is_active'] = $request->boolean('is_active');
+
+            // Auto-increment sort_order if not provided
+            if (!isset($validated['sort_order']) || $validated['sort_order'] === null) {
+                $maxSortOrder = Destination::max('sort_order') ?? 0;
+                $validated['sort_order'] = $maxSortOrder + 1;
+            }
+
+            // Handle cover image upload
+            if ($request->hasFile('cover_image')) {
+                $validated['cover_image'] = $request->file('cover_image')->store('destinations', 'public');
+            }
 
             $destination = Destination::create($validated);
 
@@ -107,6 +120,8 @@ class DestinationController extends Controller
                 'name' => 'required|string|max:255',
                 'slug' => 'required|string|max:255|unique:destinations,slug,'.$destination->id,
                 'description' => 'nullable|string',
+                'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+                'remove_cover_image' => 'nullable|boolean',
                 'hero_title' => 'nullable|string|max:255',
                 'hero_description' => 'nullable|string',
                 'meta_title' => 'nullable|string|max:255',
@@ -116,6 +131,23 @@ class DestinationController extends Controller
             ]);
 
             $validated['is_active'] = $request->boolean('is_active');
+
+            // Handle cover image removal
+            if ($request->boolean('remove_cover_image')) {
+                if ($destination->cover_image && \Storage::disk('public')->exists($destination->cover_image)) {
+                    \Storage::disk('public')->delete($destination->cover_image);
+                }
+                $validated['cover_image'] = null;
+            }
+
+            // Handle cover image upload
+            if ($request->hasFile('cover_image')) {
+                // Delete old image if exists
+                if ($destination->cover_image && \Storage::disk('public')->exists($destination->cover_image)) {
+                    \Storage::disk('public')->delete($destination->cover_image);
+                }
+                $validated['cover_image'] = $request->file('cover_image')->store('destinations', 'public');
+            }
 
             $destination->update($validated);
 

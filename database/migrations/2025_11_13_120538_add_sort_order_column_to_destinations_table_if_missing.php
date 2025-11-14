@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('destinations', function (Blueprint $table) {
-            $table->integer('sort_order')->default(0)->after('is_active');
+            if (!Schema::hasColumn('destinations', 'sort_order')) {
+                $table->integer('sort_order')->default(0);
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('destinations', function (Blueprint $table) {
-            $table->dropColumn('sort_order');
+            if (Schema::hasColumn('destinations', 'sort_order')) {
+                $table->dropColumn('sort_order');
+            }
         });
     }
 };

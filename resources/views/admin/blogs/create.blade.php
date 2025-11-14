@@ -7,8 +7,18 @@
 <div class="max-w-4xl mx-auto">
     <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Create New Blog Post</h1>
-            <p class="text-sm text-slate-600 mt-1.5 font-medium">Write and publish a new blog post</p>
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Create New Blog Post</h1>
+                    <p class="text-sm text-slate-600 mt-1.5 font-medium">Write and publish a new blog post</p>
+                </div>
+                <a href="{{ route('admin.blogs.index') }}" class="text-slate-600 hover:text-slate-900 flex items-center px-4 py-2 rounded-xl hover:bg-slate-100 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back
+                </a>
+            </div>
         </div>
         <div class="p-6">
             @if ($errors->any())
@@ -67,8 +77,8 @@
                             </div>
                         </div>
                         
-                        <input type="file" name="featured_image" id="featured_image" accept="image/*" onchange="previewImage(this)" class="block w-full text-sm text-slate-600 bg-white border-2 border-slate-200 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 file:mr-4 file:py-3 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 @error('featured_image') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
-                        <p class="text-slate-500 text-xs mt-2 px-1">Upload a featured image for this blog post (jpg, png, gif - max 5MB)</p>
+                        <input type="file" name="featured_image" id="featured_image" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" onchange="previewImage(this)" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-dark file:cursor-pointer cursor-pointer border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 @error('featured_image') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
+                        <p class="text-slate-500 text-xs mt-2 px-1">Upload a featured image for this blog post (JPEG, PNG, GIF, WebP - max 2MB)</p>
                         @error('featured_image')
                             <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
                                 <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,10 +104,27 @@
                     </div>
 
                     <div class="md:col-span-2">
-                        <label for="content" class="block text-sm font-semibold text-slate-700 mb-2">Content</label>
-                        <textarea name="content" id="content" rows="15" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('content') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror">{{ old('content') }}</textarea>
-                        <p class="text-slate-500 text-xs mt-2 px-1">Main blog content (HTML supported)</p>
+                        <label for="content" class="block text-sm font-semibold text-slate-700 mb-2">Content <span class="text-red-500">*</span></label>
+                        <div class="border-2 border-slate-200 rounded-xl overflow-hidden @error('content') border-red-300 @enderror">
+                            <div id="content" style="min-height: 400px;">{!! old('content') !!}</div>
+                        </div>
+                        <textarea name="content" id="content-textarea" style="display: none;">{{ old('content') }}</textarea>
+                        <p class="text-slate-500 text-xs mt-2 px-1">Main blog content - Use the rich text editor toolbar to format your content</p>
                         @error('content')
+                            <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                                <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="sort_order" class="block text-sm font-semibold text-slate-700 mb-2">Display Order</label>
+                        <input type="number" name="sort_order" id="sort_order" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('sort_order') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" value="{{ old('sort_order', $nextSortOrder ?? 1) }}" min="0">
+                        <p class="text-slate-500 text-xs mt-2 px-1">Auto-assigned ({{ $nextSortOrder ?? 1 }}), but you can change it. Lower numbers appear first.</p>
+                        @error('sort_order')
                             <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
                                 <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -144,17 +171,59 @@
     </div>
 </div>
 
+<!-- Quill Rich Text Editor -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+// Initialize Quill Editor
+document.addEventListener('DOMContentLoaded', function() {
+    const quill = new Quill('#content', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'align': [] }],
+                ['link', 'image', 'video'],
+                ['blockquote', 'code-block'],
+                ['clean']
+            ]
+        },
+        placeholder: 'Start writing your blog post...',
+    });
+    
+    // Get the textarea element
+    const textarea = document.querySelector('textarea[name="content"]');
+    
+    // Update textarea on text change
+    quill.on('text-change', function() {
+        textarea.value = quill.root.innerHTML;
+    });
+    
+    // Set initial content if exists
+    if (textarea.value) {
+        quill.root.innerHTML = textarea.value;
+    }
+    
+    // Update textarea before form submission
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            textarea.value = quill.root.innerHTML;
+        });
+    }
+});
+
 function previewImage(input) {
-    console.log('previewImage function called');
     if (input.files && input.files[0]) {
-        console.log('File selected:', input.files[0].name);
         const file = input.files[0];
         
         // Check file type
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'image/webp'];
         if (!validTypes.includes(file.type)) {
-            alert('Please select a valid image file (JPG, PNG, GIF)');
+            alert('Please select a valid image file (JPG, PNG, GIF, WebP)');
             input.value = '';
             return;
         }
@@ -168,10 +237,8 @@ function previewImage(input) {
         
         const reader = new FileReader();
         reader.onload = function(e) {
-            console.log('File loaded successfully');
             document.getElementById('preview-new').src = e.target.result;
             document.getElementById('filename').textContent = file.name;
-            // Show file size
             const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
             document.getElementById('file-size').textContent = 'Size: ' + fileSizeMB + ' MB';
             document.getElementById('new-image-preview').classList.remove('hidden');
@@ -181,20 +248,14 @@ function previewImage(input) {
             alert('Error reading file. Please try again.');
         };
         reader.readAsDataURL(file);
-    } else {
-        console.log('No file selected');
     }
 }
 
 function clearNewImage() {
-    console.log('clearNewImage function called');
     document.getElementById('featured_image').value = '';
     document.getElementById('new-image-preview').classList.add('hidden');
     document.getElementById('preview-new').src = '';
     document.getElementById('filename').textContent = '';
 }
-
-// Ensure functions are available globally
-console.log('Image preview functions loaded');
 </script>
 @endsection

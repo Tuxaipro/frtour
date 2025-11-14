@@ -8,7 +8,7 @@
             $pauseOnHover = \App\Models\Setting::get('carousel_pause_on_hover', '1') == '1' || \App\Models\Setting::get('carousel_pause_on_hover', '1') == 1;
         @endphp
 
-    <section class="hero-section hero-carousel relative h-[500px] sm:h-[600px] lg:h-[600px] overflow-hidden w-full" 
+    <section class="hero-section hero-carousel relative h-[450px] sm:h-[500px] lg:h-[550px] overflow-hidden w-full" 
              data-autoplay="{{ $autoplay ? 'true' : 'false' }}"
              data-interval="{{ $interval }}"
              data-pause-on-hover="{{ $pauseOnHover ? 'true' : 'false' }}">
@@ -18,16 +18,16 @@
                     position: relative;
                     overflow: hidden;
                     width: 100%;
-                    height: 500px;
+                    height: 450px;
                 }
                 @media (min-width: 640px) {
                     .hero-carousel {
-                        height: 600px;
+                        height: 500px;
                     }
                 }
                 @media (min-width: 1024px) {
                     .hero-carousel {
-                        height: 600px;
+                        height: 550px;
                     }
                 }
                 .hero-carousel .hero-slides-container {

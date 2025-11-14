@@ -15,6 +15,7 @@ class Page extends Model
         'featured_image',
         'is_active',
         'page_type',
+        'sort_order',
     ];
 
     protected $casts = [

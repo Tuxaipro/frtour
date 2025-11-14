@@ -37,7 +37,8 @@ class FaqController extends Controller
 
     public function create()
     {
-        return view('admin.faq.create');
+        $nextSortOrder = (Faq::max('sort_order') ?? 0) + 1;
+        return view('admin.faq.create', compact('nextSortOrder'));
     }
 
     public function store(Request $request)
@@ -51,7 +52,14 @@ class FaqController extends Controller
 
         $data = $request->all();
         $data['is_active'] = $request->has('is_active');
-        $data['sort_order'] = $request->get('sort_order', 0);
+        
+        // Auto-increment sort_order if not provided
+        if (!isset($data['sort_order']) || $data['sort_order'] === null || $data['sort_order'] === '') {
+            $maxSortOrder = Faq::max('sort_order') ?? 0;
+            $data['sort_order'] = $maxSortOrder + 1;
+        } else {
+            $data['sort_order'] = (int)$data['sort_order'];
+        }
 
         Faq::create($data);
 

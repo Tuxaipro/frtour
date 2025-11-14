@@ -43,7 +43,8 @@ class GalerieCategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.galerie-category.create');
+        $nextSortOrder = (GalerieCategory::max('sort_order') ?? 0) + 1;
+        return view('admin.galerie-category.create', compact('nextSortOrder'));
     }
 
     /**
@@ -60,7 +61,14 @@ class GalerieCategoryController extends Controller
 
         $data = $request->all();
         $data['is_active'] = $request->has('is_active');
-        $data['sort_order'] = $request->get('sort_order', 0);
+        
+        // Auto-increment sort_order if not provided
+        if (!isset($data['sort_order']) || $data['sort_order'] === null || $data['sort_order'] === '') {
+            $maxSortOrder = GalerieCategory::max('sort_order') ?? 0;
+            $data['sort_order'] = $maxSortOrder + 1;
+        } else {
+            $data['sort_order'] = (int)$data['sort_order'];
+        }
 
         GalerieCategory::create($data);
 

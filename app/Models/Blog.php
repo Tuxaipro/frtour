@@ -19,6 +19,7 @@ class Blog extends Model
         'featured_image',
         'is_published',
         'published_at',
+        'sort_order',
     ];
 
     protected $casts = [

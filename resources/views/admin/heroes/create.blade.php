@@ -119,9 +119,10 @@
                             </div>
                             
                             <div>
-                                <label for="sort_order" class="block text-sm font-semibold text-slate-700 mb-2">Sort Order</label>
-                                <input type="number" name="sort_order" id="sort_order" value="{{ old('sort_order', 0) }}" min="0" 
-                                       class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('sort_order') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" placeholder="0">
+                                <label for="sort_order" class="block text-sm font-semibold text-slate-700 mb-2">Display Order</label>
+                                <input type="number" name="sort_order" id="sort_order" value="{{ old('sort_order', $nextSortOrder ?? 1) }}" min="0" 
+                                       class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('sort_order') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
+                                <p class="text-slate-500 text-xs mt-2 px-1">Auto-assigned ({{ $nextSortOrder ?? 1 }}), but you can change it. Lower numbers appear first.</p>
                                 @error('sort_order')
                                     <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
                                         <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,6 +135,51 @@
                         </div>
                     </div>
 
+                    <!-- Media -->
+                    <div class="mb-8">
+                        <div class="mb-6 pb-3 border-b-2 border-slate-200">
+                            <h2 class="text-xl font-bold text-slate-900">Background Image</h2>
+                            <p class="text-xs text-slate-500 mt-1">Upload a background image for the hero section</p>
+                        </div>
+                        
+                        <!-- New Image Preview -->
+                        <div id="new-image-preview" class="mb-4 hidden">
+                            <div class="flex items-start space-x-3 p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
+                                <img id="preview-new" src="" alt="New background image" class="w-24 h-16 object-cover rounded-xl border-2 border-blue-200 shadow-sm flex-shrink-0">
+                                <div class="flex-1">
+                                    <p class="text-sm font-semibold text-blue-700">New Image Preview</p>
+                                    <p class="text-xs text-blue-600 mt-1" id="filename"></p>
+                                    <div class="mt-3">
+                                        <button type="button" onclick="clearNewImage()" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 border-2 border-red-200 rounded-xl hover:bg-red-100 transition-all duration-200">
+                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="background_image" class="block text-sm font-semibold text-slate-700 mb-2">Background Image</label>
+                            <input type="file" name="background_image" id="background_image" accept="image/*" onchange="previewImage(this)" 
+                                   class="block w-full text-sm text-slate-600 bg-white border-2 border-slate-200 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 file:mr-4 file:py-3 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 @error('background_image') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
+                            <p class="text-slate-500 text-xs mt-2 px-1">Upload an image for the hero background. Recommended size: 1920x1080px. Max file size: 5MB</p>
+                            @error('background_image')
+                                <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                                    <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                        <!-- Right Column -->
+                        <div class="space-y-6">
                     <!-- Buttons -->
                     <div class="mb-8">
                         <div class="mb-6 pb-3 border-b-2 border-slate-200">
@@ -141,7 +187,7 @@
                             <p class="text-xs text-slate-500 mt-1">Configure the hero section buttons</p>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-6">
                             <div>
                                 <label for="primary_button_text" class="block text-sm font-semibold text-slate-700 mb-2">Primary Button Text</label>
                                 <input type="text" name="primary_button_text" id="primary_button_text" value="{{ old('primary_button_text') }}" 
@@ -231,51 +277,6 @@
                         </div>
                     </div>
 
-                    <!-- Media -->
-                    <div class="mb-8">
-                        <div class="mb-6 pb-3 border-b-2 border-slate-200">
-                            <h2 class="text-xl font-bold text-slate-900">Background Image</h2>
-                            <p class="text-xs text-slate-500 mt-1">Upload a background image for the hero section</p>
-                        </div>
-                        
-                        <!-- New Image Preview -->
-                        <div id="new-image-preview" class="mb-4 hidden">
-                            <div class="flex items-start space-x-3 p-4 bg-blue-50 rounded-xl border-2 border-blue-200">
-                                <img id="preview-new" src="" alt="New background image" class="w-24 h-16 object-cover rounded-xl border-2 border-blue-200 shadow-sm flex-shrink-0">
-                                <div class="flex-1">
-                                    <p class="text-sm font-semibold text-blue-700">New Image Preview</p>
-                                    <p class="text-xs text-blue-600 mt-1" id="filename"></p>
-                                    <div class="mt-3">
-                                        <button type="button" onclick="clearNewImage()" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-50 border-2 border-red-200 rounded-xl hover:bg-red-100 transition-all duration-200">
-                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                            </svg>
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label for="background_image" class="block text-sm font-semibold text-slate-700 mb-2">Background Image</label>
-                            <input type="file" name="background_image" id="background_image" accept="image/*" onchange="previewImage(this)" 
-                                   class="block w-full text-sm text-slate-600 bg-white border-2 border-slate-200 rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 file:mr-4 file:py-3 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 @error('background_image') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
-                            <p class="text-slate-500 text-xs mt-2 px-1">Upload an image for the hero background. Recommended size: 1920x1080px. Max file size: 5MB</p>
-                            @error('background_image')
-                                <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
-                                    <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                        <!-- Right Column -->
-                        <div class="space-y-6">
                     <!-- Settings -->
                     <div class="mb-8">
                         <div class="mb-6 pb-3 border-b-2 border-slate-200">

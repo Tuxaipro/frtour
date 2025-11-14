@@ -44,7 +44,8 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.create');
+        $nextSortOrder = (Page::max('sort_order') ?? 0) + 1;
+        return view('admin.pages.create', compact('nextSortOrder'));
     }
 
     /**
@@ -61,6 +62,13 @@ class PageController extends Controller
             'is_active' => 'boolean',
         ]);
 
+        // Auto-increment sort_order if not provided
+        $sortOrder = $request->get('sort_order');
+        if ($sortOrder === null || $sortOrder === '') {
+            $maxSortOrder = Page::max('sort_order') ?? 0;
+            $sortOrder = $maxSortOrder + 1;
+        }
+
         $data = [
             'title' => $request->title,
             'slug' => Str::slug($request->title),
@@ -68,6 +76,7 @@ class PageController extends Controller
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'is_active' => $request->is_active ?? false,
+            'sort_order' => (int)$sortOrder,
         ];
 
         if ($request->hasFile('featured_image')) {
@@ -107,6 +116,7 @@ class PageController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:255',
             'is_active' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
 
         $data = [
@@ -116,6 +126,7 @@ class PageController extends Controller
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'is_active' => $request->is_active ?? false,
+            'sort_order' => $request->sort_order ?? $page->sort_order ?? 0,
         ];
 
         if ($request->hasFile('featured_image')) {

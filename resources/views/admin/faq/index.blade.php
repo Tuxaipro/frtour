@@ -46,53 +46,92 @@
         </div>
     </form>
 
-    <!-- FAQ List -->
+    <!-- FAQ Table -->
     @if($faqs->count() > 0)
         <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 overflow-hidden">
             <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
                 <h2 class="text-lg font-bold text-slate-900">All FAQs</h2>
-                <p class="text-xs text-slate-600 mt-1">Total: {{ $faqs->count() }} question(s)</p>
+                <p class="text-xs text-slate-600 mt-1">Total: {{ $faqs->total() }} question(s)</p>
             </div>
-            <div class="divide-y divide-slate-200">
-                @foreach($faqs as $faq)
-                    <div class="p-6 hover:bg-slate-50/50 transition-colors duration-150">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <h3 class="text-lg font-semibold text-slate-800 mb-2">{{ $faq->question }}</h3>
-                                <p class="text-slate-600 mb-3">{{ Str::limit($faq->answer, 200) }}</p>
-                                <div class="flex items-center space-x-4">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-50/50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                Question
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                Answer
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                Sort Order
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-slate-200">
+                        @foreach($faqs as $faq)
+                            <tr class="hover:bg-primary/5 transition-colors duration-150">
+                                <td class="px-6 py-4">
+                                    <div class="text-sm font-medium text-slate-900">{{ $faq->question }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-slate-600 max-w-md">{{ Str::limit($faq->answer, 100) }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                                    {{ $faq->sort_order ?? 0 }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $faq->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                         {{ $faq->is_active ? 'Active' : 'Inactive' }}
                                     </span>
-                                    <span class="text-sm text-slate-500">
-                                        Order: {{ $faq->sort_order }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-2 ml-4">
-                                <a href="{{ route('admin.faq.edit', $faq) }}" 
-                                   class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-colors duration-200" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                </a>
-                                <form action="{{ route('admin.faq.destroy', $faq) }}" 
-                                      method="POST" 
-                                      class="inline"
-                                      onsubmit="return confirm('Are you sure you want to delete this FAQ?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors duration-200" title="Delete">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <a href="{{ route('admin.faq.edit', $faq) }}" 
+                                           class="text-blue-600 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-50 transition-all duration-200" title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                        </a>
+                                        <form action="{{ route('admin.faq.destroy', $faq) }}" 
+                                              method="POST" 
+                                              class="inline"
+                                              onsubmit="return confirm('Are you sure you want to delete this FAQ?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-700 p-2 rounded-lg hover:bg-red-50 transition-all duration-200" title="Delete">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            @if($faqs->hasPages())
+                <div class="px-6 py-4 border-t border-slate-200 bg-slate-50/50">
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-slate-600">
+                            Showing {{ $faqs->firstItem() }} to {{ $faqs->lastItem() }} of {{ $faqs->total() }} results
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            {{ $faqs->links() }}
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endif
         </div>
     @else
         <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 p-12 text-center">

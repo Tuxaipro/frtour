@@ -126,18 +126,18 @@ async function loadFooter() {
       let destinationsHtml = '';
       destinations.forEach(destination => {
         destinationsHtml += `
-          <li><a href="/destinations/${destination.slug}" class="hover:text-white transition-colors duration-200">${destination.name}</a></li>
+          <li><a href="/destinations/${destination.slug}" class="hover:text-white transition-colors duration-200 text-sm font-sans">${destination.name}</a></li>
         `;
       });
       
       footerContainer.innerHTML = `
-        <footer class="bg-slate-900 text-white py-16">
+        <footer class="bg-slate-900 text-white py-16 font-sans antialiased">
           <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 mb-12 items-start">
               <!-- Company Info -->
               <div class="lg:col-span-2">
                 ${logoHtml}
-                <p class="text-slate-300 mb-6 max-w-md">
+                <p class="text-slate-300 mb-6 max-w-md font-sans text-base leading-relaxed">
                   ${logoSettings.site_description}
                 </p>
                 <div class="flex space-x-4 flex-wrap">
@@ -147,41 +147,46 @@ async function loadFooter() {
               
               <!-- Quick Links -->
               <div class="lg:col-span-1">
-                <h4 class="font-semibold mb-4">Liens rapides</h4>
-                <ul class="space-y-2 text-slate-300">
-                  <li><a href="/#circuits" class="hover:text-white transition-colors duration-200">Nos circuits</a></li>
-                  <li><a href="/groupe" class="hover:text-white transition-colors duration-200">Voyages de groupe</a></li>
-                  <li><a href="/#devis" class="hover:text-white transition-colors duration-200">Devis sur mesure</a></li>
-                  <li><a href="/blog" class="hover:text-white transition-colors duration-200">Blog</a></li>
-                  <li><a href="/#galerie" class="hover:text-white transition-colors duration-200">Galerie</a></li>
-                  <li><a href="/#faq" class="hover:text-white transition-colors duration-200">FAQ</a></li>
-                  <li><a href="/#contact" class="hover:text-white transition-colors duration-200">Contact</a></li>
+                <h4 class="font-display font-bold text-lg mb-4">Liens rapides</h4>
+                <ul class="space-y-2 text-slate-300 font-sans">
+                  <li><a href="/#circuits" class="hover:text-white transition-colors duration-200 text-sm">Nos circuits</a></li>
+                  <li><a href="/groupe" class="hover:text-white transition-colors duration-200 text-sm">Voyages de groupe</a></li>
+                  <li><a href="/#devis" class="hover:text-white transition-colors duration-200 text-sm">Devis sur mesure</a></li>
+                  <li><a href="/blog" class="hover:text-white transition-colors duration-200 text-sm">Blog</a></li>
+                  <li><a href="/#galerie" class="hover:text-white transition-colors duration-200 text-sm">Galerie</a></li>
+                  <li><a href="/#faq" class="hover:text-white transition-colors duration-200 text-sm">FAQ</a></li>
                 </ul>
               </div>
               
               <!-- Destinations -->
               <div class="lg:col-span-1">
-                <h4 class="font-semibold mb-4">Destinations</h4>
-                <ul class="space-y-2 text-slate-300">
+                <h4 class="font-display font-bold text-lg mb-4">Destinations</h4>
+                <ul class="space-y-2 text-slate-300 font-sans">
                   ${destinationsHtml}
                 </ul>
               </div>
               
               <!-- Contact Info -->
               <div class="lg:col-span-1">
-                <h4 class="font-semibold mb-4">Contact</h4>
-                <ul class="space-y-3 text-slate-300">
+                <h4 class="font-display font-bold text-lg mb-4">Contact</h4>
+                <ul class="space-y-3 text-slate-300 font-sans">
                   <li class="flex items-start">
                     <svg class="w-5 h-5 mr-3 mt-0.5 text-primary" fill="none" stroke="white" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                     </svg>
-                    <span>${(settings.contact_phone || '').replace(/^["']|["']$/g, '')}</span>
+                    <div>
+                      <div class="text-sm">${(settings.contact_phone || '').replace(/^["']|["']$/g, '')}</div>
+                      <div class="text-xs text-slate-400 mt-1">Lun-Ven: 9h-18h</div>
+                    </div>
                   </li>
                   <li class="flex items-start">
                     <svg class="w-5 h-5 mr-3 mt-0.5 text-primary" fill="none" stroke="white" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
-                    <span>${(settings.contact_email || '').replace(/^["']|["']$/g, '')}</span>
+                    <div>
+                      <div class="text-sm">${(settings.contact_email || '').replace(/^["']|["']$/g, '')}</div>
+                      <div class="text-xs text-slate-400 mt-1">Réponse sous 24h</div>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -189,10 +194,15 @@ async function loadFooter() {
             
             <div class="border-t border-slate-800 pt-8">
               <div class="flex flex-col md:flex-row justify-between items-center">
-                <p class="text-slate-400 text-sm mb-4 md:mb-0">
-                  © ${new Date().getFullYear()} ${logoSettings.site_name} — Tous droits réservés
-                </p>
-                <div class="flex space-x-6">
+                <div class="mb-4 md:mb-0">
+                  <p class="text-slate-400 text-sm font-sans">
+                    © ${new Date().getFullYear()} ${logoSettings.site_name} — Tous droits réservés
+                  </p>
+                  <p class="text-slate-500 text-xs mt-2 font-sans">
+                    Crafted with ❤️ for travelers.
+                  </p>
+                </div>
+                <div class="flex space-x-6 font-sans">
                   <a href="#" class="text-slate-400 hover:text-white text-sm transition-colors duration-200">Mentions légales</a>
                   <a href="#" class="text-slate-400 hover:text-white text-sm transition-colors duration-200">CGV</a>
                   <a href="#" class="text-slate-400 hover:text-white text-sm transition-colors duration-200">Confidentialité</a>
@@ -206,7 +216,7 @@ async function loadFooter() {
       console.error('Error loading footer:', error);
       // Fallback footer
       footerContainer.innerHTML = `
-        <footer class="bg-slate-900 text-white py-16">
+        <footer class="bg-slate-900 text-white py-16 font-sans antialiased">
           <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
             <div class="text-center">
               <div class="flex items-center justify-center mb-4">
@@ -216,9 +226,12 @@ async function loadFooter() {
                   </svg>
                 </div>
               </div>
-              <p class="text-slate-300 mb-6">Spécialiste des voyages sur-mesure en Inde, Sri Lanka, Népal et Bhoutan.</p>
-              <div class="text-slate-400 text-sm">
+              <p class="text-slate-300 mb-6 font-sans text-base">Spécialiste des voyages sur-mesure en Inde, Sri Lanka, Népal et Bhoutan.</p>
+              <div class="text-slate-400 text-sm font-sans">
                 © ${new Date().getFullYear()} India Tourisme. Tous droits réservés.
+              </div>
+              <div class="text-slate-500 text-xs mt-2 font-sans">
+                Crafted with ❤️ for travelers.
               </div>
             </div>
           </div>

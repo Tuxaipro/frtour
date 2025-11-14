@@ -54,7 +54,8 @@ class ReviewController extends Controller
      */
     public function create()
     {
-        return view('admin.reviews.create');
+        $nextSortOrder = (Review::max('sort_order') ?? 0) + 1;
+        return view('admin.reviews.create', compact('nextSortOrder'));
     }
 
     /**
@@ -88,7 +89,14 @@ class ReviewController extends Controller
         }
 
         $validated['is_active'] = $request->has('is_active');
-        $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        
+        // Auto-increment sort_order if not provided
+        if (!isset($validated['sort_order']) || $validated['sort_order'] === null || $validated['sort_order'] === '') {
+            $maxSortOrder = Review::max('sort_order') ?? 0;
+            $validated['sort_order'] = $maxSortOrder + 1;
+        } else {
+            $validated['sort_order'] = (int)$validated['sort_order'];
+        }
 
         Review::create($validated);
 

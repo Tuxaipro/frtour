@@ -58,6 +58,12 @@ class ViewServiceProvider extends ServiceProvider
                 'language' => Setting::get('language', 'en'),
             ]);
         });
+
+        // Share unread quote requests count with admin views
+        View::composer('layouts.admin', function ($view) {
+            $unreadQuoteRequestsCount = \App\Models\QuoteRequest::where('is_read', false)->count();
+            $view->with('unreadQuoteRequestsCount', $unreadQuoteRequestsCount);
+        });
     }
     
     /**

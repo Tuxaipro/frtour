@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('destinations', function (Blueprint $table) {
-            $table->integer('sort_order')->default(0)->after('is_active');
+            $table->string('cover_image')->nullable()->after('description');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('destinations', function (Blueprint $table) {
-            $table->dropColumn('sort_order');
+            $table->dropColumn('cover_image');
         });
     }
 };

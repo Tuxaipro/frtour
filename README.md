@@ -300,7 +300,11 @@ composer test
 
 ## 🚀 Deployment
 
-### Production Build
+For detailed step-by-step deployment instructions, see:
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Complete deployment guide with all steps
+- **[QUICK_DEPLOY.md](./QUICK_DEPLOY.md)** - Quick deployment guide for experienced users
+
+### Quick Production Build
 
 1. **Optimize for production:**
 ```bash
@@ -325,6 +329,15 @@ php artisan migrate --force
 ```bash
 chmod -R 775 storage bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache
+```
+
+### Automated Deployment
+
+Use the provided deployment script:
+
+```bash
+chmod +x deploy.sh
+sudo ./deploy.sh production
 ```
 
 ## 📄 License

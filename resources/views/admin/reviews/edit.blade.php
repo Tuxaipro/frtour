@@ -7,8 +7,18 @@
 <div class="max-w-2xl mx-auto">
     <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Edit Review</h1>
-            <p class="text-sm text-slate-600 mt-1.5 font-medium">Edit customer review information</p>
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Edit Review</h1>
+                    <p class="text-sm text-slate-600 mt-1.5 font-medium">Edit customer review information</p>
+                </div>
+                <a href="{{ route('admin.reviews.index') }}" class="text-slate-600 hover:text-slate-900 flex items-center px-4 py-2 rounded-xl hover:bg-slate-100 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back
+                </a>
+            </div>
         </div>
         <div class="p-6">
             <form action="{{ route('admin.reviews.update', $review) }}" method="POST">

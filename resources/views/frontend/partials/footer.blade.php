@@ -89,9 +89,14 @@
         
         <div class="border-t border-slate-800 pt-8">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <p class="text-slate-400 text-sm mb-4 md:mb-0">
-                    © {{ date('Y') }} {{ $siteName }} — Tous droits réservés
-                </p>
+                <div class="mb-4 md:mb-0">
+                    <p class="text-slate-400 text-sm">
+                        © {{ date('Y') }} {{ $siteName }} — Tous droits réservés
+                    </p>
+                    <p class="text-slate-500 text-xs mt-2">
+                        Crafted with ❤️ for travelers.
+                    </p>
+                </div>
                 <div class="flex space-x-6">
                     <a href="#" class="text-slate-400 hover:text-white text-sm transition-colors duration-200">Mentions légales</a>
                     <a href="#" class="text-slate-400 hover:text-white text-sm transition-colors duration-200">CGV</a>

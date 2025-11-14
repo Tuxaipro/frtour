@@ -47,6 +47,20 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Left Column - Main Details -->
         <div class="lg:col-span-2 space-y-6">
+            <!-- Cover Image -->
+            @if($destination->cover_image)
+            <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+                    <h2 class="text-lg font-semibold text-slate-900">Cover Image</h2>
+                </div>
+                <div class="p-6">
+                    <img src="{{ asset('storage/' . $destination->cover_image) }}" 
+                         alt="{{ $destination->name }} cover image" 
+                         class="w-full h-auto rounded-xl border-2 border-slate-200 max-h-96 object-cover">
+                </div>
+            </div>
+            @endif
+
             <!-- Description -->
             @if($destination->description)
             <div class="bg-white rounded-lg shadow-sm border border-slate-200">

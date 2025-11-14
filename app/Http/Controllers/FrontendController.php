@@ -14,23 +14,43 @@ class FrontendController extends Controller
 {
     public function index()
     {
-        $circuits = Circuit::where('is_active', true)->orderBy('sort_order')->take(3)->get();
+        $circuits = Circuit::with('destination')->where('is_active', true)->orderBy('sort_order')->take(6)->get();
         $destinations = Destination::where('is_active', true)->orderBy('name')->get();
 
-        return view('frontend.index', compact('circuits', 'destinations'));
+        return view('welcome', compact('circuits', 'destinations'));
     }
 
     public function destination($slug)
     {
-        $destination = Destination::where('slug', $slug)->where('is_active', true)->firstOrFail();
-        $circuits = Circuit::where('destination_id', $destination->id)->where('is_active', true)->get();
+        // Load destination with all necessary fields - explicitly refresh to avoid caching
+        $destination = Destination::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+        
+        // Refresh the model to ensure we have latest data
+        $destination->refresh();
+        
+        // Load circuits for this destination
+        $circuits = Circuit::where('destination_id', $destination->id)
+            ->where('is_active', true)
+            ->get();
 
+        // Debug: Log the destination being loaded
+        \Log::info('Loading destination', [
+            'slug' => $slug,
+            'id' => $destination->id,
+            'name' => $destination->name,
+            'hero_title' => $destination->hero_title,
+            'cover_image' => $destination->cover_image
+        ]);
+
+        // Pass destination data to view
         return view('frontend.destination', compact('destination', 'circuits'));
     }
 
     public function circuit($slug)
     {
-        $circuit = Circuit::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $circuit = Circuit::with('destination')->where('slug', $slug)->where('is_active', true)->firstOrFail();
         
         return view('frontend.circuit', compact('circuit'));
     }
@@ -42,21 +62,41 @@ class FrontendController extends Controller
 
     public function nepal()
     {
+        // Redirect to dynamic destination route
+        $destination = Destination::where('slug', 'nepal')->where('is_active', true)->first();
+        if ($destination) {
+            return redirect()->route('destination', $destination->slug);
+        }
         return view('frontend.nepal');
     }
 
     public function northIndia()
     {
+        // Redirect to dynamic destination route
+        $destination = Destination::where('slug', 'north-india')->where('is_active', true)->first();
+        if ($destination) {
+            return redirect()->route('destination', $destination->slug);
+        }
         return view('frontend.north-india');
     }
 
     public function southIndia()
     {
+        // Redirect to dynamic destination route
+        $destination = Destination::where('slug', 'south-india')->where('is_active', true)->first();
+        if ($destination) {
+            return redirect()->route('destination', $destination->slug);
+        }
         return view('frontend.south-india');
     }
 
     public function sriLanka()
     {
+        // Redirect to dynamic destination route
+        $destination = Destination::where('slug', 'sri-lanka')->where('is_active', true)->first();
+        if ($destination) {
+            return redirect()->route('destination', $destination->slug);
+        }
         return view('frontend.sri-lanka');
     }
 

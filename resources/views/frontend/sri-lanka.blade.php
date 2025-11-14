@@ -4,26 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Circuits Sri Lanka - India Tourisme</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3B82F6',
-            'primary-dark': '#1E40AF',
-            'primary-light': '#DBEAFE'
-          },
-          fontFamily: {
-            'sans': ['Inter', 'system-ui', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Tailwind CSS via Vite -->
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+    
+    /* Gradient Text Effect */
+    .gradient-text {
+      background: linear-gradient(135deg, hsl(201, 96%, 32%), hsl(142, 71%, 45%));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     
     /* Ensure sticky positioning works */
     #header-container {
@@ -98,16 +94,18 @@
     }
   </style>
 </head>
-<body class="bg-white">
-  <!-- Header Container -->
-  <div id="header-container"></div>
+<body class="bg-white text-slate-900 font-sans antialiased">
+  <!-- Navigation -->
+  @php
+    include resource_path('views/includes/navigation.php');
+  @endphp
 
-  <!-- Hero Section -->
+<!-- Hero Section -->
   <section class="relative bg-gradient-to-r from-emerald-50 to-blue-50 py-16 sm:py-20 lg:py-32">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center">
-        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-          Circuits <span class="text-emerald-600">Sri Lanka</span>
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-display font-bold text-slate-900 mb-6 leading-tight">
+          Circuits <span class="gradient-text">Sri Lanka</span>
         </h1>
         <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
           Découvrez la perle de l'océan Indien avec ses temples bouddhistes, ses plantations de thé et ses plages paradisiaques
@@ -296,11 +294,9 @@
   <div id="footer-container"></div>
 
   <!-- Load common components -->
-  <script src="/components/header.js"></script>
   <script src="/components/footer.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      loadHeader('circuits');
       loadFooter();
     });
   </script>

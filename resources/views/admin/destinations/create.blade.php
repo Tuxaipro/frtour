@@ -28,7 +28,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.destinations.store') }}" method="POST" id="destination-form">
+                <form action="{{ route('admin.destinations.store') }}" method="POST" id="destination-form" enctype="multipart/form-data">
                     @csrf
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -59,9 +59,9 @@
                         </div>
                         
                         <div>
-                            <label for="sort_order" class="block text-sm font-semibold text-slate-700 mb-2">Sort Order</label>
-                            <input type="number" name="sort_order" id="sort_order" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('sort_order') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" value="{{ old('sort_order', 0) }}" min="0">
-                            <p class="text-slate-500 text-xs mt-2 px-1">Lower numbers appear first. Default is 0.</p>
+                            <label for="sort_order" class="block text-sm font-semibold text-slate-700 mb-2">Display Order</label>
+                            <input type="number" name="sort_order" id="sort_order" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('sort_order') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" value="{{ old('sort_order', $nextSortOrder ?? 1) }}" min="0">
+                            <p class="text-slate-500 text-xs mt-2 px-1">Auto-assigned ({{ $nextSortOrder ?? 1 }}), but you can change it. Lower numbers appear first.</p>
                             @error('sort_order')
                                 <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
                                     <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,6 +83,25 @@
                                     {{ $message }}
                                 </p>
                             @enderror
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label for="cover_image" class="block text-sm font-semibold text-slate-700 mb-2">Cover Image</label>
+                            <div class="relative">
+                                <input type="file" name="cover_image" id="cover_image" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary-dark file:cursor-pointer cursor-pointer border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 @error('cover_image') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
+                            </div>
+                            <p class="text-slate-500 text-xs mt-2 px-1">Recommended size: 1920x1080px. Max file size: 2MB. Formats: JPEG, PNG, GIF, WebP.</p>
+                            @error('cover_image')
+                                <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                                    <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                            <div id="cover_image_preview" class="mt-4 hidden">
+                                <img id="cover_image_preview_img" src="" alt="Cover image preview" class="max-w-full h-auto rounded-xl border-2 border-slate-200 max-h-64">
+                            </div>
                         </div>
                         
                         <div>
@@ -179,11 +198,8 @@ document.addEventListener('DOMContentLoaded', function() {
         slugInput.value = slug;
     });
     
-    // Form submission debugging
+    // Form submission validation
     form.addEventListener('submit', function(e) {
-        console.log('Form is being submitted...');
-        console.log('Form data:', new FormData(form));
-        
         // Basic validation
         const name = nameInput.value.trim();
         const slug = slugInput.value.trim();
@@ -200,8 +216,30 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
         
-        console.log('Form validation passed, submitting...');
+        // Allow form to submit normally
+        return true;
     });
+    
+    // Cover image preview
+    const coverImageInput = document.getElementById('cover_image');
+    const coverImagePreview = document.getElementById('cover_image_preview');
+    const coverImagePreviewImg = document.getElementById('cover_image_preview_img');
+    
+    if (coverImageInput) {
+        coverImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    coverImagePreviewImg.src = e.target.result;
+                    coverImagePreview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                coverImagePreview.classList.add('hidden');
+            }
+        });
+    }
 });
 </script>
 @endsection

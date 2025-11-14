@@ -46,7 +46,8 @@ class HeroController extends Controller
      */
     public function create()
     {
-        return view('admin.heroes.create');
+        $nextSortOrder = (Hero::max('sort_order') ?? 0) + 1;
+        return view('admin.heroes.create', compact('nextSortOrder'));
     }
 
     /**
@@ -101,6 +102,12 @@ class HeroController extends Controller
         $data['video_muted'] = $request->has('video_muted');
         $data['carousel_autoplay'] = $request->has('carousel_autoplay');
         $data['carousel_pause_on_hover'] = $request->has('carousel_pause_on_hover');
+
+        // Auto-increment sort_order if not provided
+        if (!isset($data['sort_order']) || $data['sort_order'] === null || $data['sort_order'] === '') {
+            $maxSortOrder = Hero::max('sort_order') ?? 0;
+            $data['sort_order'] = $maxSortOrder + 1;
+        }
 
         // Set defaults for new fields
         $data['layout_type'] = $data['layout_type'] ?? 'full-width';

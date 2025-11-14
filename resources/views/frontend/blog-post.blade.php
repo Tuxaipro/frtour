@@ -5,30 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ ($blog->meta_title ?? $blog->title) . ' — India Tourisme' }}</title>
   <meta name="description" content="{{ $blog->meta_description ?? Str::limit(strip_tags($blog->content), 160) }}">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: 'hsl(220, 70%, 25%)',
-            'primary-dark': 'hsl(220, 70%, 20%)',
-            'primary-light': 'hsl(220, 60%, 35%)',
-            accent: 'hsl(75, 45%, 40%)',
-            'accent-light': 'hsl(80, 50%, 45%)',
-            background: 'hsl(0, 0%, 98%)',
-            foreground: 'hsl(215, 25%, 27%)'
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
+  
+  <!-- Tailwind CSS via Vite -->
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+    
+    /* Gradient Text Effect */
+    .gradient-text {
+      background: linear-gradient(135deg, hsl(201, 96%, 32%), hsl(142, 71%, 45%));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     
     /* Ensure sticky positioning works */
     #header-container {
@@ -89,11 +82,34 @@
     .prose-custom img {
       @apply rounded-lg shadow-lg my-8;
     }
+    
+    /* Button Shimmer Effect */
+    .btn-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-shimmer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .btn-shimmer:hover::before {
+      left: 100%;
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans antialiased">
-  <!-- Header Container -->
-  <div id="header-container"></div>
+  <!-- Navigation -->
+  @php
+    include resource_path('views/includes/navigation.php');
+  @endphp
 
   <main>
 <!-- Article Hero Section with Featured Image -->
@@ -283,9 +299,9 @@
     @endif
     
     <div class="text-center mt-12">
-      <a href="{{ route('blog') }}" class="inline-flex items-center bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-xl font-semibold transition-all duration-200">
+      <a href="{{ route('blog') }}" class="inline-flex items-center px-8 py-4 bg-primary text-white rounded-xl font-semibold text-lg hover:bg-primary-dark transition-all duration-300 shadow-lg hover:shadow-xl btn-shimmer">
         Voir tous les articles
-        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
       </a>
@@ -299,12 +315,10 @@
   <div id="footer-container"></div>
 
   <!-- Load Common Components -->
-  <script src="/components/header.js"></script>
   <script src="/components/footer.js"></script>
   <script>
     // Load components when page loads
     document.addEventListener('DOMContentLoaded', function() {
-      loadHeader();
       loadFooter();
     });
   </script>

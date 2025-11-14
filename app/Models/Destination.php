@@ -10,6 +10,7 @@ class Destination extends Model
         'name',
         'slug',
         'description',
+        'cover_image',
         'hero_title',
         'hero_description',
         'meta_title',

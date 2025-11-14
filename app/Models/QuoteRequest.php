@@ -16,14 +16,17 @@ class QuoteRequest extends Model
         'destinations',
         'services',
         'travel_style',
+        'preferences',
         'special_requests',
         'budget_range',
         'is_processed',
+        'is_read',
     ];
 
     protected $casts = [
         'travel_dates' => 'date',
         'number_of_travelers' => 'integer',
         'is_processed' => 'boolean',
+        'is_read' => 'boolean',
     ];
 }

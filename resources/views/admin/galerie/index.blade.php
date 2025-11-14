@@ -6,12 +6,12 @@
 @section('content')
 <div class="space-y-6">
     <!-- Header -->
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
             <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Gallery</h1>
             <p class="text-sm text-slate-600 mt-1.5 font-medium">Manage your gallery images</p>
         </div>
-        <div class="flex space-x-3">
+        <div class="flex flex-wrap gap-3">
             <a href="{{ route('admin.galerie-category.index') }}" 
                class="bg-slate-600 text-white px-5 py-2.5 rounded-xl hover:bg-slate-700 transition-all duration-200 flex items-center shadow-md hover:shadow-lg">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,113 +41,112 @@
 
     <!-- Search and Filter Bar -->
     <form method="GET" action="{{ route('admin.galerie.index') }}" class="bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by title, description..." class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400">
-            @if($categories->count() > 0)
-                <div class="flex space-x-3">
-                    <select name="category_id" class="flex-1 px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white">
-                        <option value="">All Categories</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <button type="submit" class="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg">Apply</button>
-                    <a href="{{ route('admin.galerie.index') }}" class="bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-200 px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center">Clear</a>
-                </div>
-            @else
-                <div class="flex space-x-3">
-                    <button type="submit" class="flex-1 bg-primary hover:bg-primary-dark text-white px-5 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg">Apply</button>
-                    <a href="{{ route('admin.galerie.index') }}" class="flex-1 bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-200 px-5 py-3 rounded-xl font-semibold transition-all duration-200 text-center shadow-sm hover:shadow-md">Clear</a>
-                </div>
-            @endif
+            <select name="category_id" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white">
+                <option value="">All Categories</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+            <select name="status" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 bg-white">
+                <option value="">All Status</option>
+                <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+            </select>
+        </div>
+        <div class="flex space-x-3 mt-4">
+            <button type="submit" class="flex-1 bg-primary hover:bg-primary-dark text-white px-5 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg">Apply</button>
+            <a href="{{ route('admin.galerie.index') }}" class="flex-1 bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-200 px-5 py-3 rounded-xl font-semibold transition-all duration-200 text-center shadow-sm hover:shadow-md">Clear</a>
         </div>
     </form>
 
-    <!-- Old Category Filter (hidden for now, keeping for reference) -->
-    @if(false && $categories->count() > 0)
-        <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
-            <form method="GET" action="{{ route('admin.galerie.index') }}" class="flex items-center space-x-4">
-                <label for="category_id" class="text-sm font-medium text-slate-700">Filter by category:</label>
-                <select name="category_id" id="category_id" 
-                        class="px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <option value="">All categories</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }} ({{ $category->galeries->count() }})
-                        </option>
-                    @endforeach
-                </select>
-                <button type="submit" 
-                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                    Filter
-                </button>
-                @if(request('category_id'))
-                    <a href="{{ route('admin.galerie.index') }}" 
-                       class="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors duration-200">
-                        Clear
-                    </a>
-                @endif
-            </form>
-        </div>
-    @endif
-
-    <!-- Gallery Grid -->
+    <!-- Gallery Cards -->
     @if($galerie->count() > 0)
-        <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 p-6">
-            <div class="mb-6 pb-4 border-b border-slate-200">
-                <h2 class="text-lg font-bold text-slate-900">All Gallery Images</h2>
-                <p class="text-xs text-slate-600 mt-1">Total: {{ $galerie->count() }} image(s)</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                @foreach($galerie as $image)
-                    <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                    <div class="aspect-w-16 aspect-h-12 bg-slate-100">
-                        <img src="{{ Storage::url($image->image) }}" 
-                             alt="{{ $image->title }}" 
-                             class="w-full h-48 object-cover">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-slate-800 mb-2">{{ $image->title }}</h3>
-                        @if($image->category)
-                            <div class="mb-2">
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {{ $image->category->name }}
-                                </span>
-                            </div>
-                        @endif
-                        @if($image->description)
-                            <p class="text-sm text-slate-600 mb-3">{{ Str::limit($image->description, 100) }}</p>
-                        @endif
-                        <div class="flex items-center justify-between">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $image->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                {{ $image->is_active ? 'Active' : 'Inactive' }}
-                            </span>
-                            <div class="flex items-center space-x-2">
-                                <a href="{{ route('admin.galerie.edit', $image) }}" 
-                                   class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-colors duration-200" title="Edit">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                </a>
-                                <form action="{{ route('admin.galerie.destroy', $image) }}" 
-                                      method="POST" 
-                                      class="inline"
-                                      onsubmit="return confirm('Are you sure you want to delete this image?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors duration-200" title="Delete">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
+        <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">All Gallery Images</h2>
+                        <p class="text-xs text-slate-600 mt-1">Total: {{ $galerie->count() }} image(s)</p>
                     </div>
                 </div>
-            @endforeach
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10 gap-2">
+                    @foreach($galerie as $image)
+                        <div class="group bg-white rounded-lg border border-slate-200 hover:border-primary/50 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
+                            <!-- Image -->
+                            <div class="relative h-20 overflow-hidden bg-gradient-to-br from-primary to-accent">
+                                @if($image->image)
+                                    <img src="{{ Storage::url($image->image) }}" 
+                                         alt="{{ $image->title }}" 
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                @endif
+                                <!-- Status Badge -->
+                                <div class="absolute top-1 right-1">
+                                    <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium {{ $image->is_active ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }}">
+                                        {{ $image->is_active ? '✓' : '✗' }}
+                                    </span>
+                                </div>
+                                <!-- Sort Order Badge -->
+                                @if($image->sort_order)
+                                    <div class="absolute top-1 left-1">
+                                        <span class="inline-flex items-center px-1 py-0.5 rounded text-[10px] font-medium bg-black/60 text-white">
+                                            #{{ $image->sort_order }}
+                                        </span>
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            <!-- Content -->
+                            <div class="p-1.5">
+                                <h3 class="text-[10px] font-semibold text-slate-900 mb-0.5 line-clamp-1 group-hover:text-primary transition-colors" title="{{ $image->title }}">
+                                    {{ $image->title }}
+                                </h3>
+                                
+                                @if($image->category)
+                                    <div class="mb-1">
+                                        <span class="inline-flex items-center px-1 py-0.5 rounded text-[9px] font-medium bg-blue-100 text-blue-800 line-clamp-1" title="{{ $image->category->name }}">
+                                            {{ Str::limit($image->category->name, 8) }}
+                                        </span>
+                                    </div>
+                                @endif
+                                
+                                <!-- Actions -->
+                                <div class="flex items-center justify-between gap-1 pt-1 border-t border-slate-100">
+                                    <a href="{{ route('admin.galerie.edit', $image) }}" 
+                                       class="flex-1 text-center p-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded transition-all duration-200" title="Edit">
+                                        <svg class="w-3 h-3 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </a>
+                                    <form action="{{ route('admin.galerie.destroy', $image) }}" 
+                                          method="POST" 
+                                          class="flex-1"
+                                          onsubmit="return confirm('Are you sure you want to delete this image?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="w-full text-center p-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-200" title="Delete">
+                                            <svg class="w-3 h-3 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
     @else
         <div class="bg-white rounded-2xl shadow-lg border border-slate-200/50 p-12 text-center">

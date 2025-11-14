@@ -79,7 +79,11 @@
 
                         <div class="md:col-span-2">
                             <label for="content" class="block text-sm font-semibold text-slate-700 mb-2">Content</label>
-                            <textarea name="content" id="content" rows="10" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('content') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" placeholder="Enter page content">{{ old('content') }}</textarea>
+                            <div class="border-2 border-slate-200 rounded-xl overflow-hidden @error('content') border-red-300 @enderror">
+                                <div id="content" style="min-height: 400px;">{!! old('content') !!}</div>
+                            </div>
+                            <textarea name="content" id="content-textarea" style="display: none;">{{ old('content') }}</textarea>
+                            <p class="text-slate-500 text-xs mt-2 px-1">Page content - Use the rich text editor toolbar to format your content</p>
                             @error('content')
                                 <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
                                     <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,6 +98,20 @@
                             <label for="meta_title" class="block text-sm font-semibold text-slate-700 mb-2">Meta Title</label>
                             <input type="text" name="meta_title" id="meta_title" value="{{ old('meta_title') }}" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('meta_title') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" placeholder="Enter meta title for SEO">
                             @error('meta_title')
+                                <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                                    <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="sort_order" class="block text-sm font-semibold text-slate-700 mb-2">Display Order</label>
+                            <input type="number" name="sort_order" id="sort_order" class="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 text-slate-900 placeholder-slate-400 @error('sort_order') border-red-300 focus:ring-red-500 focus:border-red-500 @enderror" value="{{ old('sort_order', $nextSortOrder ?? 1) }}" min="0">
+                            <p class="text-slate-500 text-xs mt-2 px-1">Auto-assigned ({{ $nextSortOrder ?? 1 }}), but you can change it. Lower numbers appear first.</p>
+                            @error('sort_order')
                                 <p class="text-red-600 text-xs mt-2 flex items-center bg-red-50 px-3 py-2 rounded-lg border border-red-200">
                                     <svg class="w-4 h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -176,5 +194,46 @@ function clearNewImage() {
     document.getElementById('preview-new').src = '';
     document.getElementById('filename').textContent = '';
 }
+</script>
+
+<!-- Quill Rich Text Editor -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quill = new Quill('#content', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'align': [] }],
+                ['link', 'image', 'video'],
+                ['blockquote', 'code-block'],
+                ['clean']
+            ]
+        },
+        placeholder: 'Start writing your page content...',
+    });
+    
+    const textarea = document.querySelector('textarea[name="content"]');
+    
+    quill.on('text-change', function() {
+        textarea.value = quill.root.innerHTML;
+    });
+    
+    if (textarea.value) {
+        quill.root.innerHTML = textarea.value;
+    }
+    
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function() {
+            textarea.value = quill.root.innerHTML;
+        });
+    }
+});
 </script>
 @endsection

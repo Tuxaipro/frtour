@@ -12,26 +12,23 @@
   @else
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
   @endif
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3B82F6',
-            'primary-dark': '#1E40AF',
-            'primary-light': '#DBEAFE'
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
+  
+  <!-- Tailwind CSS via Vite -->
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+    
+    /* Gradient Text Effect */
+    .gradient-text {
+      background: linear-gradient(135deg, hsl(201, 96%, 32%), hsl(142, 71%, 45%));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
     
     /* Ensure sticky positioning works */
     #header-container {
@@ -80,53 +77,54 @@
     }
   </style>
 </head>
-<body class="font-sans antialiased bg-white">
+<body class="bg-white text-slate-900 font-sans antialiased">
   <div class="min-h-screen">
-    <!-- Header -->
-    <div id="header-container"></div>
+    <!-- Navigation -->
+    @php
+      include resource_path('views/includes/navigation.php');
+    @endphp
 
     <!-- Page Content -->
     <main>
 <!-- Hero Section -->
-@if($circuit->featured_image)
-<section class="relative h-[500px] lg:h-[600px] overflow-hidden">
-    <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="absolute inset-0 w-full h-full object-cover">
-    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-    <div class="relative h-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div class="flex flex-col justify-end h-full pb-16">
-            <div class="max-w-4xl">
-                <nav class="flex items-center space-x-2 text-sm sm:text-base mb-6 text-white/80">
-                    <a href="{{ route('home') }}" class="hover:text-white transition-colors">Accueil</a>
-                    <span>/</span>
-                    <a href="{{ route('destination', $circuit->destination->slug) }}" class="hover:text-white transition-colors">{{ $circuit->destination->name }}</a>
-                    <span>/</span>
-                    <span class="text-white font-medium">{{ $circuit->name }}</span>
-                </nav>
-                
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
-                    {{ $circuit->name }}
-                </h1>
-            </div>
-        </div>
+@php
+    $heroBackground = $circuit->featured_image ? asset('storage/' . $circuit->featured_image) : null;
+    $heroOverlay = $circuit->featured_image ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.1)';
+@endphp
+<section class="relative py-16 sm:py-20 lg:py-32 text-white overflow-hidden" style="background-color: hsl(220, 70%, 25%); min-height: 500px;">
+    @if($heroBackground)
+    <!-- Background Image -->
+    <div class="absolute inset-0 z-0">
+        <img src="{{ $heroBackground }}" alt="{{ $circuit->name }}" class="w-full h-full object-cover" style="object-fit: cover; object-position: center; width: 100%; height: 100%;">
     </div>
-</section>
-@else
-<section class="relative bg-gradient-to-br from-orange-500 to-red-600 text-white py-16 sm:py-20 lg:py-32">
-    <div class="absolute inset-0 bg-black/20"></div>
-    <div class="relative max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
-        <div class="max-w-4xl">
-            <nav class="flex items-center space-x-2 text-sm sm:text-base mb-6">
-                <a href="{{ route('home') }}" class="opacity-80 hover:opacity-100 transition-opacity">Accueil</a>
-                <span class="opacity-60">/</span>
-                <a href="{{ route('destination', $circuit->destination->slug) }}" class="opacity-80 hover:opacity-100 transition-opacity">{{ $circuit->destination->name }}</a>
-                <span class="opacity-60">/</span>
-                <span class="opacity-100 font-medium">{{ $circuit->name }}</span>
+    @endif
+    
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 z-10 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
+    
+    <!-- Gradient Overlay -->
+    <div class="absolute inset-0 z-20" style="background-color: {{ $heroOverlay }};"></div>
+    
+    <!-- Content Container -->
+    <div class="relative z-30 max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 w-full">
+        <div class="max-w-4xl mx-auto">
+            <!-- Breadcrumb -->
+            @if($circuit->destination)
+            <nav class="flex items-center space-x-2 text-sm sm:text-base mb-6 text-white/80">
+                <a href="{{ route('home') }}" class="hover:text-white transition-colors">Accueil</a>
+                <span>/</span>
+                <a href="{{ route('destination', $circuit->destination->slug) }}" class="hover:text-white transition-colors">{{ $circuit->destination->name }}</a>
+                <span>/</span>
+                <span class="text-white font-medium">{{ $circuit->name }}</span>
             </nav>
+            @endif
             
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            <!-- Main Heading -->
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-display font-bold mb-6 leading-tight text-white">
                 {{ $circuit->name }}
             </h1>
             
+            <!-- Circuit Info -->
             <div class="flex flex-wrap gap-4 mb-8">
                 <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,11 +142,9 @@
                 </div>
                 @endif
             </div>
-            
         </div>
     </div>
 </section>
-@endif
 
 <!-- Circuit Details -->
 <section class="py-16 sm:py-20 lg:py-24">
@@ -157,7 +153,7 @@
             <div class="lg:col-span-2">
                 @if($circuit->description)
                 <div class="prose max-w-none mb-12">
-                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Description du circuit</h2>
+                    <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6">Description du circuit</h2>
                     <div class="text-slate-600 text-lg leading-relaxed">
                         {!! nl2br(e($circuit->description)) !!}
                     </div>
@@ -166,7 +162,7 @@
                 
                 @if($circuit->highlights)
                 <div class="mb-12">
-                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Points forts</h2>
+                    <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6">Points forts</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         @php
                             $highlights = explode("\n", $circuit->highlights);
@@ -191,7 +187,7 @@
                 
                 @if($circuit->itinerary)
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Itinéraire détaillé</h2>
+                    <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6">Itinéraire détaillé</h2>
                     <div class="prose max-w-none">
                         {!! nl2br(e($circuit->itinerary)) !!}
                     </div>
@@ -206,7 +202,7 @@
                         <img src="{{ asset('storage/' . $circuit->featured_image) }}" alt="{{ $circuit->name }}" class="w-full h-48 object-cover">
                     </div>
                     @endif
-                    <h3 class="text-2xl font-bold text-slate-900 mb-6">Résumé du circuit</h3>
+                    <h3 class="text-2xl font-display font-bold text-slate-900 mb-6">Résumé du circuit</h3>
                     
                     <div class="space-y-4 mb-8">
                         <div class="flex justify-between py-3 border-b border-slate-100">
@@ -241,8 +237,8 @@
 <section class="py-16 sm:py-20 lg:py-24 bg-slate-50">
     <div class="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20">
         <div class="text-center mb-16">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-                Autres circuits en <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-red-600">{{ $circuit->destination->name }}</span>
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-slate-900 mb-6">
+                Autres circuits en <span class="gradient-text">{{ $circuit->destination->name }}</span>
             </h2>
             <p class="text-xl text-slate-600 max-w-3xl mx-auto">
                 Découvrez nos autres circuits sur-mesure dans cette destination
@@ -302,8 +298,7 @@
     <div id="footer-container"></div>
   </div>
 
-  <!-- Load Header and Footer -->
-  <script src="/components/header.js"></script>
+  <!-- Load Footer -->
   <script src="/components/footer.js"></script>
 </body>
 </html>

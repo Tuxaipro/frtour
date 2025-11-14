@@ -46,7 +46,8 @@ class GalerieController extends Controller
     public function create()
     {
         $categories = GalerieCategory::where('is_active', true)->orderBy('sort_order')->get();
-        return view('admin.galerie.create', compact('categories'));
+        $nextSortOrder = (Galerie::max('sort_order') ?? 0) + 1;
+        return view('admin.galerie.create', compact('categories', 'nextSortOrder'));
     }
 
     public function store(Request $request)
@@ -67,7 +68,14 @@ class GalerieController extends Controller
         }
 
         $data['is_active'] = $request->has('is_active');
-        $data['sort_order'] = $request->get('sort_order', 0);
+        
+        // Auto-increment sort_order if not provided
+        if (!isset($data['sort_order']) || $data['sort_order'] === null || $data['sort_order'] === '') {
+            $maxSortOrder = Galerie::max('sort_order') ?? 0;
+            $data['sort_order'] = $maxSortOrder + 1;
+        } else {
+            $data['sort_order'] = (int)$data['sort_order'];
+        }
 
         Galerie::create($data);
 

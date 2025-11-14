@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CircuitController;
-use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\FaqController;
@@ -13,7 +12,6 @@ use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\QuoteRequestController as AdminQuoteRequestController;
 use App\Http\Controllers\Admin\SettingController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuoteRequestController;
@@ -22,13 +20,14 @@ use Illuminate\Support\Facades\Route;
 // Frontend routes
 Route::match(['GET', 'HEAD'], '/', function () {
     $heroes = \App\Models\Hero::active()->ordered()->get();
-    $circuits = \App\Models\Circuit::where('is_active', true)->inRandomOrder()->take(6)->get();
+    $circuits = \App\Models\Circuit::with('destination')->where('is_active', true)->orderBy('sort_order')->take(6)->get();
     $categories = \App\Models\GalerieCategory::where('is_active', true)->inRandomOrder()->take(6)->get();
+    $galerie = \App\Models\Galerie::with('category')->where('is_active', true)->orderBy('sort_order')->take(6)->get();
     $faqs = \App\Models\Faq::where('is_active', true)->orderBy('sort_order')->get();
     $blogs = \App\Models\Blog::where('is_published', true)->orderBy('created_at', 'desc')->take(3)->get();
     $destinations = \App\Models\Destination::where('is_active', true)->orderBy('name')->get();
     $reviews = \App\Models\Review::getActive();
-    return view('welcome', compact('heroes', 'circuits', 'categories', 'faqs', 'blogs', 'destinations', 'reviews'));
+    return view('welcome', compact('heroes', 'circuits', 'categories', 'galerie', 'faqs', 'blogs', 'destinations', 'reviews'));
 })->name('home');
 Route::get('/destinations/{slug}', [FrontendController::class, 'destination'])->name('destination');
 Route::get('/circuits/{slug}', [FrontendController::class, 'circuit'])->name('circuit');
@@ -46,9 +45,6 @@ Route::get('/page/{slug}', [FrontendController::class, 'page'])->name('page');
 Route::post('/quote-requests', [QuoteRequestController::class, 'store'])->name('quote-requests.store');
 
 
-// Contact form routes
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-Route::get('/contact/captcha', [ContactController::class, 'refreshCaptcha'])->name('contact.captcha');
 Route::get('/api/destinations', function() {
     try {
     $destinations = \App\Models\Destination::where('is_active', true)->orderBy('name')->get();
@@ -345,8 +341,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/heroes/{hero}/duplicate', [HeroController::class, 'duplicate'])->name('heroes.duplicate');
     Route::resource('reviews', ReviewController::class);
     Route::resource('quote-requests', AdminQuoteRequestController::class);
-    Route::resource('contacts', AdminContactController::class)->only(['index', 'show', 'destroy']);
-    Route::post('/contacts/{contact}/toggle-read', [AdminContactController::class, 'toggleRead'])->name('contacts.toggle-read');
+    Route::patch('quote-requests/{quoteRequest}/update-status', [AdminQuoteRequestController::class, 'updateStatus'])->name('quote-requests.update-status');
     
     // Custom routes for settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');

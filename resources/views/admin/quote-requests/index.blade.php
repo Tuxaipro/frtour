@@ -11,6 +11,14 @@
             <p class="text-sm text-slate-600 mt-1.5 font-medium">Manage custom quote requests</p>
         </div>
         <div class="flex items-center space-x-4">
+            @if(isset($unreadCount) && $unreadCount > 0)
+                <div class="text-sm text-white bg-red-500 border-2 border-red-600 px-4 py-2 rounded-xl font-semibold shadow-lg flex items-center space-x-2 animate-pulse">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                    <span>{{ $unreadCount }} new</span>
+                </div>
+            @endif
             <div class="text-sm text-slate-600 bg-white border-2 border-slate-200 px-4 py-2 rounded-xl font-semibold shadow-sm">
                 {{ $totalCount }} request{{ $totalCount > 1 ? 's' : '' }} total
             </div>
@@ -120,7 +128,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-slate-200">
                         @foreach($quoteRequests as $request)
-                            <tr class="hover:bg-primary/5 transition-colors duration-150">
+                            <tr class="hover:bg-primary/5 transition-colors duration-150 {{ !$request->is_read ? 'bg-blue-50/50' : '' }}">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-12 w-12">
@@ -180,7 +188,19 @@
                                         @if($request->destinations)
                                             @php
                                                 $destinations = json_decode($request->destinations, true);
-                                                $destinationNames = \App\Models\Destination::whereIn('id', $destinations)->pluck('name')->toArray();
+                                                // Handle both old format (IDs) and new format (names)
+                                                if (is_array($destinations) && count($destinations) > 0) {
+                                                    // Check if first element is numeric (ID) or string (name)
+                                                    if (is_numeric($destinations[0])) {
+                                                        // Old format: IDs - query database
+                                                        $destinationNames = \App\Models\Destination::whereIn('id', $destinations)->pluck('name')->toArray();
+                                                    } else {
+                                                        // New format: names - use directly
+                                                        $destinationNames = $destinations;
+                                                    }
+                                                } else {
+                                                    $destinationNames = [];
+                                                }
                                             @endphp
                                             @if(count($destinationNames) > 0)
                                                 <div class="flex items-center space-x-2">
@@ -203,20 +223,39 @@
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-slate-900 font-medium">{{ $request->created_at->format('d/m/Y') }}</div>
-                                    <div class="text-sm text-slate-500">{{ $request->created_at->format('H:i') }}</div>
+                                    <div class="flex items-center space-x-2">
+                                        <div>
+                                            <div class="text-sm text-slate-900 font-medium">{{ $request->created_at->format('d/m/Y') }}</div>
+                                            <div class="text-sm text-slate-500">{{ $request->created_at->format('H:i') }}</div>
+                                        </div>
+                                        @if(!$request->is_read)
+                                            <span class="inline-flex items-center justify-center w-2 h-2 bg-blue-500 rounded-full animate-pulse" title="New/Unread"></span>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $request->is_processed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                        {{ $request->is_processed ? 'Processed' : 'Pending' }}
-                                    </span>
+                                    <form action="{{ route('admin.quote-requests.update-status', $request) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 {{ $request->is_processed ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' }}" title="Click to toggle status">
+                                            {{ $request->is_processed ? 'Processed' : 'Pending' }}
+                                            <svg class="w-3 h-3 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <div class="flex items-center justify-end space-x-3">
-                                        <a href="{{ route('admin.quote-requests.show', $request) }}" class="text-indigo-600 hover:text-indigo-900 p-2 rounded-lg hover:bg-indigo-50 transition-colors duration-200" title="View">
+                                    <div class="flex items-center justify-end space-x-2">
+                                        <a href="{{ route('admin.quote-requests.show', $request) }}" class="text-indigo-600 hover:text-indigo-900 p-2 rounded-lg hover:bg-indigo-50 transition-colors duration-200" title="View Details">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ route('admin.quote-requests.edit', $request) }}" class="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-colors duration-200" title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
                                         </a>
                                         <form action="{{ route('admin.quote-requests.destroy', $request) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this request?')">

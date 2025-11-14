@@ -54,8 +54,9 @@ class CircuitController extends Controller
     public function create()
     {
         $destinations = Destination::all();
+        $nextSortOrder = (Circuit::max('sort_order') ?? 0) + 1;
 
-        return view('admin.circuits.create', compact('destinations'));
+        return view('admin.circuits.create', compact('destinations', 'nextSortOrder'));
     }
 
     /**
@@ -80,6 +81,12 @@ class CircuitController extends Controller
             ]);
 
             $validated['is_active'] = $request->boolean('is_active');
+
+            // Auto-increment sort_order if not provided
+            if (!isset($validated['sort_order']) || $validated['sort_order'] === null) {
+                $maxSortOrder = Circuit::max('sort_order') ?? 0;
+                $validated['sort_order'] = $maxSortOrder + 1;
+            }
 
             // Handle featured image upload
             if ($request->hasFile('featured_image')) {
