@@ -210,6 +210,29 @@
       visibility: visible;
       pointer-events: auto;
     }
+    
+    /* Form Steps Scrollbar */
+    .form-step .overflow-y-auto {
+      scrollbar-width: thin;
+      scrollbar-color: hsl(201, 96%, 32%) transparent;
+    }
+    
+    .form-step .overflow-y-auto::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .form-step .overflow-y-auto::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .form-step .overflow-y-auto::-webkit-scrollbar-thumb {
+      background-color: hsl(201, 96%, 32%);
+      border-radius: 3px;
+    }
+    
+    .form-step .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+      background-color: hsl(201, 96%, 22%);
+    }
   </style>
 </head>
 <body class="bg-white text-slate-900 font-sans antialiased">
@@ -519,14 +542,14 @@
     @endif
     
     <!-- Quote Form Section -->
-    <section id="devis" class="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-primary via-primary-dark to-primary-600 parallax-bg scroll-mt-20 relative overflow-hidden">
+    <section id="devis" class="pt-12 sm:pt-16 lg:pt-20 pb-6 sm:pb-8 lg:pb-10 bg-gradient-to-br from-primary via-primary-dark to-primary-600 parallax-bg scroll-mt-20 relative overflow-hidden">
       <!-- Decorative Elements -->
       <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.03\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"4\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
       
       <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Section Header -->
-        <div class="text-center mb-8 fade-in">
+        <div class="text-center mb-5 fade-in">
           <div class="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold text-sm mb-4">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -541,155 +564,70 @@
           </p>
         </div>
         
-        <!-- Combined Layout: Trust & Stats (Left) + Quote Form (Right) -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-          
-          <!-- Left Side: Trust & Stats -->
-          <div class="space-y-6 fade-in lg:sticky lg:top-24 lg:self-start">
-            <!-- Trust Badges -->
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-xl">
-              <h3 class="text-base font-display font-bold text-white mb-6 pb-3 border-b border-white/20">Pourquoi nous choisir ?</h3>
-              <div class="grid grid-cols-3 gap-4">
-                <!-- 24/7 Support -->
-                <div class="text-center group cursor-pointer p-3 rounded-lg hover:bg-white/10 transition-all duration-300">
-                  <div class="w-12 h-12 mx-auto mb-3 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-md group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                    </svg>
-                  </div>
-                  <h4 class="text-xs font-bold text-white mb-1">Support 24/7</h4>
-                  <p class="text-[10px] text-white/80 leading-relaxed">Assistance continue</p>
-                </div>
-                
-                <!-- Secure Payment -->
-                <div class="text-center group cursor-pointer p-3 rounded-lg hover:bg-white/10 transition-all duration-300">
-                  <div class="w-12 h-12 mx-auto mb-3 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-md group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
-                    </svg>
-                  </div>
-                  <h4 class="text-xs font-bold text-white mb-1">Paiement Sécurisé</h4>
-                  <p class="text-[10px] text-white/80 leading-relaxed">100% protégé</p>
-                </div>
-                
-                <!-- Best Price -->
-                <div class="text-center group cursor-pointer p-3 rounded-lg hover:bg-white/10 transition-all duration-300">
-                  <div class="w-12 h-12 mx-auto mb-3 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-md group-hover:bg-white/30 group-hover:scale-110 transition-all duration-300">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
-                    </svg>
-                  </div>
-                  <h4 class="text-xs font-bold text-white mb-1">Meilleur Prix</h4>
-                  <p class="text-[10px] text-white/80 leading-relaxed">Garanti</p>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Statistics -->
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-xl">
-              <h3 class="text-base font-display font-bold text-white mb-6 pb-3 border-b border-white/20">Nos chiffres</h3>
-              <div class="grid grid-cols-4 gap-3">
-                <div class="text-center group cursor-pointer p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
-                  <div class="w-10 h-10 mx-auto mb-2 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                  </div>
-                  <div class="text-xl font-display font-bold text-white mb-1">15+</div>
-                  <p class="text-[10px] text-white/80 font-medium leading-tight">Années d'expérience</p>
-                </div>
-                
-                <div class="text-center group cursor-pointer p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
-                  <div class="w-10 h-10 mx-auto mb-2 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                  </div>
-                  <div class="text-xl font-display font-bold text-white mb-1">10K+</div>
-                  <p class="text-[10px] text-white/80 font-medium leading-tight">Clients satisfaits</p>
-                </div>
-                
-                <div class="text-center group cursor-pointer p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
-                  <div class="w-10 h-10 mx-auto mb-2 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
-                    </svg>
-                  </div>
-                  <div class="text-xl font-display font-bold text-white mb-1">150+</div>
-                  <p class="text-[10px] text-white/80 font-medium leading-tight">Circuits disponibles</p>
-                </div>
-                
-                <div class="text-center group cursor-pointer p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
-                  <div class="w-10 h-10 mx-auto mb-2 bg-white/20 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                    </svg>
-                  </div>
-                  <div class="text-xl font-display font-bold text-white mb-1">4.9/5</div>
-                  <p class="text-[10px] text-white/80 font-medium leading-tight">Note moyenne</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Right Side: Quote Form -->
+        <!-- Quote Form -->
+        <div class="max-w-4xl mx-auto">
           <div class="fade-in">
-            <div class="bg-white rounded-2xl shadow-2xl p-6 lg:p-8 border border-slate-100">
-          <form action="{{ route('quote-requests.store') }}" method="POST" id="quoteForm">
+            <div class="bg-white rounded-2xl shadow-2xl pt-4 lg:pt-5 px-4 lg:px-5 pb-2 lg:pb-2 border border-slate-100 flex flex-col">
+          <form action="{{ route('quote-requests.store') }}" method="POST" id="quoteForm" class="flex flex-col">
             @csrf
             
-            <!-- Step Indicator with Labels -->
-            <div class="mb-8">
-              <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center flex-1">
-                  <div class="flex flex-col items-center flex-1">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white font-bold text-sm step-indicator shadow-lg" data-step="1">1</div>
-                    <span class="text-xs font-semibold text-slate-600 mt-2 hidden sm:block">Coordonnées</span>
-                  </div>
-                  <div class="flex-1 h-1 bg-primary mx-2 max-w-[60px]"></div>
-                  <div class="flex flex-col items-center flex-1">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-200 text-slate-600 font-bold text-sm step-indicator" data-step="2">2</div>
-                    <span class="text-xs font-semibold text-slate-600 mt-2 hidden sm:block">Voyage</span>
-                  </div>
-                  <div class="flex-1 h-1 bg-slate-200 mx-2 max-w-[60px]"></div>
-                  <div class="flex flex-col items-center flex-1">
-                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-200 text-slate-600 font-bold text-sm step-indicator" data-step="3">3</div>
-                    <span class="text-xs font-semibold text-slate-600 mt-2 hidden sm:block">Message</span>
+            <!-- Form Content Container -->
+            <div class="flex flex-col flex-1">
+              <!-- Step Indicator with Labels -->
+              <div class="mt-3 mb-3">
+                <div class="flex items-center justify-between mb-1">
+                  <div class="flex items-center flex-1">
+                    <div class="flex flex-col items-center flex-1">
+                      <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-xs step-indicator shadow-lg" data-step="1">1</div>
+                      <span class="text-xs font-semibold text-slate-600 mt-1.5 hidden sm:block">Coordonnées</span>
+                    </div>
+                    <div class="flex-1 h-1 bg-primary mx-2 max-w-[50px]"></div>
+                    <div class="flex flex-col items-center flex-1">
+                      <div class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-xs step-indicator" data-step="2">2</div>
+                      <span class="text-xs font-semibold text-slate-600 mt-1.5 hidden sm:block">Voyage</span>
+                    </div>
+                    <div class="flex-1 h-1 bg-slate-200 mx-2 max-w-[50px]"></div>
+                    <div class="flex flex-col items-center flex-1">
+                      <div class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-xs step-indicator" data-step="3">3</div>
+                      <span class="text-xs font-semibold text-slate-600 mt-1.5 hidden sm:block">Message</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            
-            <!-- Form Steps Container - Fixed Height -->
-            <div class="relative min-h-[500px] pb-16">
+              
+              <!-- Form Steps Container - Fixed Height -->
+              <div class="relative flex-1 min-h-[400px] overflow-hidden">
               <!-- Step 1: Personal Info -->
               <div id="step-1" class="form-step absolute inset-0 w-full flex flex-col">
-                <div class="flex-1">
-                  <h3 class="text-lg font-bold text-slate-900 mb-5 pb-3 border-b border-slate-200">Vos coordonnées</h3>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <label for="first_name" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Prénom *</label>
-                      <input type="text" id="first_name" name="first_name" required class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                <div class="flex-1 overflow-y-auto px-1">
+                  <h3 class="text-lg font-bold text-slate-900 mb-3 pb-1.5 border-b border-slate-200">Vos coordonnées</h3>
+                  <div class="space-y-3 mb-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label for="first_name" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Prénom *</label>
+                        <input type="text" id="first_name" name="first_name" required class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                      </div>
+                      <div>
+                        <label for="last_name" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Nom de famille</label>
+                        <input type="text" id="last_name" name="last_name" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                      </div>
                     </div>
-                    <div>
-                      <label for="last_name" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Nom de famille</label>
-                      <input type="text" id="last_name" name="last_name" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
-                    </div>
-                    <div>
-                      <label for="email" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Email *</label>
-                      <input type="email" id="email" name="email" required class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
-                    </div>
-                    <div>
-                      <label for="phone" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Téléphone *</label>
-                      <input type="tel" id="phone" name="phone" required class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
-                    </div>
-                    <div>
-                      <label for="country" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Pays</label>
-                      <input type="text" id="country" name="country" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Email *</label>
+                        <input type="email" id="email" name="email" required class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                      </div>
+                      <div>
+                        <label for="phone" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Téléphone *</label>
+                        <input type="tel" id="phone" name="phone" required class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                      </div>
+                      <div>
+                        <label for="country" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Pays</label>
+                        <input type="text" id="country" name="country" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                      </div>
                     </div>
                   </div>
-                  <div class="bg-primary-50 border-l-4 border-primary rounded-lg p-3 mb-4">
+                  <div class="bg-primary-50 border-l-4 border-primary rounded-lg p-2.5">
                     <div class="flex items-start">
                       <svg class="w-4 h-4 text-primary flex-shrink-0 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -700,8 +638,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="flex justify-end mt-4 pt-4 border-t border-slate-100">
-                  <button type="button" onclick="nextFormStep()" class="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 shadow-md hover:shadow-lg btn-shimmer text-sm flex items-center">
+                <div class="flex justify-end mt-2 pt-2 border-t border-slate-100 bg-white flex-shrink-0">
+                  <button type="button" onclick="nextFormStep()" class="px-5 py-2.5 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 shadow-md hover:shadow-lg btn-shimmer text-sm flex items-center">
                     Suivant
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -712,13 +650,29 @@
               
               <!-- Step 2: Trip Details -->
               <div id="step-2" class="form-step hidden absolute inset-0 w-full flex flex-col">
-                <div class="flex-1">
-                  <h3 class="text-lg font-bold text-slate-900 mb-5 pb-3 border-b border-slate-200">Détails du voyage</h3>
-                  <div class="space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex-1 overflow-y-auto px-1">
+                  <h3 class="text-lg font-bold text-slate-900 mb-3 pb-1.5 border-b border-slate-200">Détails du voyage</h3>
+                  <div class="space-y-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                       <div>
-                        <label for="destination" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Destination souhaitée</label>
-                        <select id="destination" name="destination" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white font-sans text-sm hover:border-slate-300">
+                        <label for="budget" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Budget estimé (par personne)</label>
+                        <select id="budget" name="budget" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white font-sans text-sm hover:border-slate-300">
+                          <option value="">Sélectionnez un budget</option>
+                          <option value="Moins de 1000€">Moins de 1000€</option>
+                          <option value="1000€ - 2000€">1000€ - 2000€</option>
+                          <option value="2000€ - 3000€">2000€ - 3000€</option>
+                          <option value="Plus de 3000€">Plus de 3000€</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label for="message" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Parlez-nous de votre projet *</label>
+                        <textarea id="message" name="message" rows="4" required placeholder="Décrivez vos envies, vos centres d'intérêt, vos attentes..." class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none font-sans text-sm hover:border-slate-300"></textarea>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
+                      <div>
+                        <label for="destination" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Destination souhaitée</label>
+                        <select id="destination" name="destination" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white font-sans text-sm hover:border-slate-300">
                           <option value="">Sélectionnez une destination</option>
                           @foreach($destinations as $dest)
                             <option value="{{ $dest->name }}">{{ $dest->name }}</option>
@@ -726,38 +680,38 @@
                         </select>
                       </div>
                       <div>
-                        <label for="duration" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Durée du voyage</label>
-                        <input type="text" id="duration" name="duration" placeholder="Ex: 10 jours" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                        <label for="duration" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Durée du voyage</label>
+                        <input type="text" id="duration" name="duration" placeholder="Ex: 10 jours" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
                       </div>
                       <div>
-                        <label for="travel_date" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Date de départ souhaitée</label>
-                        <input type="date" id="travel_date" name="travel_date" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                        <label for="travel_date" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Date de départ souhaitée</label>
+                        <input type="date" id="travel_date" name="travel_date" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
                       </div>
                       <div>
-                        <label for="num_travelers" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Nombre de voyageurs</label>
-                        <input type="number" id="num_travelers" name="num_travelers" min="1" placeholder="2" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
+                        <label for="num_travelers" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Nombre de voyageurs</label>
+                        <input type="number" id="num_travelers" name="num_travelers" min="1" placeholder="2" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
                       </div>
                     </div>
-                    <div>
-                      <label for="budget" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Budget estimé (par personne)</label>
-                      <select id="budget" name="budget" class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white font-sans text-sm hover:border-slate-300">
-                        <option value="">Sélectionnez un budget</option>
-                        <option value="Moins de 1000€">Moins de 1000€</option>
-                        <option value="1000€ - 2000€">1000€ - 2000€</option>
-                        <option value="2000€ - 3000€">2000€ - 3000€</option>
-                        <option value="Plus de 3000€">Plus de 3000€</option>
-                      </select>
+                  </div>
+                  <div class="bg-primary-50 border-l-4 border-primary rounded-lg p-2.5">
+                    <div class="flex items-start">
+                      <svg class="w-4 h-4 text-primary flex-shrink-0 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      <p class="text-xs text-slate-700 leading-relaxed font-sans">
+                        <strong class="font-sans">Note :</strong> Plus vous nous donnez de détails, plus nous pourrons personnaliser votre voyage selon vos préférences et votre budget.
+                      </p>
                     </div>
                   </div>
                 </div>
-                <div class="flex justify-between mt-6 pt-4 border-t border-slate-100">
-                  <button type="button" onclick="prevFormStep()" class="px-6 py-3 bg-slate-200 text-slate-700 rounded-lg font-semibold hover:bg-slate-300 transition-all duration-300 text-sm flex items-center">
+                <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100 bg-white flex-shrink-0">
+                  <button type="button" onclick="prevFormStep()" class="px-5 py-2.5 bg-slate-200 text-slate-700 rounded-lg font-semibold hover:bg-slate-300 transition-all duration-300 text-sm flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                     Précédent
                   </button>
-                  <button type="button" onclick="nextFormStep()" class="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 shadow-md hover:shadow-lg btn-shimmer text-sm flex items-center">
+                  <button type="button" onclick="nextFormStep()" class="px-5 py-2.5 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all duration-300 shadow-md hover:shadow-lg btn-shimmer text-sm flex items-center">
                     Suivant
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -768,23 +722,21 @@
               
               <!-- Step 3: Message -->
               <div id="step-3" class="form-step hidden absolute inset-0 w-full flex flex-col">
-                <div class="flex-1">
-                  <h3 class="text-lg font-bold text-slate-900 mb-5 pb-3 border-b border-slate-200">Votre message</h3>
-                  <div class="space-y-4 mb-4">
-                    <div>
-                      <label for="message" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Parlez-nous de votre projet *</label>
-                      <textarea id="message" name="message" rows="4" required placeholder="Décrivez vos envies, vos centres d'intérêt, vos attentes..." class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none font-sans text-sm hover:border-slate-300"></textarea>
-                    </div>
-                    <div>
-                      <label for="preferences" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Préférences</label>
-                      <textarea id="preferences" name="preferences" rows="3" placeholder="Ex: Hôtels 4 étoiles, cuisine végétarienne, activités culturelles..." class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none font-sans text-sm hover:border-slate-300"></textarea>
-                    </div>
-                    <div>
-                      <label for="special_requests" class="block text-sm font-semibold text-slate-700 mb-2 font-sans">Demandes spéciales</label>
-                      <textarea id="special_requests" name="special_requests" rows="3" placeholder="Ex: Accessibilité, anniversaire, besoins particuliers..." class="w-full px-4 py-2.5 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none font-sans text-sm hover:border-slate-300"></textarea>
+                <div class="flex-1 overflow-y-auto px-1">
+                  <h3 class="text-lg font-bold text-slate-900 mb-3 pb-1.5 border-b border-slate-200">Votre message</h3>
+                  <div class="mb-3">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label for="preferences" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Préférences</label>
+                        <textarea id="preferences" name="preferences" rows="3" placeholder="Ex: Hôtels 4 étoiles, cuisine végétarienne, activités culturelles..." class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none font-sans text-sm hover:border-slate-300"></textarea>
+                      </div>
+                      <div>
+                        <label for="special_requests" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Demandes spéciales</label>
+                        <textarea id="special_requests" name="special_requests" rows="3" placeholder="Ex: Accessibilité, anniversaire, besoins particuliers..." class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none font-sans text-sm hover:border-slate-300"></textarea>
+                      </div>
                     </div>
                   </div>
-                  <div class="bg-primary-50 border-l-4 border-primary rounded-lg p-3">
+                  <div class="bg-primary-50 border-l-4 border-primary rounded-lg p-2.5">
                     <div class="flex items-start">
                       <svg class="w-4 h-4 text-primary flex-shrink-0 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -795,14 +747,14 @@
                     </div>
                   </div>
                 </div>
-                <div class="flex justify-between mt-6 pt-4 border-t border-slate-100">
-                  <button type="button" onclick="prevFormStep()" class="px-6 py-3 bg-slate-200 text-slate-700 rounded-lg font-semibold hover:bg-slate-300 transition-all duration-300 text-sm flex items-center">
+                <div class="flex justify-between items-center mt-2 pt-2 border-t border-slate-100 bg-white flex-shrink-0">
+                  <button type="button" onclick="prevFormStep()" class="px-5 py-2.5 bg-slate-200 text-slate-700 rounded-lg font-semibold hover:bg-slate-300 transition-all duration-300 text-sm flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                     Précédent
                   </button>
-                  <button type="submit" class="px-6 py-3 bg-accent text-white rounded-lg font-semibold hover:bg-accent-dark transition-all duration-300 shadow-md hover:shadow-lg btn-shimmer text-sm flex items-center">
+                  <button type="submit" class="px-5 py-2.5 bg-accent text-white rounded-lg font-semibold hover:bg-accent-dark transition-all duration-300 shadow-md hover:shadow-lg btn-shimmer text-sm flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -811,11 +763,11 @@
                 </div>
               </div>
             </div>
+            </div>
             
           </form>
             </div>
           </div>
-          
         </div>
         
       </div>
