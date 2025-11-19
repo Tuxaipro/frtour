@@ -233,6 +233,34 @@
     .form-step .overflow-y-auto::-webkit-scrollbar-thumb:hover {
       background-color: hsl(201, 96%, 22%);
     }
+    
+    /* Step 2 Form Field Spacing Fix */
+    #step-2 label {
+      display: block;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+    }
+    
+    #step-2 .flex.flex-col {
+      min-width: 0;
+      width: 100%;
+    }
+    
+    #step-2 input,
+    #step-2 select,
+    #step-2 textarea {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    @media (min-width: 1280px) {
+      #step-2 .grid.grid-cols-1.sm\\:grid-cols-2.xl\\:grid-cols-4 > div {
+        min-width: 0;
+      }
+    }
   </style>
 </head>
 <body class="bg-white text-slate-900 font-sans antialiased">
@@ -650,12 +678,12 @@
               
               <!-- Step 2: Trip Details -->
               <div id="step-2" class="form-step hidden absolute inset-0 w-full flex flex-col">
-                <div class="flex-1 overflow-y-auto px-1">
-                  <h3 class="text-lg font-bold text-slate-900 mb-3 pb-1.5 border-b border-slate-200">Détails du voyage</h3>
-                  <div class="space-y-3">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                <div class="flex-1 px-4 sm:px-6 flex flex-col">
+                  <h3 class="text-lg font-bold text-slate-900 mb-3 pb-2 border-b border-slate-200">Détails du voyage</h3>
+                  <div class="space-y-3 flex-1 flex flex-col">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label for="budget" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Budget estimé (par personne)</label>
+                        <label for="budget" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans leading-tight">Budget estimé (par personne)</label>
                         <select id="budget" name="budget" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white font-sans text-sm hover:border-slate-300">
                           <option value="">Sélectionnez un budget</option>
                           <option value="Moins de 1000€">Moins de 1000€</option>
@@ -665,13 +693,13 @@
                         </select>
                       </div>
                       <div>
-                        <label for="message" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Parlez-nous de votre projet *</label>
-                        <textarea id="message" name="message" rows="4" required placeholder="Décrivez vos envies, vos centres d'intérêt, vos attentes..." class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none font-sans text-sm hover:border-slate-300"></textarea>
+                        <label for="message" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans leading-tight">Parlez-nous de votre projet *</label>
+                        <textarea id="message" name="message" rows="3" required placeholder="Décrivez vos envies, vos centres d'intérêt, vos attentes..." class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 resize-none font-sans text-sm hover:border-slate-300"></textarea>
                       </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
-                      <div>
-                        <label for="destination" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Destination souhaitée</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-12 gap-3">
+                      <div class="flex flex-col xl:col-span-5">
+                        <label for="destination" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 font-sans leading-snug">Destination souhaitée</label>
                         <select id="destination" name="destination" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-white font-sans text-sm hover:border-slate-300">
                           <option value="">Sélectionnez une destination</option>
                           @foreach($destinations as $dest)
@@ -679,21 +707,21 @@
                           @endforeach
                         </select>
                       </div>
-                      <div>
-                        <label for="duration" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Durée du voyage</label>
+                      <div class="flex flex-col xl:col-span-2">
+                        <label for="duration" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 font-sans leading-snug">Durée du voyage</label>
                         <input type="text" id="duration" name="duration" placeholder="Ex: 10 jours" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
                       </div>
-                      <div>
-                        <label for="travel_date" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Date de départ souhaitée</label>
+                      <div class="flex flex-col xl:col-span-3">
+                        <label for="travel_date" class="block text-xs sm:text-sm font-semibold text-slate-700 mb-1.5 font-sans leading-snug">Date de départ souhaitée</label>
                         <input type="date" id="travel_date" name="travel_date" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
                       </div>
-                      <div>
-                        <label for="num_travelers" class="block text-sm font-semibold text-slate-700 mb-1.5 font-sans">Nombre de voyageurs</label>
+                      <div class="flex flex-col xl:col-span-2">
+                        <label for="num_travelers" class="block text-xs font-semibold text-slate-700 mb-1.5 font-sans leading-tight whitespace-nowrap">Nombre de voyageurs</label>
                         <input type="number" id="num_travelers" name="num_travelers" min="1" placeholder="2" class="w-full px-4 py-2 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 font-sans text-sm hover:border-slate-300">
                       </div>
                     </div>
                   </div>
-                  <div class="bg-primary-50 border-l-4 border-primary rounded-lg p-2.5">
+                  <div class="bg-primary-50 border-l-4 border-primary rounded-lg p-2.5 mt-3 mb-3">
                     <div class="flex items-start">
                       <svg class="w-4 h-4 text-primary flex-shrink-0 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>

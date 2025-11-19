@@ -64,7 +64,13 @@ class QuoteRequestSeeder extends Seeder
         ];
 
         foreach ($quoteRequests as $quoteRequestData) {
-            QuoteRequest::create($quoteRequestData);
+            QuoteRequest::updateOrCreate(
+                [
+                    'email' => $quoteRequestData['email'],
+                    'travel_dates' => $quoteRequestData['travel_dates'],
+                ],
+                $quoteRequestData
+            );
         }
     }
 }

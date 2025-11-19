@@ -53,7 +53,10 @@ class GalerieCategorySeeder extends Seeder
         ];
 
         foreach ($categories as $category) {
-            GalerieCategory::create($category);
+            GalerieCategory::updateOrCreate(
+                ['name' => $category['name']],
+                $category
+            );
         }
     }
 }
